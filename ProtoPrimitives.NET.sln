@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
+MinimumVisualStudioVersion = 15.0.26124.0
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1026A720-D6D0-4B36-A345-ADFD70E71387}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "main", "main", "{23ACB39D-E6D7-4633-8E84-CA93CA7DFDCE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cs", "cs", "{B55C0410-E66E-405D-8C43-02E51E155E75}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{FB049E54-A006-49CA-8DD0-2783BC9BF260}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cs", "cs", "{B17D95F2-CF14-45B6-928E-649A25AA4198}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProtoPrimitives.NET", "src\main\cs\ProtoPrimitives.NET\ProtoPrimitives.NET.csproj", "{49A5B028-3CFB-4683-940E-789989A3794E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProtoPrimitives.NET.Tests", "src\test\cs\ProtoPrimitives.NET.Tests\ProtoPrimitives.NET.Tests.csproj", "{7CC77E58-C0C4-4E27-B380-EDB81C4C90D5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{49A5B028-3CFB-4683-940E-789989A3794E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49A5B028-3CFB-4683-940E-789989A3794E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49A5B028-3CFB-4683-940E-789989A3794E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49A5B028-3CFB-4683-940E-789989A3794E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CC77E58-C0C4-4E27-B380-EDB81C4C90D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CC77E58-C0C4-4E27-B380-EDB81C4C90D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CC77E58-C0C4-4E27-B380-EDB81C4C90D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CC77E58-C0C4-4E27-B380-EDB81C4C90D5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{23ACB39D-E6D7-4633-8E84-CA93CA7DFDCE} = {1026A720-D6D0-4B36-A345-ADFD70E71387}
+		{B55C0410-E66E-405D-8C43-02E51E155E75} = {23ACB39D-E6D7-4633-8E84-CA93CA7DFDCE}
+		{FB049E54-A006-49CA-8DD0-2783BC9BF260} = {1026A720-D6D0-4B36-A345-ADFD70E71387}
+		{B17D95F2-CF14-45B6-928E-649A25AA4198} = {FB049E54-A006-49CA-8DD0-2783BC9BF260}
+		{49A5B028-3CFB-4683-940E-789989A3794E} = {B55C0410-E66E-405D-8C43-02E51E155E75}
+		{7CC77E58-C0C4-4E27-B380-EDB81C4C90D5} = {B17D95F2-CF14-45B6-928E-649A25AA4198}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6EA6C726-B2A4-4059-9E45-59CF887A0103}
+	EndGlobalSection
+EndGlobal
