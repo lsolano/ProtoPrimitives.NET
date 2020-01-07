@@ -84,6 +84,7 @@ namespace ProtoPrimitives.NET.Strings
         /// </summary>
         public sealed class Builder
         {
+            private static readonly Action<string> NoOpCustomParser = (val) => {};
             private static readonly Message DefaultTooShortErrorMessage = new Message("Input string is too short.");
             private static readonly Message DefaultTooLongErrorMessage = new Message("Input string is too long.");
             private static readonly Message DefaultInvalidCharactersErrorMessage = new Message("Input string contains invalid characters.");
@@ -434,7 +435,7 @@ namespace ProtoPrimitives.NET.Strings
             /// <param name="rawValue">Can not be <see langowrd="null"/></param>
             /// <returns><see cref="ConfigurableString"/> or throws exception</returns>
             public ConfigurableString Build(string rawValue)
-                => Build(rawValue, (val) => { /*no-op parser*/ });
+                => Build(rawValue, NoOpCustomParser);
 
             /// <summary>
             /// Validates input against all configured options, if all are met, creates the <see cref="ConfigurableString"/> instance, otherwise throws exception.
