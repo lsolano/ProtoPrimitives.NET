@@ -115,7 +115,7 @@ namespace ProtoPrimitives.NET.Tests.Numerics
             [TestCase("peter")]
             [TestCase(true)]
             [TestCase(1.25)]
-            public void With_Other_Types_Returns_False(object other)
+            public void With_Other_Types_Returns_False(in object other)
             {
                 NegativeInteger ns = Build(DefaultRawValue, UseCustomMessage);
 
@@ -164,7 +164,7 @@ namespace ProtoPrimitives.NET.Tests.Numerics
             }
 
             [Test]
-            public void Same_As_Raw_Value([Values(-1, -2)] int rawValueA, [Values(-1, -2)] int rawValueB)
+            public void Same_As_Raw_Value([Values(-1, -2)] in int rawValueA, [Values(-1, -2)] in int rawValueB)
             {
                 (NegativeInteger positiveIntA, NegativeInteger positiveIntB)
                     = (Build(rawValueA, UseCustomMessage), Build(rawValueB, UseCustomMessage));
@@ -173,7 +173,7 @@ namespace ProtoPrimitives.NET.Tests.Numerics
             }
         }
 
-        private static NegativeInteger Build(int rawValue, bool useCustomMessage)
+        private static NegativeInteger Build(in int rawValue, in bool useCustomMessage)
         {
             return useCustomMessage ? new NegativeInteger(rawValue, CustomErrorMessage) : new NegativeInteger(rawValue);
         }

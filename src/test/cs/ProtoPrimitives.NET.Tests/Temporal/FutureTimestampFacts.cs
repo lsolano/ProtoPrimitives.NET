@@ -21,7 +21,7 @@ namespace ProtoPrimitives.NET.Tests.Temporal
 
             [Test]
             public void Rejects_Past_Values_With_Default_Error_Message(
-                [ValueSource(nameof(Magnitudes))] TimeMagnitude timeMagnitude)
+                [ValueSource(nameof(Magnitudes))] in TimeMagnitude timeMagnitude)
             {
                 DateTimeOffset rawValue = DateTimeOffset.UtcNow.FromMagnitude(timeMagnitude, -1);
 
@@ -31,7 +31,7 @@ namespace ProtoPrimitives.NET.Tests.Temporal
 
             [Test]
             public void Rejects_Past_Values_With_Custom_Error_Message(
-                [ValueSource(nameof(Magnitudes))] TimeMagnitude timeMagnitude)
+                [ValueSource(nameof(Magnitudes))] in TimeMagnitude timeMagnitude)
             {
                 DateTimeOffset rawValue = DateTimeOffset.UtcNow.FromMagnitude(timeMagnitude, -1);
 
@@ -53,7 +53,7 @@ namespace ProtoPrimitives.NET.Tests.Temporal
                 Assert.That(() => new FutureTimestamp(rawValue, CustomErrorMessage), BuildArgumentOutOfRangeExceptionConstraint(rawValue, CustomErrorMessage));
             }
 
-            private static IResolveConstraint BuildArgumentOutOfRangeExceptionConstraint(DateTimeOffset rawValue, Message errorMessage)
+            private static IResolveConstraint BuildArgumentOutOfRangeExceptionConstraint(in DateTimeOffset rawValue, in Message errorMessage)
             {
                 return Throws.InstanceOf<ArgumentOutOfRangeException>().With.Message.StartsWith(errorMessage.Value)
                                                                        .And.Message.Contains(ParamName)
@@ -61,7 +61,7 @@ namespace ProtoPrimitives.NET.Tests.Temporal
             }
 
             [Test]
-            public void Accepts_Future_Values_With_Default_Error_Message([ValueSource(nameof(Magnitudes))] TimeMagnitude timeMagnitude)
+            public void Accepts_Future_Values_With_Default_Error_Message([ValueSource(nameof(Magnitudes))] in TimeMagnitude timeMagnitude)
             {
                 DateTimeOffset rawValue = DateTimeOffset.UtcNow.FromMagnitude(timeMagnitude, 100);
 
@@ -69,7 +69,7 @@ namespace ProtoPrimitives.NET.Tests.Temporal
             }
 
             [Test]
-            public void Accepts_Future_Values_With_Custom_Error_Message([ValueSource(nameof(Magnitudes))] TimeMagnitude timeMagnitude)
+            public void Accepts_Future_Values_With_Custom_Error_Message([ValueSource(nameof(Magnitudes))] in TimeMagnitude timeMagnitude)
             {
                 DateTimeOffset rawValue = DateTimeOffset.UtcNow.FromMagnitude(timeMagnitude, 100);
 
@@ -138,7 +138,7 @@ namespace ProtoPrimitives.NET.Tests.Temporal
             [TestCase("peter")]
             [TestCase(true)]
             [TestCase(1.25)]
-            public void With_Other_Types_Returns_False(object other)
+            public void With_Other_Types_Returns_False(in object other)
             {
                 (FutureTimestamp futureTimestamp, _) = CreateWithFiveMinutesInTheFuture();
 

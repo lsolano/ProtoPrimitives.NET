@@ -31,18 +31,5 @@ namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts
 
             Assert.That(testDelegate, Throws.Nothing);
         }
-
-        // [Test]
-        // public void Allows_Build_After_Instantiation([Values(false, true)] bool useSingleParamConstructor, [Values(false, true)] bool useSingleMessage)
-        // {
-        //     Assume.That(useSingleParamConstructor && useSingleMessage, Is.Not.True);
-
-        //     var builder = useSingleParamConstructor ? new ConfigurableString.Builder(ArgNullErrorMessage) : new ConfigurableString.Builder(ArgNullErrorMessage, useSingleMessage);
-        //     const string rawValue = "I'm a valid string";
-
-        //     ConfigurableString str = builder.Build(rawValue);
-
-        //     Assert.That(str.Value, Is.SameAs(rawValue));
-        // }
     }
 }

@@ -11,7 +11,7 @@ namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts
         private static readonly Message ArgNullErrorMessage = new Message("Some caller provided not null message");
 
         [Test]
-        public void With_Null_Rawvalue_Throws_ArgumentNullException([Values(false, true)] bool useSingleParamConstructor, [Values(false, true)] bool useSingleMessage)
+        public void With_Null_Rawvalue_Throws_ArgumentNullException([Values(false, true)] in bool useSingleParamConstructor, [Values(false, true)] in bool useSingleMessage)
         {
             Assume.That(useSingleParamConstructor && useSingleMessage, Is.Not.True);
 
@@ -25,7 +25,7 @@ namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts
         }
 
         [Test]
-        public void Allows_Build_After_Instantiation([Values(false, true)] bool useSingleParamConstructor, [Values(false, true)] bool useSingleMessage)
+        public void Allows_Build_After_Instantiation([Values(false, true)] in bool useSingleParamConstructor, [Values(false, true)] in bool useSingleMessage)
         {
             Assume.That(useSingleParamConstructor && useSingleMessage, Is.Not.True);
 
@@ -38,7 +38,7 @@ namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts
         }
 
         [Test]
-        public void Throws_If_Called_Twice([Values(false, true)] bool useSingleParamConstructor, [Values(false, true)] bool useSingleMessage)
+        public void Throws_If_Called_Twice([Values(false, true)] in bool useSingleParamConstructor, [Values(false, true)] in bool useSingleMessage)
         {
             Assume.That(useSingleParamConstructor && useSingleMessage, Is.Not.True);
 

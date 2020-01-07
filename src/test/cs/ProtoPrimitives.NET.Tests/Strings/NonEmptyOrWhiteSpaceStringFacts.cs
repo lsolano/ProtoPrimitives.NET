@@ -9,7 +9,7 @@ namespace ProtoPrimitives.NET.Tests.Strings
         private const string ValidSampleValue = "Hello World!!!";
         private const string CustomErrorMessage = "Use me if something is not OK with rawValue";
 
-        private static NonEmptyOrWhiteSpaceString Build(string rawValue, bool useCustomMessage)
+        private static NonEmptyOrWhiteSpaceString Build(in string rawValue, in bool useCustomMessage)
         {
             return useCustomMessage
                 ? new NonEmptyOrWhiteSpaceString(rawValue, CustomErrorMessage)
@@ -152,7 +152,7 @@ namespace ProtoPrimitives.NET.Tests.Strings
             [TestCase("peter")]
             [TestCase(true)]
             [TestCase(1.25)]
-            public void With_Other_Types_Returns_False(object other)
+            public void With_Other_Types_Returns_False(in object other)
             {
                 NonEmptyOrWhiteSpaceString notEmptyOrWhiteSpaceString = Build(ValidSampleValue, UseCustomMessage);
 
@@ -202,8 +202,8 @@ namespace ProtoPrimitives.NET.Tests.Strings
 
             [Test]
             public void Same_As_Raw_Value(
-                [Values("hello", "world")] string rawValueA,
-                [Values("hello", "world")] string rawValueB)
+                [Values("hello", "world")] in string rawValueA,
+                [Values("hello", "world")] in string rawValueB)
             {
                 (NonEmptyOrWhiteSpaceString notEmptyOrWhiteSpaceStringA,
                         NonEmptyOrWhiteSpaceString notEmptyOrWhiteSpaceStringB)

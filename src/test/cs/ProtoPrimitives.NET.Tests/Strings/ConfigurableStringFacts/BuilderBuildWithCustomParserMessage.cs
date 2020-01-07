@@ -11,7 +11,7 @@ namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts
         private static readonly Message ArgNullErrorMessage = new Message("Some caller provided not null message");
 
         [Test]
-        public void With_Null_Rawvalue_Throws_ArgumentNullException([Values(false, true)] bool useSingleParamConstructor, [Values(false, true)] bool useSingleMessage)
+        public void With_Null_Rawvalue_Throws_ArgumentNullException([Values(false, true)] in bool useSingleParamConstructor, [Values(false, true)] in bool useSingleMessage)
         {
             Assume.That(useSingleParamConstructor && useSingleMessage, Is.Not.True);
 
@@ -25,7 +25,7 @@ namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts
         }
 
         [Test]
-        public void With_Null_CustomParser_Throws_ArgumentNullException([Values(false, true)] bool useSingleParamConstructor, [Values(false, true)] bool useSingleMessage)
+        public void With_Null_CustomParser_Throws_ArgumentNullException([Values(false, true)] in bool useSingleParamConstructor, [Values(false, true)] in bool useSingleMessage)
         {
             Assume.That(useSingleParamConstructor && useSingleMessage, Is.Not.True);
 
@@ -38,7 +38,7 @@ namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts
         }
 
         [Test]
-        public void Calls_Custom_Parser([Values(false, true)] bool useSingleParamConstructor, [Values(false, true)] bool useSingleMessage)
+        public void Calls_Custom_Parser([Values(false, true)] in bool useSingleParamConstructor, [Values(false, true)] in bool useSingleMessage)
         {
             Assume.That(useSingleParamConstructor && useSingleMessage, Is.Not.True);
 
@@ -52,7 +52,7 @@ namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts
         }
 
         [Test]
-        public void Accepts_Valid_Value([Values(false, true)] bool useSingleParamConstructor, [Values(false, true)] bool useSingleMessage)
+        public void Accepts_Valid_Value([Values(false, true)] in bool useSingleParamConstructor, [Values(false, true)] in bool useSingleMessage)
         {
             Assume.That(useSingleParamConstructor && useSingleMessage, Is.Not.True);
 
@@ -65,7 +65,7 @@ namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts
         }
 
         [Test]
-        public void Does_Not_Catch_CustomParser_Exceptions([Values(false, true)] bool useSingleParamConstructor, [Values(false, true)] bool useSingleMessage)
+        public void Does_Not_Catch_CustomParser_Exceptions([Values(false, true)] in bool useSingleParamConstructor, [Values(false, true)] in bool useSingleMessage)
         {
             Assume.That(useSingleParamConstructor && useSingleMessage, Is.Not.True);
 
@@ -81,7 +81,7 @@ namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts
         }
 
         [Test]
-        public void Throws_If_Called_Twice([Values(false, true)] bool useSingleParamConstructor, [Values(false, true)] bool useSingleMessage)
+        public void Throws_If_Called_Twice([Values(false, true)] in bool useSingleParamConstructor, [Values(false, true)] in bool useSingleMessage)
         {
             Assume.That(useSingleParamConstructor && useSingleMessage, Is.Not.True);
 

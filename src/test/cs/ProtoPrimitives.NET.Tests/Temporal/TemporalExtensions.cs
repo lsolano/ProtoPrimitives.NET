@@ -15,7 +15,7 @@ namespace ProtoPrimitives.NET.Tests.Temporal
             Year = 7
         }
 
-        internal static DateTimeOffset FromMagnitude(this DateTimeOffset offset, TimeMagnitude timeMagnitude, int delta)
+        internal static DateTimeOffset FromMagnitude(this DateTimeOffset offset, in TimeMagnitude timeMagnitude, in int delta)
             => timeMagnitude switch
             {
                 TimeMagnitude.Millisecond => offset.AddMilliseconds(delta),
