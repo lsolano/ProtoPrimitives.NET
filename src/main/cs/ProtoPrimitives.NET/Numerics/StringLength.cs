@@ -24,22 +24,22 @@ namespace ProtoPrimitives.NET.Numerics
         public static readonly  StringLength Max = new StringLength(int.MaxValue);
 
         /// <summary>
-        /// Initializes an intance after validating provided input.
+        /// Initializes an instance after validating provided input.
         /// </summary>
         /// <param name="rawValue"></param>
-        public StringLength(int rawValue) : this(rawValue, DefaultErrorMessage)
+        public StringLength(in int rawValue) : this(rawValue, DefaultErrorMessage)
         {
         }
 
         /// <summary>
-        /// Initializes an intance after validating provided input.
+        /// Initializes an instance after validating provided input.
         /// </summary>
         /// <param name="rawValue"></param>
         /// <param name="errorMessage">Can not be <see langword="null"/></param>
-        public StringLength(int rawValue, Message errorMessage) : base(rawValue, errorMessage, Validate)
+        public StringLength(in int rawValue, in Message errorMessage) : base(rawValue, errorMessage, (val, msg) => Validate(val, msg))
         {
         }
 
-        private static int Validate(int rawValue, Message errorMessage) => Arguments.GreaterThanOrEqualTo(rawValue, 0, nameof(rawValue));
+        private static int Validate(in int rawValue, in Message errorMessage) => Arguments.GreaterThanOrEqualTo(rawValue, 0, nameof(rawValue));
     }
 }

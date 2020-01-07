@@ -32,7 +32,7 @@ namespace ProtoPrimitives.NET.Strings
         /// <param name="rawValue">Can not be <see langword="null"/> or empty</param>
         /// <exception cref="ArgumentNullException">When <paramref name="rawValue"/> is <see langword="null"/>.</exception>
         /// <exception cref="FormatException">When <paramref name="rawValue"/> is empty or contains only white-spaces.</exception>
-        public NonEmptyOrWhiteSpaceString(string rawValue) => _value = Validate(rawValue, DefaultErrorMessage);
+        public NonEmptyOrWhiteSpaceString(in string rawValue) => _value = Validate(rawValue, DefaultErrorMessage);
 
         /// <summary>
         /// Validates input and returns new instance if everything is OK.
@@ -41,9 +41,9 @@ namespace ProtoPrimitives.NET.Strings
         /// <param name="errorMessage">Custom error message</param>
         /// <exception cref="ArgumentNullException">When any parameter is <see langword="null"/>.</exception>
         /// <exception cref="FormatException">When <paramref name="rawValue"/> is empty or contains only white-spaces.</exception>
-        public NonEmptyOrWhiteSpaceString(string rawValue, string errorMessage) => _value = Validate(rawValue, errorMessage);
+        public NonEmptyOrWhiteSpaceString(in string rawValue, in string errorMessage) => _value = Validate(rawValue, errorMessage);
 
-        private static ConfigurableString Validate(string rawValue, string errorMessage)
+        private static ConfigurableString Validate(in string rawValue, in string errorMessage)
         {
             Arguments.NotNull(errorMessage, nameof(errorMessage), InvalidCustomErrorMessageMessage);
 
@@ -85,7 +85,7 @@ namespace ProtoPrimitives.NET.Strings
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public int CompareTo(NonEmptyOrWhiteSpaceString? other)
+        public int CompareTo(in NonEmptyOrWhiteSpaceString? other)
             => _value.CompareTo(other);
 
         /// <summary>
@@ -104,6 +104,6 @@ namespace ProtoPrimitives.NET.Strings
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public bool Equals(NonEmptyOrWhiteSpaceString? other) => _value.Equals(other);
+        public bool Equals(in NonEmptyOrWhiteSpaceString? other) => _value.Equals(other);
     }
 }

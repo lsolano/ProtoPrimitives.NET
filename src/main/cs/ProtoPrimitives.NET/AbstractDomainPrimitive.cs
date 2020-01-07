@@ -17,7 +17,7 @@ namespace ProtoPrimitives.NET
         /// <param name="errorMessage">Value to wrap.</param>
         /// <param name="validator">Validator function, must perform all validations and throw exceptions, if everything is OK returns the <paramref name="rawValue"/></param>
         /// <exception cref="ArgumentNullException">When <paramref name="validator"/> is <see langword="null"/>.</exception>
-        protected AbstractDomainPrimitive(TRawType rawValue, Message errorMessage, Func<TRawType, Message, TRawType> validator)
+        protected AbstractDomainPrimitive(in TRawType rawValue, in Message errorMessage, in Func<TRawType, Message, TRawType> validator)
             => Value = Arguments.NotNull(validator, nameof(validator)).Invoke(rawValue, Arguments.NotNull(errorMessage, nameof(errorMessage)));
 
         /// <summary>

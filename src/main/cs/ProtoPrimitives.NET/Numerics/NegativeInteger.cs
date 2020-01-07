@@ -24,7 +24,7 @@ namespace ProtoPrimitives.NET.Numerics
         /// </summary>
         /// <param name="rawValue">Must be negative</param>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="rawValue"/> is zero or positive.</exception>
-        public NegativeInteger(int rawValue) : this(rawValue, DefaultErrorMessage)
+        public NegativeInteger(in int rawValue) : this(rawValue, DefaultErrorMessage)
         {
         }
 
@@ -35,10 +35,10 @@ namespace ProtoPrimitives.NET.Numerics
         /// <param name="errorMessage">Custom error message</param>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="rawValue"/> is zero or positive.</exception>
         /// <exception cref="ArgumentNullException">When <paramref name="errorMessage"/> is <see langword="null"/>.</exception>
-        public NegativeInteger(int rawValue, Message errorMessage) : base(rawValue, errorMessage, Validate)
+        public NegativeInteger(in int rawValue, in Message errorMessage) : base(rawValue, errorMessage, (val, msg) => Validate(val, msg))
         {
         }
 
-        private static int Validate(int rawValue, Message errorMessage) => Arguments.LessThan(rawValue, 0, nameof(rawValue), errorMessage.Value);
+        private static int Validate(in int rawValue, in Message errorMessage) => Arguments.LessThan(rawValue, 0, nameof(rawValue), errorMessage.Value);
     }
 }

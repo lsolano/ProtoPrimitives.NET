@@ -19,7 +19,7 @@ namespace ProtoPrimitives.NET.Temporal
         /// </summary>
         /// <param name="rawValue"></param>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="rawValue"/> is not in the future.</exception>
-        public FutureTimestamp(DateTimeOffset rawValue) : this(rawValue, DefaultErrorMessage)
+        public FutureTimestamp(in DateTimeOffset rawValue) : this(rawValue, DefaultErrorMessage)
         {
         }
 
@@ -30,11 +30,11 @@ namespace ProtoPrimitives.NET.Temporal
         /// <param name="errorMessage">Custom error message</param>
         /// <exception cref="ArgumentNullException">When <paramref name="errorMessage"/> is <see langword="null"/></exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="rawValue"/> is not in the future.</exception>
-        public FutureTimestamp(DateTimeOffset rawValue, Message errorMessage) : base(rawValue, errorMessage, Validate)
+        public FutureTimestamp(in DateTimeOffset rawValue, in Message errorMessage) : base(rawValue, errorMessage, (val, msg) => Validate(val, msg))
         {
         }
 
-        private static DateTimeOffset Validate(DateTimeOffset rawValue, Message errorMessage)
+        private static DateTimeOffset Validate(in DateTimeOffset rawValue, in Message errorMessage)
             => Arguments.GreaterThan(rawValue, DateTimeOffset.UtcNow, nameof(rawValue), errorMessage.Value);
     }
 }

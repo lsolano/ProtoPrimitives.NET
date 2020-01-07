@@ -20,7 +20,7 @@ namespace ProtoPrimitives.NET.Strings
     {
         private readonly StringComparison _comparisonStrategy;
 
-        private ConfigurableString(string rawValue, StringComparison comparisonStrategy)
+        private ConfigurableString(in string rawValue, in StringComparison comparisonStrategy)
         {
             Value = rawValue;
             _comparisonStrategy = comparisonStrategy;
@@ -79,7 +79,7 @@ namespace ProtoPrimitives.NET.Strings
 
         /// <summary>
         /// Fluent builder for <see cref="ConfigurableString"/>s.
-        /// This builder is for only one usage, after calling <see cref="Build(string)"/> or <see cref="Build(string,System.Action{string})"/>
+        /// This builder is for only one usage, after calling <see cref="Build(in string)"/> or <see cref="Build(in string, in System.Action{string})"/>
         /// subsequent calls will throw <see cref="InvalidOperationException"/>.
         /// </summary>
         public sealed class Builder
@@ -117,7 +117,7 @@ namespace ProtoPrimitives.NET.Strings
             /// </summary>
             /// <param name="argumentNullErrorMessage">Required</param>
             /// <exception cref="ArgumentNullException">When <paramref name="argumentNullErrorMessage"/> is <see langword="null"/></exception>
-            public Builder(Message argumentNullErrorMessage) : this(argumentNullErrorMessage, false)
+            public Builder(in Message argumentNullErrorMessage) : this(argumentNullErrorMessage, false)
             {
             }
 
@@ -127,7 +127,7 @@ namespace ProtoPrimitives.NET.Strings
             /// <param name="argumentNullErrorMessage">Required</param>
             /// <param name="useSingleMessage">If <see langword="true"/> the same error message (<paramref name="argumentNullErrorMessage"/>) will be used on all exception situations.</param>
             /// <exception cref="ArgumentNullException">When <paramref name="argumentNullErrorMessage"/> is <see langword="null"/></exception>
-            public Builder(Message argumentNullErrorMessage, bool useSingleMessage)
+            public Builder(in Message argumentNullErrorMessage, in bool useSingleMessage)
             {
                 _argumentNullErrorMessage = Arguments.NotNull(argumentNullErrorMessage, nameof(argumentNullErrorMessage));
 
@@ -408,7 +408,7 @@ namespace ProtoPrimitives.NET.Strings
                 => CheckPreconditionsTrySetInvalidFormatErrorMessageAndExecute(invalidFormatErrorMessage,
                     () => _validFormatRegex = Arguments.NotNull(regex, nameof(regex)));
 
-            private Builder CheckPreconditionsAndExecute(Action checkAndSet)
+            private Builder CheckPreconditionsAndExecute(in Action checkAndSet)
             {
                 EnsureNotBuilt();
 
@@ -417,7 +417,7 @@ namespace ProtoPrimitives.NET.Strings
                 return this;
             }
 
-            private Builder CheckPreconditionsTrySetInvalidFormatErrorMessageAndExecute(Message invalidFormatErrorMessage, Action checkAndSet)
+            private Builder CheckPreconditionsTrySetInvalidFormatErrorMessageAndExecute(in Message invalidFormatErrorMessage, in Action checkAndSet)
             {
                 EnsureNotBuilt();
 
@@ -434,7 +434,7 @@ namespace ProtoPrimitives.NET.Strings
             /// </summary>
             /// <param name="rawValue">Can not be <see langowrd="null"/></param>
             /// <returns><see cref="ConfigurableString"/> or throws exception</returns>
-            public ConfigurableString Build(string rawValue)
+            public ConfigurableString Build(in string rawValue)
                 => Build(rawValue, NoOpCustomParser);
 
             /// <summary>
@@ -443,7 +443,7 @@ namespace ProtoPrimitives.NET.Strings
             /// <param name="rawValue">Can not be <see langowrd="null"/></param>
             /// <param name="customParser">Can not be <see langowrd="null"/>. Applied after all options, as a final validation.</param>
             /// <returns></returns>
-            public ConfigurableString Build(string rawValue, Action<string> customParser)
+            public ConfigurableString Build(in string rawValue, in Action<string> customParser)
             {
                 EnsureNotBuilt();
 
@@ -474,13 +474,13 @@ namespace ProtoPrimitives.NET.Strings
                 }
             }
 
-            private void CheckForNull(string rawValue, Action<string> customParser)
+            private void CheckForNull(in string rawValue, in Action<string> customParser)
             {
                 Arguments.NotNull(customParser, nameof(customParser));
                 Arguments.NotNull(rawValue, nameof(rawValue), _argumentNullErrorMessage.Value);
             }
 
-            private void CheckLengthRange(string rawValue)
+            private void CheckLengthRange(in string rawValue)
             {
                 StringLengthRange.Validate(_minLength ?? StringLength.Min, _maxLength ?? StringLength.Max);
 
@@ -497,11 +497,8 @@ namespace ProtoPrimitives.NET.Strings
                 }
             }
 
-            private void CheckForTrimming(string rawValue)
+            private void CheckForTrimming(in string rawValue)
             {
-                bool HasLeadingWhiteSpace() => char.IsWhiteSpace(rawValue, 0);
-                bool HasTrailingWhiteSpace() => char.IsWhiteSpace(rawValue, rawValue.Length - 1);
-
                 if (rawValue.Length == 0)
                 {
                     return;
@@ -509,26 +506,26 @@ namespace ProtoPrimitives.NET.Strings
 
                 if (_requiresTrimmed)
                 {
-                    if (HasLeadingWhiteSpace() || HasTrailingWhiteSpace())
+                    if (rawValue.HasLeadingWhiteSpace() || rawValue.HasTrailingWhiteSpace())
                     {
                         throw new FormatException(_invalidFormatErrorMessage.Value);
                     }
                 }
                 else
                 {
-                    if (DoesNotAllowLeadingWhiteSpace && HasLeadingWhiteSpace())
+                    if (DoesNotAllowLeadingWhiteSpace && rawValue.HasLeadingWhiteSpace())
                     {
                         throw new FormatException(_invalidFormatErrorMessage.Value);
                     }
 
-                    if (DoesNotAllowTrailingWhiteSpace && HasTrailingWhiteSpace())
+                    if (DoesNotAllowTrailingWhiteSpace && rawValue.HasTrailingWhiteSpace())
                     {
                         throw new FormatException(_invalidFormatErrorMessage.Value);
                     }
                 }
             }
 
-            private void CheckForInvalidChars(string rawValue)
+            private void CheckForInvalidChars(in string rawValue)
             {
                 if (_invalidCharsRegex == null)
                 {
@@ -541,7 +538,7 @@ namespace ProtoPrimitives.NET.Strings
                 }
             }
 
-            private void CheckForValidFormat(string rawValue)
+            private void CheckForValidFormat(in string rawValue)
             {
                 if (_validFormatRegex == null)
                 {
@@ -554,12 +551,11 @@ namespace ProtoPrimitives.NET.Strings
                 }
             }
 
-            private void CheckForWhiteSpaces(string rawValue)
+            private void CheckForWhiteSpaces(in string rawValue)
             {
                 bool CanNotBeEmpty() => _minLength != null && _minLength.Value > 0;
-                bool IsWhiteSpaceOnly() => rawValue.All(char.IsWhiteSpace);
 
-                if (DoesNotAllowWhiteSpacesOnly && CanNotBeEmpty() && IsWhiteSpaceOnly())
+                if (DoesNotAllowWhiteSpacesOnly && CanNotBeEmpty() && rawValue.IsWhiteSpaceOnly())
                 {
                     throw new FormatException(_invalidFormatErrorMessage.Value);
                 }

@@ -13,7 +13,7 @@ namespace ProtoPrimitives.NET.Numerics
         /// </summary>
         /// <param name="min">Can be equals to <paramref name="max"/> but not <see langword="nulll"/></param>
         /// <param name="max">Can be equals to <paramref name="min"/> but not <see langword="nulll"/></param>
-        public StringLengthRange(StringLength min, StringLength max)
+        public StringLengthRange(in StringLength min, in StringLength max)
         {
             Validate(min, max);
 
@@ -30,7 +30,7 @@ namespace ProtoPrimitives.NET.Numerics
         /// </summary>
         public StringLength Max { get; }
 
-        internal static void Validate(StringLength min, StringLength max)
+        internal static void Validate(in StringLength min, in StringLength max)
         {
             Arguments.NotNull(min, nameof(min));
             Arguments.NotNull(max, nameof(max));

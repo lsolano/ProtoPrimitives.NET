@@ -19,7 +19,7 @@ namespace ProtoPrimitives.NET.Temporal
         /// </summary>
         /// <param name="rawValue">Must be present or past time</param>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="rawValue"/> is in the future.</exception>
-        public PastOrPresentTimestamp(DateTimeOffset rawValue) : this(rawValue, DefaultErrorMessage)
+        public PastOrPresentTimestamp(in DateTimeOffset rawValue) : this(rawValue, DefaultErrorMessage)
         {
         }
 
@@ -30,11 +30,11 @@ namespace ProtoPrimitives.NET.Temporal
         /// <param name="errorMessage">Custom error message</param>
         /// <exception cref="ArgumentNullException">When <paramref name="errorMessage"/> is <see langword="null"/></exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="rawValue"/> is in the future.</exception>
-        public PastOrPresentTimestamp(DateTimeOffset rawValue, Message errorMessage) : base(rawValue, errorMessage, Validate)
+        public PastOrPresentTimestamp(in DateTimeOffset rawValue, in Message errorMessage) : base(rawValue, errorMessage, (val, msg) => Validate(val, msg))
         {
         }
 
-        private static DateTimeOffset Validate(DateTimeOffset rawValue, Message errorMessage)
+        private static DateTimeOffset Validate(in DateTimeOffset rawValue, in Message errorMessage)
             => Arguments.LessThanOrEqualTo(rawValue, DateTimeOffset.UtcNow, nameof(rawValue), errorMessage.Value);
     }
 }

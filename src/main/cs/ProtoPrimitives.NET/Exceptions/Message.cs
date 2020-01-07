@@ -14,7 +14,7 @@ namespace ProtoPrimitives.NET.Exceptions
         /// <param name="rawValue">Can not be <see langword="null"/> or empty</param>
         /// <exception cref="ArgumentNullException">When <paramref name="rawValue"/> is <see langword="null"/>.</exception>
         /// <exception cref="FormatException">When <paramref name="rawValue"/> is empty or contains only white-spaces.</exception>
-        public Message(string rawValue)
+        public Message(in string rawValue)
         {
             Arguments.NotNull(rawValue, nameof(rawValue));
 
@@ -43,7 +43,7 @@ namespace ProtoPrimitives.NET.Exceptions
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public int CompareTo(Message? other) => string.CompareOrdinal(Value, other?.Value);
+        public int CompareTo(in Message? other) => string.CompareOrdinal(Value, other?.Value);
 
         /// <summary>
         /// Same as wrapped value equality.
