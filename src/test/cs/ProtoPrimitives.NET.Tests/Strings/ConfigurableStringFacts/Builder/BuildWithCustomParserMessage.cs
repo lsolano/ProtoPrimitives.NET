@@ -5,15 +5,16 @@ using static ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts.Builder.C
 
 namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts.Builder
 {
-    [TestFixture]
-    internal sealed class BuildWithCustomParserMessage
+    internal sealed class BuildWithCustomParserMessage : ValidConstructorArgumentsFixture
     {
-        [Test]
-        public void With_Null_Rawvalue_Throws_ArgumentNullException([Values(false, true)] in bool useSingleParamConstructor, [Values(false, true)] in bool useSingleMessage)
+        public BuildWithCustomParserMessage(bool useSingleParamConstructor, bool useSingleMessage) : base(useSingleParamConstructor, useSingleMessage)
         {
-            Assume.That(useSingleParamConstructor && useSingleMessage, Is.Not.True);
+        }
 
-            var builder = Create(useSingleParamConstructor, ArgNullErrorMessage, useSingleMessage);
+        [Test]
+        public void With_Null_Rawvalue_Throws_ArgumentNullException()
+        {
+            ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
             const string rawValue = null;
 
             Assert.That(() => builder.Build(rawValue, val => { }),
@@ -23,11 +24,9 @@ namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts.Builder
         }
 
         [Test]
-        public void With_Null_CustomParser_Throws_ArgumentNullException([Values(false, true)] in bool useSingleParamConstructor, [Values(false, true)] in bool useSingleMessage)
+        public void With_Null_CustomParser_Throws_ArgumentNullException()
         {
-            Assume.That(useSingleParamConstructor && useSingleMessage, Is.Not.True);
-
-            var builder = Create(useSingleParamConstructor, ArgNullErrorMessage, useSingleMessage);
+            ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
             const string rawValue = "Some value using custom parser";
 
             Assert.That(() => builder.Build(rawValue, null),
@@ -36,11 +35,9 @@ namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts.Builder
         }
 
         [Test]
-        public void Calls_Custom_Parser([Values(false, true)] in bool useSingleParamConstructor, [Values(false, true)] in bool useSingleMessage)
+        public void Calls_Custom_Parser()
         {
-            Assume.That(useSingleParamConstructor && useSingleMessage, Is.Not.True);
-
-            var builder = Create(useSingleParamConstructor, ArgNullErrorMessage, useSingleMessage);
+            ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
             const string rawValue = "Some value using custom parser";
 
             bool parserCalled = false;
@@ -50,11 +47,9 @@ namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts.Builder
         }
 
         [Test]
-        public void Accepts_Valid_Value([Values(false, true)] in bool useSingleParamConstructor, [Values(false, true)] in bool useSingleMessage)
+        public void Accepts_Valid_Value()
         {
-            Assume.That(useSingleParamConstructor && useSingleMessage, Is.Not.True);
-
-            var builder = Create(useSingleParamConstructor, ArgNullErrorMessage, useSingleMessage);
+            ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
             const string rawValue = "Some value using custom parser";
 
             ConfigurableString str = builder.Build(rawValue, val => { });
@@ -63,11 +58,9 @@ namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts.Builder
         }
 
         [Test]
-        public void Does_Not_Catch_CustomParser_Exceptions([Values(false, true)] in bool useSingleParamConstructor, [Values(false, true)] in bool useSingleMessage)
+        public void Does_Not_Catch_CustomParser_Exceptions()
         {
-            Assume.That(useSingleParamConstructor && useSingleMessage, Is.Not.True);
-
-            var builder = Create(useSingleParamConstructor, ArgNullErrorMessage, useSingleMessage);
+            ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
             const string rawValue = "Some value using custom parser";
             const string customParserExceptionMessage = "I was thrown from custom parser.";
 
@@ -79,17 +72,15 @@ namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts.Builder
         }
 
         [Test]
-        public void Throws_If_Called_Twice([Values(false, true)] in bool useSingleParamConstructor, [Values(false, true)] in bool useSingleMessage)
+        public void Throws_If_Called_Twice()
         {
-            Assume.That(useSingleParamConstructor && useSingleMessage, Is.Not.True);
-
-            var builder = Create(useSingleParamConstructor, ArgNullErrorMessage, useSingleMessage);
+            ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
 
             _ = builder.Build("Another valid input.");
 
             Assert.That(() => builder.Build("More good inputs.", val => { }),
                 Throws.InstanceOf<InvalidOperationException>()
-                    .With.Message.EqualTo("Already built."));
+                    .With.Message.EqualTo(BuildMessage.AlreadyBuiltErrorMessage));
         }
     }
 }

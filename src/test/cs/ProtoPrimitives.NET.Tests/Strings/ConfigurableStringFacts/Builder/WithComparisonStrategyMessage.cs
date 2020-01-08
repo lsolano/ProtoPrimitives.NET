@@ -7,33 +7,26 @@ using static ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts.Builder.C
 
 namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts.Builder
 {
-    [TestFixture]
-    internal sealed class WithComparisonStrategyMessage
+    internal sealed class WithComparisonStrategyMessage : ValidConstructorArgumentsFixture
     {
         private static readonly IEnumerable<StringComparison> AllStrategies = Enum.GetValues(typeof(StringComparison)).Cast<StringComparison>().ToList();
 
-        [Test]
-        public void With_Valid_Values_Throws_Nothing(
-            [ValueSource(nameof(AllStrategies))] StringComparison strategy,
-            [Values(false, true)] in bool useSingleParamConstructor,
-            [Values(false, true)] in bool useSingleMessage)
+        public WithComparisonStrategyMessage(bool useSingleParamConstructor, bool useSingleMessage) : base(useSingleParamConstructor, useSingleMessage)
         {
-            Assume.That(useSingleParamConstructor && useSingleMessage, Is.Not.True);
+        }
 
-            var builder = Create(useSingleParamConstructor, ArgNullErrorMessage, useSingleMessage);
+        [Test]
+        public void With_Valid_Values_Throws_Nothing([ValueSource(nameof(AllStrategies))] StringComparison strategy)
+        {
+            ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
 
             Assert.That(() => builder.WithComparisonStrategy(strategy), Throws.Nothing);
         }
 
         [Test]
-        public void With_Invalid_Values_Throws_ArgumentOutOfRangeException(
-            [Values(-1, 6)] StringComparison strategy,
-            [Values(false, true)] in bool useSingleParamConstructor,
-            [Values(false, true)] in bool useSingleMessage)
+        public void With_Invalid_Values_Throws_ArgumentOutOfRangeException([Values(-1, 6)] StringComparison strategy)
         {
-            Assume.That(useSingleParamConstructor && useSingleMessage, Is.Not.True);
-
-            var builder = Create(useSingleParamConstructor, ArgNullErrorMessage, useSingleMessage);
+            ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
 
             Assert.That(() => builder.WithComparisonStrategy(strategy),
                 Throws.InstanceOf<ArgumentOutOfRangeException>()
@@ -42,13 +35,9 @@ namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts.Builder
         }
 
         [Test]
-        public void Can_Be_Called_Twice(
-            [Values(false, true)] in bool useSingleParamConstructor,
-            [Values(false, true)] in bool useSingleMessage)
+        public void Can_Be_Called_Twice()
         {
-            Assume.That(useSingleParamConstructor && useSingleMessage, Is.Not.True);
-
-            var builder = Create(useSingleParamConstructor, ArgNullErrorMessage, useSingleMessage);
+            ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
 
             builder.WithComparisonStrategy(StringComparison.InvariantCulture);
 
@@ -56,14 +45,10 @@ namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts.Builder
         }
 
         [Test]
-        public void Use_Default_Strategy_For_Comparison(
-            [Values(false, true)] in bool useSingleParamConstructor,
-            [Values(false, true)] in bool useSingleMessage)
+        public void Use_Default_Strategy_For_Comparison()
         {
-            Assume.That(useSingleParamConstructor && useSingleMessage, Is.Not.True);
-
             string[] rawValues = new[] { "a", "b", "c", "A", "B", "C" };
-            ConfigurableString[] cfgStrings = FromRaw(rawValues, useSingleParamConstructor, useSingleMessage, null);
+            ConfigurableString[] cfgStrings = FromRaw(rawValues, _useSingleParamConstructor, _useSingleMessage, null);
 
             string actual = string.Join("", cfgStrings.OrderBy(cfgStr => cfgStr).Select(cfgStr => cfgStr.Value));
 
@@ -71,14 +56,10 @@ namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts.Builder
         }
 
         [Test]
-        public void Use_Default_Strategy_For_Equality(
-            [Values(false, true)] in bool useSingleParamConstructor,
-            [Values(false, true)] in bool useSingleMessage)
+        public void Use_Default_Strategy_For_Equality()
         {
-            Assume.That(useSingleParamConstructor && useSingleMessage, Is.Not.True);
-
             string[] rawValues = new[] { "aBc", "AbC" };
-            ConfigurableString[] cfgStrings = FromRaw(rawValues, useSingleParamConstructor, useSingleMessage, null);
+            ConfigurableString[] cfgStrings = FromRaw(rawValues, _useSingleParamConstructor, _useSingleMessage, null);
 
             string actual = string.Join("", cfgStrings.OrderBy(cfgStr => cfgStr).Select(cfgStr => cfgStr.Value));
 
@@ -86,14 +67,10 @@ namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts.Builder
         }
 
         [Test]
-        public void Use_Set_Strategy_For_Comparison(
-            [Values(false, true)] in bool useSingleParamConstructor,
-            [Values(false, true)] in bool useSingleMessage)
+        public void Use_Set_Strategy_For_Comparison()
         {
-            Assume.That(useSingleParamConstructor && useSingleMessage, Is.Not.True);
-
             string[] rawValues = new[] { "a", "b", "c", "A", "B", "C" };
-            ConfigurableString[] cfgStrings = FromRaw(rawValues, useSingleParamConstructor, useSingleMessage, StringComparison.InvariantCulture);
+            ConfigurableString[] cfgStrings = FromRaw(rawValues, _useSingleParamConstructor, _useSingleMessage, StringComparison.InvariantCulture);
 
             string actual = string.Join("", cfgStrings.OrderBy(cfgStr => cfgStr).Select(cfgStr => cfgStr.Value));
 
@@ -101,26 +78,33 @@ namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts.Builder
         }
 
         [Test]
-        public void Use_Set_Strategy_For_Equality(
-            [Values(false, true)] in bool useSingleParamConstructor,
-            [Values(false, true)] in bool useSingleMessage)
+        public void Use_Set_Strategy_For_Equality()
         {
-            Assume.That(useSingleParamConstructor && useSingleMessage, Is.Not.True);
-
             string[] rawValues = new[] { "aBc", "AbC" };
-            ConfigurableString[] cfgStrings = FromRaw(rawValues, useSingleParamConstructor, useSingleMessage, StringComparison.OrdinalIgnoreCase);
+            ConfigurableString[] cfgStrings = FromRaw(rawValues, _useSingleParamConstructor, _useSingleMessage, StringComparison.OrdinalIgnoreCase);
 
             string actual = string.Join("", cfgStrings.OrderBy(cfgStr => cfgStr).Select(cfgStr => cfgStr.Value));
 
             Assert.That(cfgStrings[0].Equals(cfgStrings[1]), Is.True);
         }
 
-        private ConfigurableString[] FromRaw(in string[] rawValues, in bool useSingleParamConstructor, in bool useSingleMessage, in StringComparison? strategy)
+        [Test]
+        public void After_Built_Throws_Exception()
+        {
+            ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
+
+            _ = builder.Build("Some dummy, but valid, input.");
+
+            Assert.That(() => builder.WithComparisonStrategy(StringComparison.OrdinalIgnoreCase),
+                Throws.InstanceOf<InvalidOperationException>().With.Message.EqualTo(BuildMessage.AlreadyBuiltErrorMessage));
+        }
+
+        private static ConfigurableString[] FromRaw(in string[] rawValues, in bool useSingleParamConstructor, in bool useSingleMessage, in StringComparison? strategy)
         {
             List<ConfigurableString> result = new List<ConfigurableString>();
             foreach (string rawValue in rawValues)
             {
-                var builder = Create(useSingleParamConstructor, ArgNullErrorMessage, useSingleMessage);
+                ConfigurableString.Builder builder = Create(useSingleParamConstructor, useSingleMessage);
 
                 if (strategy.HasValue)
                 {

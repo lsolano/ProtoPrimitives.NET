@@ -5,15 +5,18 @@ using static ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts.Builder.C
 
 namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts.Builder
 {
-    [TestFixture]
-    internal sealed class BuildMessage
+    internal sealed class BuildMessage : ValidConstructorArgumentsFixture
     {
-        [Test]
-        public void With_Null_Rawvalue_Throws_ArgumentNullException([Values(false, true)] in bool useSingleParamConstructor, [Values(false, true)] in bool useSingleMessage)
-        {
-            Assume.That(useSingleParamConstructor && useSingleMessage, Is.Not.True);
+        internal const string AlreadyBuiltErrorMessage = "Already built.";
 
-            var builder = Create(useSingleParamConstructor, ArgNullErrorMessage, useSingleMessage);
+        public BuildMessage(bool useSingleParamConstructor, bool useSingleMessage) : base(useSingleParamConstructor, useSingleMessage)
+        {
+        }
+
+        [Test]
+        public void With_Null_Rawvalue_Throws_ArgumentNullException()
+        {
+            ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
             const string rawValue = null;
 
             Assert.That(() => builder.Build(rawValue),
@@ -23,11 +26,9 @@ namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts.Builder
         }
 
         [Test]
-        public void Allows_Build_After_Instantiation([Values(false, true)] in bool useSingleParamConstructor, [Values(false, true)] in bool useSingleMessage)
+        public void Allows_Build_After_Instantiation()
         {
-            Assume.That(useSingleParamConstructor && useSingleMessage, Is.Not.True);
-
-            var builder = Create(useSingleParamConstructor, ArgNullErrorMessage, useSingleMessage);
+            ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
             const string rawValue = "I'm a valid string";
 
             ConfigurableString str = builder.Build(rawValue);
@@ -36,15 +37,14 @@ namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts.Builder
         }
 
         [Test]
-        public void Throws_If_Called_Twice([Values(false, true)] in bool useSingleParamConstructor, [Values(false, true)] in bool useSingleMessage)
+        public void Throws_If_Called_Twice()
         {
-            Assume.That(useSingleParamConstructor && useSingleMessage, Is.Not.True);
-
-            var builder = Create(useSingleParamConstructor, ArgNullErrorMessage, useSingleMessage);
+            ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
 
             _ = builder.Build("I'm a valid string");
 
-            Assert.That(() => builder.Build("Some other value."), Throws.InstanceOf<InvalidOperationException>().With.Message.EqualTo("Already built."));
+            Assert.That(() => builder.Build("Some other value."),
+                Throws.InstanceOf<InvalidOperationException>().With.Message.EqualTo(AlreadyBuiltErrorMessage));
         }
     }
 }
