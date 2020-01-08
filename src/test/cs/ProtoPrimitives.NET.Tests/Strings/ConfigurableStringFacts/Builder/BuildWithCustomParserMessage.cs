@@ -1,27 +1,25 @@
 ﻿using NUnit.Framework;
-using ProtoPrimitives.NET.Exceptions;
 using ProtoPrimitives.NET.Strings;
 using System;
+using static ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts.Builder.ConstructorMessage;
 
-namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts
+namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts.Builder
 {
     [TestFixture]
-    internal sealed class BuilderBuildWithCustomParserMessage
+    internal sealed class BuildWithCustomParserMessage
     {
-        private static readonly Message ArgNullErrorMessage = new Message("Some caller provided not null message");
-
         [Test]
         public void With_Null_Rawvalue_Throws_ArgumentNullException([Values(false, true)] in bool useSingleParamConstructor, [Values(false, true)] in bool useSingleMessage)
         {
             Assume.That(useSingleParamConstructor && useSingleMessage, Is.Not.True);
 
-            var builder = useSingleParamConstructor ? new ConfigurableString.Builder(ArgNullErrorMessage) : new ConfigurableString.Builder(ArgNullErrorMessage, useSingleMessage);
+            var builder = Create(useSingleParamConstructor, ArgNullErrorMessage, useSingleMessage);
             const string rawValue = null;
 
             Assert.That(() => builder.Build(rawValue, val => { }),
                 Throws.ArgumentNullException
                     .With.Property(nameof(ArgumentNullException.ParamName)).EqualTo("rawValue")
-                    .With.Message.StartsWith(ArgNullErrorMessage.Value));
+                    .With.Message.StartsWith(ConstructorMessage.ArgNullErrorMessage.Value));
         }
 
         [Test]
@@ -29,7 +27,7 @@ namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts
         {
             Assume.That(useSingleParamConstructor && useSingleMessage, Is.Not.True);
 
-            var builder = useSingleParamConstructor ? new ConfigurableString.Builder(ArgNullErrorMessage) : new ConfigurableString.Builder(ArgNullErrorMessage, useSingleMessage);
+            var builder = Create(useSingleParamConstructor, ArgNullErrorMessage, useSingleMessage);
             const string rawValue = "Some value using custom parser";
 
             Assert.That(() => builder.Build(rawValue, null),
@@ -42,7 +40,7 @@ namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts
         {
             Assume.That(useSingleParamConstructor && useSingleMessage, Is.Not.True);
 
-            var builder = useSingleParamConstructor ? new ConfigurableString.Builder(ArgNullErrorMessage) : new ConfigurableString.Builder(ArgNullErrorMessage, useSingleMessage);
+            var builder = Create(useSingleParamConstructor, ArgNullErrorMessage, useSingleMessage);
             const string rawValue = "Some value using custom parser";
 
             bool parserCalled = false;
@@ -56,7 +54,7 @@ namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts
         {
             Assume.That(useSingleParamConstructor && useSingleMessage, Is.Not.True);
 
-            var builder = useSingleParamConstructor ? new ConfigurableString.Builder(ArgNullErrorMessage) : new ConfigurableString.Builder(ArgNullErrorMessage, useSingleMessage);
+            var builder = Create(useSingleParamConstructor, ArgNullErrorMessage, useSingleMessage);
             const string rawValue = "Some value using custom parser";
 
             ConfigurableString str = builder.Build(rawValue, val => { });
@@ -69,7 +67,7 @@ namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts
         {
             Assume.That(useSingleParamConstructor && useSingleMessage, Is.Not.True);
 
-            var builder = useSingleParamConstructor ? new ConfigurableString.Builder(ArgNullErrorMessage) : new ConfigurableString.Builder(ArgNullErrorMessage, useSingleMessage);
+            var builder = Create(useSingleParamConstructor, ArgNullErrorMessage, useSingleMessage);
             const string rawValue = "Some value using custom parser";
             const string customParserExceptionMessage = "I was thrown from custom parser.";
 
@@ -85,7 +83,7 @@ namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts
         {
             Assume.That(useSingleParamConstructor && useSingleMessage, Is.Not.True);
 
-            var builder = useSingleParamConstructor ? new ConfigurableString.Builder(ArgNullErrorMessage) : new ConfigurableString.Builder(ArgNullErrorMessage, useSingleMessage);
+            var builder = Create(useSingleParamConstructor, ArgNullErrorMessage, useSingleMessage);
 
             _ = builder.Build("Another valid input.");
 

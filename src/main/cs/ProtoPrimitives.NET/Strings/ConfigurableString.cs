@@ -1,7 +1,6 @@
 ﻿using ProtoPrimitives.NET.Exceptions;
 using ProtoPrimitives.NET.Numerics;
 using System;
-using System.Linq;
 using System.Text.RegularExpressions;
 using Triplex.Validations;
 
@@ -92,7 +91,7 @@ namespace ProtoPrimitives.NET.Strings
 
             private bool _built;
 
-            private StringComparison _comparisonStrategy = StringComparison.InvariantCulture;
+            private StringComparison _comparisonStrategy = StringComparison.Ordinal;
             private readonly Message _argumentNullErrorMessage;
             private Message _tooShortErrorMessage = DefaultTooShortErrorMessage;
             private Message _tooLongErrorMessage = DefaultTooLongErrorMessage;
@@ -141,7 +140,7 @@ namespace ProtoPrimitives.NET.Strings
             }
 
             /// <summary>
-            /// If not set, defaults to <see cref="StringComparison.InvariantCulture"/>.
+            /// If not set, defaults to <see cref="StringComparison.Ordinal"/>.
             /// </summary>
             /// <param name="comparisonStrategy"></param>
             /// <returns>Self</returns>

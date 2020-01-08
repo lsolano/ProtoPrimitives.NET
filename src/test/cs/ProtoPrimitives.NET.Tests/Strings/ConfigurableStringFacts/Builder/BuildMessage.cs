@@ -1,21 +1,19 @@
 using System;
 using NUnit.Framework;
-using ProtoPrimitives.NET.Exceptions;
 using ProtoPrimitives.NET.Strings;
+using static ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts.Builder.ConstructorMessage;
 
-namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts
+namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts.Builder
 {
     [TestFixture]
-    internal sealed class BuilderBuildMessage
+    internal sealed class BuildMessage
     {
-        private static readonly Message ArgNullErrorMessage = new Message("Some caller provided not null message");
-
         [Test]
         public void With_Null_Rawvalue_Throws_ArgumentNullException([Values(false, true)] in bool useSingleParamConstructor, [Values(false, true)] in bool useSingleMessage)
         {
             Assume.That(useSingleParamConstructor && useSingleMessage, Is.Not.True);
 
-            var builder = useSingleParamConstructor ? new ConfigurableString.Builder(ArgNullErrorMessage) : new ConfigurableString.Builder(ArgNullErrorMessage, useSingleMessage);
+            var builder = Create(useSingleParamConstructor, ArgNullErrorMessage, useSingleMessage);
             const string rawValue = null;
 
             Assert.That(() => builder.Build(rawValue),
@@ -29,7 +27,7 @@ namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts
         {
             Assume.That(useSingleParamConstructor && useSingleMessage, Is.Not.True);
 
-            var builder = useSingleParamConstructor ? new ConfigurableString.Builder(ArgNullErrorMessage) : new ConfigurableString.Builder(ArgNullErrorMessage, useSingleMessage);
+            var builder = Create(useSingleParamConstructor, ArgNullErrorMessage, useSingleMessage);
             const string rawValue = "I'm a valid string";
 
             ConfigurableString str = builder.Build(rawValue);
@@ -42,7 +40,7 @@ namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts
         {
             Assume.That(useSingleParamConstructor && useSingleMessage, Is.Not.True);
 
-            var builder = useSingleParamConstructor ? new ConfigurableString.Builder(ArgNullErrorMessage) : new ConfigurableString.Builder(ArgNullErrorMessage, useSingleMessage);
+            var builder = Create(useSingleParamConstructor, ArgNullErrorMessage, useSingleMessage);
 
             _ = builder.Build("I'm a valid string");
 
