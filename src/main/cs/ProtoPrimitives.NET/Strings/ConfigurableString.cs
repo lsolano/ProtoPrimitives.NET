@@ -177,11 +177,22 @@ namespace ProtoPrimitives.NET.Strings
             }
 
             /// <summary>
-            /// 
+            /// Sets the maximum allowed length and associated violation message.
             /// </summary>
-            /// <param name="maxLength"></param>
-            /// <param name="tooLongErrorMessage"></param>
+            /// <param name="maxLength">Can not be <see langword="null"/>.</param>
             /// <returns></returns>
+            /// <exception cref="ArgumentNullException">When any parameter is <see langword="null"/></exception>
+            /// <exception cref="InvalidOperationException">If already built.</exception>
+            public Builder WithMaxLength(StringLength maxLength)
+                => CheckPreconditionsAndExecute(() => _maxLength = Arguments.NotNull(maxLength, nameof(maxLength)));
+
+            /// <summary>
+            /// Sets the maximum allowed length and associated violation message.
+            /// </summary>
+            /// <param name="maxLength">Can not be <see langword="null"/>.</param>
+            /// <param name="tooLongErrorMessage">Can not be <see langword="null"/>.</param>
+            /// <returns></returns>
+            /// <exception cref="ArgumentNullException">When any parameter is <see langword="null"/></exception>
             /// <exception cref="InvalidOperationException">If already built.</exception>
             public Builder WithMaxLength(StringLength maxLength, Message tooLongErrorMessage)
             {
