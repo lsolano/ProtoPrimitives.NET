@@ -204,12 +204,13 @@ namespace ProtoPrimitives.NET.Strings
             }
 
             /// <summary>
-            /// 
+            /// Sets both minimum length and maximum length with associated error messages.
             /// </summary>
-            /// <param name="lengthRange"></param>
-            /// <param name="tooShortErrorMessage"></param>
-            /// <param name="tooLongErrorMessage"></param>
-            /// <returns></returns>
+            /// <param name="lengthRange">Can not be <see langword="null"/>.</param>
+            /// <param name="tooShortErrorMessage">Can not be <see langword="null"/>.</param>
+            /// <param name="tooLongErrorMessage">Can not be <see langword="null"/>.</param>
+            /// <returns>Self</returns>
+            /// <exception cref="ArgumentNullException">When any parameter is <see langword="null"/></exception>
             /// <exception cref="InvalidOperationException">If already built.</exception>
             public Builder WithLengthRange(StringLengthRange lengthRange, Message tooShortErrorMessage, Message tooLongErrorMessage)
             {
