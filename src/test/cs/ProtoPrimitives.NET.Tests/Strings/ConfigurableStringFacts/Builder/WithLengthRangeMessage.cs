@@ -21,7 +21,7 @@ namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts.Builder
         {
             ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
 
-            Assert.That(() => WithLengthRange(builder, SomeRange, null, DefaultTooLongMessage),
+            Assert.That(() => builder.WithLengthRange(SomeRange, null, DefaultTooLongMessage),
                 Throws.ArgumentNullException
                     .With.Property(nameof(ArgumentNullException.ParamName)).EqualTo("tooShortErrorMessage"));
         }
@@ -31,7 +31,7 @@ namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts.Builder
         {
             ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
 
-            Assert.That(() => WithLengthRange(builder, SomeRange, DefaultTooLongMessage, null),
+            Assert.That(() => builder.WithLengthRange(SomeRange, DefaultTooLongMessage, null),
                 Throws.ArgumentNullException
                     .With.Property(nameof(ArgumentNullException.ParamName)).EqualTo("tooLongErrorMessage"));
         }
@@ -41,7 +41,7 @@ namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts.Builder
         {
             ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
 
-            Assert.That(() => WithLengthRange(builder, null, DefaultTooLongMessage, DefaultTooLongMessage),
+            Assert.That(() => builder.WithLengthRange(null, DefaultTooLongMessage, DefaultTooLongMessage),
                 Throws.ArgumentNullException
                     .With.Property(nameof(ArgumentNullException.ParamName)).EqualTo("lengthRange"));
         }
@@ -51,7 +51,7 @@ namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts.Builder
         {
             ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
 
-            Assert.That(() => WithLengthRange(builder, SomeRange, DefaultTooLongMessage, DefaultTooLongMessage),
+            Assert.That(() => builder.WithLengthRange(SomeRange, DefaultTooLongMessage, DefaultTooLongMessage),
                 Throws.Nothing);
         }
 
@@ -59,7 +59,7 @@ namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts.Builder
         public void Uses_Set_LengthRange([Values("ab", "abc", "abcd")] in string rawValue)
         {
             ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
-            WithLengthRange(builder, new StringLengthRange(new StringLength(2), new StringLength(4)), DefaultTooLongMessage, DefaultTooLongMessage);
+            builder.WithLengthRange(new StringLengthRange(new StringLength(2), new StringLength(4)), DefaultTooLongMessage, DefaultTooLongMessage);
 
             Assert.That(builder.Build(rawValue).Value, Is.SameAs(rawValue));
         }
@@ -68,7 +68,7 @@ namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts.Builder
         public void Rejects_RawValues_Larger_Than_MaxLength([Values("abc", "abcd")]  string rawValue)
         {
             ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
-            WithLengthRange(builder, new StringLengthRange(new StringLength(1), new StringLength(2)), DefaultTooLongMessage, DefaultTooLongMessage);
+            builder.WithLengthRange(new StringLengthRange(new StringLength(1), new StringLength(2)), DefaultTooLongMessage, DefaultTooLongMessage);
 
             Assert.That(() => builder.Build(rawValue),
                 Throws.InstanceOf<ArgumentOutOfRangeException>()
@@ -80,17 +80,12 @@ namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts.Builder
         public void Rejects_RawValues_Shorter_Than_MinLength([Values("a", "ab")]  string rawValue)
         {
             ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
-            WithLengthRange(builder, new StringLengthRange(new StringLength(3), new StringLength(5)), DefaultTooLongMessage, DefaultTooLongMessage);
+            builder.WithLengthRange(new StringLengthRange(new StringLength(3), new StringLength(5)), DefaultTooLongMessage, DefaultTooLongMessage);
 
             Assert.That(() => builder.Build(rawValue),
                 Throws.InstanceOf<ArgumentOutOfRangeException>()
                     .With.Property(nameof(ArgumentOutOfRangeException.ParamName)).EqualTo("rawValue")
                     .And.Property(nameof(ArgumentOutOfRangeException.ActualValue)).EqualTo(rawValue.Length));
-        }
-
-        private static void WithLengthRange(in ConfigurableString.Builder builder, in StringLengthRange lengthRange, in Message tooShortMessage, in Message tooLongMessage)
-        {
-            builder.WithLengthRange(lengthRange, tooShortMessage, tooLongMessage);
         }
     }
 }

@@ -226,20 +226,21 @@ namespace ProtoPrimitives.NET.Strings
             }
 
             /// <summary>
-            /// 
+            /// Indicates if the given input must be trimmed (can not have white space characters at the biginning or end).
             /// </summary>
             /// <param name="requiresTrimmed"></param>
-            /// <returns></returns>
+            /// <returns>Self</returns>
             /// <exception cref="InvalidOperationException">If already built.</exception>
             public Builder WithRequiresTrimmed(bool requiresTrimmed)
                 => WithRequiresTrimmed(requiresTrimmed, DefaultInvalidFormatErrorMessage);
 
             /// <summary>
-            /// 
+            /// Indicates if the given input must be trimmed (can not have white space characters at the biginning or end).
             /// </summary>
             /// <param name="requiresTrimmed"></param>
             /// <param name="invalidFormatErrorMessage"></param>
             /// <returns></returns>
+            /// <exception cref="ArgumentNullException">When any parameter is <see langword="null"/></exception>
             /// <exception cref="InvalidOperationException">If already built.</exception>
             public Builder WithRequiresTrimmed(bool requiresTrimmed, Message invalidFormatErrorMessage)
             {
