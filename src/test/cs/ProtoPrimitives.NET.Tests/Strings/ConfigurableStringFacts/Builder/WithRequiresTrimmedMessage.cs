@@ -36,18 +36,11 @@ namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts.Builder
         [Test]
         public void Rejects_Leading_And_Trailing_White_Spaces_When_True(
             [Values(" ", "\t", "\n", "\r", "\t\r\n")] string whiteSpace,
-            [Values(0, 1, 2)] int position,
+            [Values(WhiteSpacePosition.Leading, WhiteSpacePosition.Trailing, WhiteSpacePosition.Both)] WhiteSpacePosition position,
             [Values(false, true)] bool requiresTrimmed,
             [Values(false, true)] bool sendMessage)
         {
-            const string baseValue = "abc";
-            string rawValue = position switch
-            {
-                0 => $"{whiteSpace}{baseValue}",
-                1 => $"{baseValue}{whiteSpace}",
-                _ => $"{whiteSpace}{baseValue}{whiteSpace}"
-            };
-
+            string rawValue = ConcatWhiteSpacesAtPosition(position, whiteSpace);
             ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
             WithRequiresTrimmed(builder, requiresTrimmed, DefaultInvalidFormatMessage, sendMessage);
 
@@ -62,14 +55,43 @@ namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts.Builder
             }
         }
 
+        public enum WhiteSpacePosition { None, Leading, Trailing, Both }
+
+        /*
+         * Overrides: AllowLeadingWhiteSpace, AllowTrailingWhiteSpace, AllowWhiteSpaceOnly (true => false) 
+         */
+        [Test]
+        public void Overrides_AllowLeadingWhiteSpace_Option_When_True(
+             [Values(" ", "\t", "\n", "\r", "\t\r\n")] string whiteSpace,
+             [Values(WhiteSpacePosition.Leading, WhiteSpacePosition.Both)] WhiteSpacePosition position,
+             [Values(false, true)] bool sendMessage)
+        {
+            string rawValue = ConcatWhiteSpacesAtPosition(position, whiteSpace);
+            ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
+            builder.WithAllowLeadingWhiteSpace(true);
+            WithRequiresTrimmed(builder, true, DefaultInvalidFormatMessage, sendMessage);
+
+            Assert.That(() => builder.Build(rawValue), Throws.InstanceOf<FormatException>());
+        }
+
         private static ConfigurableString.Builder WithRequiresTrimmed(
             in ConfigurableString.Builder builder,
             in bool requiresTrimmed,
             in Message invalidFormatMsg,
-            in bool sendMessage)
-        {
-            return sendMessage ? builder.WithRequiresTrimmed(requiresTrimmed, invalidFormatMsg)
+            in bool sendMessage) => sendMessage ? builder.WithRequiresTrimmed(requiresTrimmed, invalidFormatMsg)
                 : builder.WithRequiresTrimmed(requiresTrimmed);
-            }
+
+        private static string ConcatWhiteSpacesAtPosition(in WhiteSpacePosition position, in string whiteSpace)
+        {
+            const string baseValue = "abc";
+            return position switch
+            {
+                WhiteSpacePosition.None => baseValue,
+                WhiteSpacePosition.Leading => $"{whiteSpace}{baseValue}",
+                WhiteSpacePosition.Trailing => $"{baseValue}{whiteSpace}",
+                WhiteSpacePosition.Both => $"{whiteSpace}{baseValue}{whiteSpace}",
+                _ => throw new ArgumentOutOfRangeException(nameof(position), position, "Not handled enumeration value.")
+            };
+        }
     }
 }

@@ -232,7 +232,7 @@ namespace ProtoPrimitives.NET.Strings
             /// <returns>Self</returns>
             /// <exception cref="InvalidOperationException">If already built.</exception>
             public Builder WithRequiresTrimmed(bool requiresTrimmed)
-                => WithRequiresTrimmed(requiresTrimmed, DefaultInvalidFormatErrorMessage);
+                => WithRequiresTrimmed(requiresTrimmed, _invalidFormatErrorMessage ?? DefaultInvalidFormatErrorMessage);
 
             /// <summary>
             /// Indicates if the given input must be trimmed (can not have white space characters at the biginning or end).
@@ -242,7 +242,7 @@ namespace ProtoPrimitives.NET.Strings
             /// <returns></returns>
             /// <exception cref="ArgumentNullException">When any parameter is <see langword="null"/></exception>
             /// <exception cref="InvalidOperationException">If already built.</exception>
-            public Builder WithRequiresTrimmed(bool requiresTrimmed, Message invalidFormatErrorMessage)
+            public Builder WithRequiresTrimmed(bool requiresTrimmed, in Message invalidFormatErrorMessage)
             {
                 return CheckPreconditionsTrySetInvalidFormatErrorMessageAndExecute(invalidFormatErrorMessage, () =>
                 {
@@ -270,7 +270,7 @@ namespace ProtoPrimitives.NET.Strings
             /// <param name="invalidFormatErrorMessage"></param>
             /// <returns></returns>
             /// <exception cref="InvalidOperationException">If already built.</exception>
-            public Builder WithAllowLeadingWhiteSpace(bool allowLeadingWhiteSpace, Message invalidFormatErrorMessage)
+            public Builder WithAllowLeadingWhiteSpace(bool allowLeadingWhiteSpace, in Message invalidFormatErrorMessage)
                 => CheckPreconditionsTrySetInvalidFormatErrorMessageAndExecute(invalidFormatErrorMessage, () => _allowLeadingWhiteSpace = allowLeadingWhiteSpace);
 
             /// <summary>
@@ -289,7 +289,7 @@ namespace ProtoPrimitives.NET.Strings
             /// <param name="invalidFormatErrorMessage"></param>
             /// <returns></returns>
             /// <exception cref="InvalidOperationException">If already built.</exception>
-            public Builder WithAllowTrailingWhiteSpace(bool allowTrailingWhiteSpace, Message invalidFormatErrorMessage)
+            public Builder WithAllowTrailingWhiteSpace(bool allowTrailingWhiteSpace, in Message invalidFormatErrorMessage)
             {
                 return CheckPreconditionsTrySetInvalidFormatErrorMessageAndExecute(invalidFormatErrorMessage,
                     () => _allowTrailingWhiteSpace = allowTrailingWhiteSpace);
@@ -311,17 +311,18 @@ namespace ProtoPrimitives.NET.Strings
             /// <param name="invalidFormatErrorMessage"></param>
             /// <returns></returns>
             /// <exception cref="InvalidOperationException">If already built.</exception>
-            public Builder WithAllowWhiteSpacesOnly(bool allowWhiteSpacesOnly, Message invalidFormatErrorMessage)
+            public Builder WithAllowWhiteSpacesOnly(bool allowWhiteSpacesOnly, in Message invalidFormatErrorMessage)
                 => CheckPreconditionsTrySetInvalidFormatErrorMessageAndExecute(invalidFormatErrorMessage,
                     () => SetAllowWhiteSpacesOnly(allowWhiteSpacesOnly));
 
-            private void SetAllowWhiteSpacesOnly(bool allowWhiteSpacesOnly)
+            private void SetAllowWhiteSpacesOnly(in bool allowWhiteSpacesOnly)
             {
                 _allowWhiteSpacesOnly = allowWhiteSpacesOnly;
 
                 if (allowWhiteSpacesOnly)
                 {
                     _allowLeadingWhiteSpace = _allowTrailingWhiteSpace = true;
+                    _requiresTrimmed = false;
                 }
             }
 
@@ -518,7 +519,7 @@ namespace ProtoPrimitives.NET.Strings
 
                 if (_requiresTrimmed)
                 {
-                    if (rawValue.HasLeadingWhiteSpace() || rawValue.HasTrailingWhiteSpace())
+                    if (rawValue.IsNotTrimmed())
                     {
                         throw new FormatException(_invalidFormatErrorMessage.Value);
                     }
