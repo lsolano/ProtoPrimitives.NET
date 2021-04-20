@@ -477,7 +477,7 @@ namespace ProtoPrimitives.NET.Strings
                 _built = true;
 
                 return new ConfigurableString(rawValue, _comparisonStrategy);
-            }
+            }            
 
             private void EnsureNotBuilt()
             {

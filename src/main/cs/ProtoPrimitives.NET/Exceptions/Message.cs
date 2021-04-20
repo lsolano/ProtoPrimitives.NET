@@ -36,7 +36,7 @@ namespace ProtoPrimitives.NET.Exceptions
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        int IComparable<IDomainPrimitive<string>>.CompareTo(IDomainPrimitive<string> other) => CompareTo(other as Message);
+        int IComparable<IDomainPrimitive<string>>.CompareTo(IDomainPrimitive<string>? other) => CompareTo(other as Message);
 
         /// <summary>
         /// Compares with <see cref="StringComparison.Ordinal"/> strategy both wrapped values.
@@ -50,6 +50,6 @@ namespace ProtoPrimitives.NET.Exceptions
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public bool Equals(IDomainPrimitive<string> other) => Value.Equals(other?.Value, StringComparison.Ordinal);
+        public bool Equals(IDomainPrimitive<string>? other) => Value.Equals(other?.Value, StringComparison.Ordinal);
     }
 }

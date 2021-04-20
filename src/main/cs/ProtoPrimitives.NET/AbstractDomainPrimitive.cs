@@ -49,7 +49,7 @@ namespace ProtoPrimitives.NET
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public int CompareTo(IDomainPrimitive<TRawType> other)
+        public int CompareTo(IDomainPrimitive<TRawType>? other)
         {
             if (other == null)
             {

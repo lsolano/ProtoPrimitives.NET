@@ -77,7 +77,7 @@ namespace ProtoPrimitives.NET.Strings
         /// <returns></returns>
         public override string ToString() => _value.ToString();
 
-        int IComparable<IDomainPrimitive<string>>.CompareTo(IDomainPrimitive<string> other)
+        int IComparable<IDomainPrimitive<string>>.CompareTo(IDomainPrimitive<string>? other)
             => CompareTo(other as NonEmptyOrWhiteSpaceString);
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace ProtoPrimitives.NET.Strings
         public override bool Equals(object? obj)
             => Equals(obj as NonEmptyOrWhiteSpaceString);
 
-        bool IEquatable<IDomainPrimitive<string>>.Equals(IDomainPrimitive<string> other)
+        bool IEquatable<IDomainPrimitive<string>>.Equals(IDomainPrimitive<string>? other)
             => Equals(other as NonEmptyOrWhiteSpaceString);
 
         /// <summary>
