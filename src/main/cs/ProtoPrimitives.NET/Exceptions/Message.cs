@@ -1,7 +1,7 @@
 ﻿using System;
 using Triplex.Validations;
 
-namespace ProtoPrimitives.NET.Exceptions
+namespace Triplex.ProtoDomainPrimitives.Exceptions
 {
     /// <summary>
     /// Non-empty or null exception message.

@@ -1,8 +1,8 @@
-﻿using ProtoPrimitives.NET.Exceptions;
+﻿using Triplex.ProtoDomainPrimitives.Exceptions;
 using System;
 using Triplex.Validations;
 
-namespace ProtoPrimitives.NET.Strings
+namespace Triplex.ProtoDomainPrimitives.Strings
 {
     /// <summary>
     /// Non empty or white-space only string.

@@ -4,8 +4,8 @@
     <TargetFrameworks>net5.0</TargetFrameworks>
     <LangVersion>9.0</LangVersion>
     <IsTestProject>true</IsTestProject>
-    <RootNamespace>ProtoPrimitives.NET.Tests</RootNamespace>
-    <AssemblyName>ProtoPrimitives.NET.Tests</AssemblyName>
+    <RootNamespace>Triplex.ProtoDomainPrimitives.Tests</RootNamespace>
+    <AssemblyName>Triplex.ProtoDomainPrimitives.Tests</AssemblyName>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>

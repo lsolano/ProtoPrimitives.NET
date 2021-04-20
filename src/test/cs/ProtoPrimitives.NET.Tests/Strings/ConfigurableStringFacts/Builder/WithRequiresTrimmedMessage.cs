@@ -1,10 +1,10 @@
 using System;
 using NUnit.Framework;
-using ProtoPrimitives.NET.Exceptions;
-using ProtoPrimitives.NET.Strings;
-using static ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts.Builder.ConstructorMessage;
+using Triplex.ProtoDomainPrimitives.Exceptions;
+using Triplex.ProtoDomainPrimitives.Strings;
+using static Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Builder.ConstructorMessage;
 
-namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts.Builder
+namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Builder
 {
     internal sealed class WithRequiresTrimmedMessage : ValidConstructorArgumentsFixture
     {

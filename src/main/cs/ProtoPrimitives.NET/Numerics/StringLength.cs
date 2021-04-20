@@ -1,7 +1,7 @@
-﻿using ProtoPrimitives.NET.Exceptions;
+﻿using Triplex.ProtoDomainPrimitives.Exceptions;
 using Triplex.Validations;
 
-namespace ProtoPrimitives.NET.Numerics
+namespace Triplex.ProtoDomainPrimitives.Numerics
 {
     /// <summary>
     /// Represents a valid string length, meaning from zero (0) to <see cref="System.Int32.MaxValue"/>

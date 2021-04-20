@@ -1,8 +1,8 @@
-﻿using ProtoPrimitives.NET.Exceptions;
+﻿using Triplex.ProtoDomainPrimitives.Exceptions;
 using System;
 using Triplex.Validations;
 
-namespace ProtoPrimitives.NET
+namespace Triplex.ProtoDomainPrimitives
 {
     /// <summary>
     /// Useful base class when the domain primitive will be a proxy of the wrapped value. All operations, except input validation, are based on the wrapped type.

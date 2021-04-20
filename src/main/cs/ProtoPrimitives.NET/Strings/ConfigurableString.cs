@@ -1,10 +1,10 @@
-﻿using ProtoPrimitives.NET.Exceptions;
-using ProtoPrimitives.NET.Numerics;
+﻿using Triplex.ProtoDomainPrimitives.Exceptions;
+using Triplex.ProtoDomainPrimitives.Numerics;
 using System;
 using System.Text.RegularExpressions;
 using Triplex.Validations;
 
-namespace ProtoPrimitives.NET.Strings
+namespace Triplex.ProtoDomainPrimitives.Strings
 {
     /// <summary>
     /// <para>

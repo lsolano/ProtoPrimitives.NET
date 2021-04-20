@@ -1,8 +1,8 @@
-﻿using ProtoPrimitives.NET.Exceptions;
+﻿using Triplex.ProtoDomainPrimitives.Exceptions;
 using System;
 using Triplex.Validations;
 
-namespace ProtoPrimitives.NET.Numerics
+namespace Triplex.ProtoDomainPrimitives.Numerics
 {
     /// <summary>
     /// Valid positive integer, meaning <code>&gt;= 1</code> (greater than or equals to one).

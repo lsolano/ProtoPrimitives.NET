@@ -1,9 +1,9 @@
 ﻿using NUnit.Framework;
-using ProtoPrimitives.NET.Strings;
+using Triplex.ProtoDomainPrimitives.Strings;
 using System;
-using static ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts.Builder.ConstructorMessage;
+using static Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Builder.ConstructorMessage;
 
-namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts.Builder
+namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Builder
 {
     internal sealed class BuildWithCustomParserMessage : ValidConstructorArgumentsFixture
     {

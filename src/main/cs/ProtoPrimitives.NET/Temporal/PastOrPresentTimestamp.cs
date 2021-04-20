@@ -1,8 +1,8 @@
-﻿using ProtoPrimitives.NET.Exceptions;
+﻿using Triplex.ProtoDomainPrimitives.Exceptions;
 using System;
 using Triplex.Validations;
 
-namespace ProtoPrimitives.NET.Temporal
+namespace Triplex.ProtoDomainPrimitives.Temporal
 {
     /// <summary>
     /// Represents a <see cref="DateTimeOffset"/> in the past or exactly as current time.

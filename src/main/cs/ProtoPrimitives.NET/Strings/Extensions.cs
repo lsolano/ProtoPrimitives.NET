@@ -1,6 +1,6 @@
 using System.Linq;
 
-namespace ProtoPrimitives.NET.Strings
+namespace Triplex.ProtoDomainPrimitives.Strings
 {
     internal static class Extensions
     {

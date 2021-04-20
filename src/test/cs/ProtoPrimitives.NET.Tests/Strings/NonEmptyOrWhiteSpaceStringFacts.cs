@@ -1,8 +1,8 @@
 ﻿using System;
 using NUnit.Framework;
-using ProtoPrimitives.NET.Strings;
+using Triplex.ProtoDomainPrimitives.Strings;
 
-namespace ProtoPrimitives.NET.Tests.Strings
+namespace Triplex.ProtoDomainPrimitives.Tests.Strings
 {
     internal static class NonEmptyOrWhiteSpaceStringFacts
     {

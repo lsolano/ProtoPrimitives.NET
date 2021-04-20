@@ -1,13 +1,13 @@
 ﻿using NUnit.Framework;
 using NUnit.Framework.Constraints;
-using ProtoPrimitives.NET.Exceptions;
-using ProtoPrimitives.NET.Temporal;
+using Triplex.ProtoDomainPrimitives.Exceptions;
+using Triplex.ProtoDomainPrimitives.Temporal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static ProtoPrimitives.NET.Tests.Temporal.TemporalExtensions;
+using static Triplex.ProtoDomainPrimitives.Tests.Temporal.TemporalExtensions;
 
-namespace ProtoPrimitives.NET.Tests.Temporal
+namespace Triplex.ProtoDomainPrimitives.Tests.Temporal
 {
     internal static class FutureTimestampFacts
     {

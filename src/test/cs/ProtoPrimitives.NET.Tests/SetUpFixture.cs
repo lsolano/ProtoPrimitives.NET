@@ -2,7 +2,7 @@
 
 [assembly: Parallelizable(ParallelScope.All)]
 
-namespace ProtoPrimitives.NET.Tests
+namespace Triplex.ProtoDomainPrimitives.Tests
 {
     [SetUpFixture]
     internal sealed class SetUpFixture

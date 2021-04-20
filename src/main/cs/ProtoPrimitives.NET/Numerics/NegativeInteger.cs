@@ -1,8 +1,8 @@
-﻿using ProtoPrimitives.NET.Exceptions;
+﻿using Triplex.ProtoDomainPrimitives.Exceptions;
 using System;
 using Triplex.Validations;
 
-namespace ProtoPrimitives.NET.Numerics
+namespace Triplex.ProtoDomainPrimitives.Numerics
 {
     /// <summary>
     /// Valid negative integer, meaning <code>&lt; 0</code> (less than zero).

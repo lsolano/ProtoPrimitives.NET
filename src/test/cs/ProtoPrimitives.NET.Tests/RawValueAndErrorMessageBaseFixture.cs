@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 
-namespace ProtoPrimitives.NET.Tests
+namespace Triplex.ProtoDomainPrimitives.Tests
 {
     [TestFixture(false)]
     [TestFixture(true)]

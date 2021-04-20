@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ProtoPrimitives.NET
+namespace Triplex.ProtoDomainPrimitives
 {
     /// <summary>
     /// Represent a domain primitive wrapping some raw type, usually language primitive types such as <see cref="string"/> and <see cref="int"/>.

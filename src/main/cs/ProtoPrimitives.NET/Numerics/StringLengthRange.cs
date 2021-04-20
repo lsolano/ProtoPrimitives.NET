@@ -1,7 +1,7 @@
 ﻿using System;
 using Triplex.Validations;
 
-namespace ProtoPrimitives.NET.Numerics
+namespace Triplex.ProtoDomainPrimitives.Numerics
 {
     /// <summary>
     /// Defines a length's range for strings.

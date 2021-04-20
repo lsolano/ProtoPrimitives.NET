@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-namespace ProtoPrimitives.NET.Tests.Strings.ConfigurableStringFacts.Builder
+namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Builder
 {
     [TestFixture(false, false)]
     [TestFixture(false, true)]

@@ -1,9 +1,9 @@
 ﻿using System;
 using NUnit.Framework;
-using ProtoPrimitives.NET.Exceptions;
-using ProtoPrimitives.NET.Numerics;
+using Triplex.ProtoDomainPrimitives.Exceptions;
+using Triplex.ProtoDomainPrimitives.Numerics;
 
-namespace ProtoPrimitives.NET.Tests.Numerics
+namespace Triplex.ProtoDomainPrimitives.Tests.Numerics
 {
     internal static class NegativeIntegerFacts
     {

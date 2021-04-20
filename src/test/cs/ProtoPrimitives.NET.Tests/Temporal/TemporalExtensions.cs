@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ProtoPrimitives.NET.Tests.Temporal
+namespace Triplex.ProtoDomainPrimitives.Tests.Temporal
 {
     internal static class TemporalExtensions
     {
