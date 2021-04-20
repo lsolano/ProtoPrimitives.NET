@@ -12,6 +12,6 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.100
+        dotnet-version: 5.0.202
     - name: Build and run Unit Tests with dotnet
-      run: dotnet test --framework netcoreapp3.1 --configuration Release
+      run: dotnet test --framework net5.0 --configuration Release
