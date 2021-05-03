@@ -1,11 +1,14 @@
-﻿using NUnit.Framework;
-using NUnit.Framework.Constraints;
-using Triplex.ProtoDomainPrimitives.Exceptions;
-using Triplex.ProtoDomainPrimitives.Temporal;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using static Triplex.ProtoDomainPrimitives.Tests.Temporal.TemporalExtensions;
+
+using NUnit.Framework;
+using NUnit.Framework.Constraints;
+
+using Triplex.ProtoDomainPrimitives.Exceptions;
+using Triplex.ProtoDomainPrimitives.Temporal;
+
+using static Triplex.ProtoDomainPrimitives.Tests.Temporal.TemporalExtensions;using Triplex.ProtoDomainPrimitives.Tests.AbstractDomainPrimitiveFacts;
 
 namespace Triplex.ProtoDomainPrimitives.Tests.Temporal
 {
@@ -111,55 +114,16 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Temporal
         }
 
         [TestFixture]
-        internal sealed class EqualsMessage
+        internal sealed class EqualsMessage : IEquatableEqualsFacts<PastOrPresentTimestamp, DateTimeOffset>
         {
-            [Test]
-            public void With_Null_Returns_False()
+            protected override Context CreateContext()
             {
-                (PastOrPresentTimestamp pastOrPresentTimestamp, _) = CreateFromNow();
-
-                Assert.That(pastOrPresentTimestamp.Equals(null), Is.False);
-            }
-
-
-
-            [Test]
-            public void With_Self_Returns_True()
-            {
-                (PastOrPresentTimestamp pastOrPresentTimestamp, _) = CreateFromNow();
-
-                Assert.That(pastOrPresentTimestamp.Equals(pastOrPresentTimestamp), Is.True);
-            }
-
-            [TestCase(1024)]
-            [TestCase("peter")]
-            [TestCase(true)]
-            [TestCase(1.25)]
-            public void With_Other_Types_Returns_False(in object other)
-            {
-                (PastOrPresentTimestamp pastOrPresentTimestamp, _) = CreateFromNow();
-
-                Assert.That(pastOrPresentTimestamp.Equals(other), Is.False);
-            }
-
-            [Test]
-            public void With_Same_Value_Returns_True()
-            {
-                DateTimeOffset rawValue = DateTimeOffset.UtcNow;
-                var (pastOrPresentTimestampA, pastOrPresentTimestampB) = (new PastOrPresentTimestamp(rawValue), new PastOrPresentTimestamp(rawValue));
-
-                Assert.That(pastOrPresentTimestampA.Equals(pastOrPresentTimestampB), Is.True);
-            }
-
-            [Test]
-            public void With_Different_Values_Returns_False()
-            {
-                DateTimeOffset rawValueA = DateTimeOffset.UtcNow;
-                DateTimeOffset rawValueB = DateTimeOffset.UtcNow.AddMinutes(-5);
-                var (pastOrPresentTimestampA, pastOrPresentTimestampB) 
-                    = (new PastOrPresentTimestamp(rawValueA), new PastOrPresentTimestamp(rawValueB));
-
-                Assert.That(pastOrPresentTimestampA.Equals(pastOrPresentTimestampB), Is.False);
+                PastOrPresentTimestamp subject = CreateFromNow().pastOrPresentTimestamp;
+                return new IEquatableEqualsFacts<PastOrPresentTimestamp, DateTimeOffset>.Context(
+                    subject: subject,
+                    subjectValueCopy: new PastOrPresentTimestamp(subject.Value),
+                    differentSubject: new PastOrPresentTimestamp(subject.Value.AddMinutes(-15)) 
+                );
             }
         }
 

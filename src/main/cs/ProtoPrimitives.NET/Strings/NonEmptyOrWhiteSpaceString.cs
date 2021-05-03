@@ -1,5 +1,6 @@
-﻿using Triplex.ProtoDomainPrimitives.Exceptions;
-using System;
+﻿using System;
+
+using Triplex.ProtoDomainPrimitives.Exceptions;
 using Triplex.Validations;
 
 namespace Triplex.ProtoDomainPrimitives.Strings
@@ -105,5 +106,90 @@ namespace Triplex.ProtoDomainPrimitives.Strings
         /// <param name="other"></param>
         /// <returns></returns>
         public bool Equals(in NonEmptyOrWhiteSpaceString? other) => _value.Equals(other);
+
+        /// <summary>
+        /// Indicates if two instances are not equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator !=(in NonEmptyOrWhiteSpaceString left, in NonEmptyOrWhiteSpaceString right) => !(left == right);
+
+        /// <summary>
+        /// Indicates if two instances are equals.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator ==(in NonEmptyOrWhiteSpaceString left, in NonEmptyOrWhiteSpaceString right)
+        {
+            if (left is null) {
+                return right is null;
+            }
+
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        /// Indicates if <paramref name="left"/> is less than <paramref name="right"/>.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator <(in NonEmptyOrWhiteSpaceString left, in NonEmptyOrWhiteSpaceString right) {
+            if (left is null) {
+                return right is not null;
+            }
+
+            return left.CompareTo(right) < 0;
+        }
+
+        /// <summary>
+        /// Indicates if <paramref name="left"/> is less than or equals to <paramref name="right"/>.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator <=(in NonEmptyOrWhiteSpaceString left, in NonEmptyOrWhiteSpaceString right) {
+            if (left is null) {
+                return true;
+            }
+
+            return left.CompareTo(right) <= 0;
+        }
+
+        /// <summary>
+        /// Indicates if <paramref name="left"/> is greater than <paramref name="right"/>.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator >(in NonEmptyOrWhiteSpaceString left, in NonEmptyOrWhiteSpaceString right) {
+            if (left is null) {
+                return false;
+                
+            } else if (right is null) {
+                return true;
+            }
+
+            return left.CompareTo(right) > 0;
+        }
+
+        /// <summary>
+        /// Indicates if <paramref name="left"/> is greater than or equals to <paramref name="right"/>.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator >=(in NonEmptyOrWhiteSpaceString left, in NonEmptyOrWhiteSpaceString right) {
+            if (right is null) {
+                return true;
+
+            } else if (left is null) {
+                return false;
+            }
+
+            return left.CompareTo(right) >= 0;
+        }
     }
 }

@@ -1,5 +1,6 @@
-﻿using Triplex.ProtoDomainPrimitives.Exceptions;
-using System;
+﻿using System;
+
+using Triplex.ProtoDomainPrimitives.Exceptions;
 using Triplex.Validations;
 
 namespace Triplex.ProtoDomainPrimitives.Numerics

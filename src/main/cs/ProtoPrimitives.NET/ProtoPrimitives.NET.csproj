@@ -9,20 +9,33 @@
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
     <Nullable>enable</Nullable>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Version>0.1.0</Version>
+    <Version>1.0.0</Version>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageTags>Domain Primitives;Invariants;DDD;Domain Driven Design</PackageTags>
-    <PackageReleaseNotes>Upgrade to .NET 5 (net5.0) and fix some warnings</PackageReleaseNotes>
+    <PackageReleaseNotes>
+Breaking changes: 
+  - Triplex.ProtoDomainPrimitives.Exceptions.Message(string) now throws Triplex.Validations.Exceptions.ArgumentFormatException instead of System.FormatException.
+
+New Features:
+  - Relational operators overload for AbstractDomainPrimitive and common derived types: NegativeInteger, PositiveInteger.
+  - Mark assembly as CLS-Compliant
+  - Use String.GetHashCode(StringComparison) for all domain primitives wrapping String
+
+Internal:
+  - Add publish to nuget script.
+  - Parallelize tests execution.
+  - Add code analysis as recommended by new .net5 SDK (using EnableNETAnalyzers, AnalysisLevel, and AnalysisMode).
+    </PackageReleaseNotes>
+
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.3">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Triplex.Validations" Version="0.4.0" />
+    <PackageReference Include="Triplex.Validations" Version="0.7.0" />
   </ItemGroup>
 
   <ItemGroup>

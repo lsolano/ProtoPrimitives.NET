@@ -40,6 +40,7 @@ namespace Triplex.ProtoDomainPrimitives.Numerics
         {
         }
 
-        private static int Validate(in int rawValue, in Message errorMessage) => Arguments.GreaterThanOrEqualTo(rawValue, 0, nameof(rawValue));
+        private static int Validate(in int rawValue, in Message errorMessage)
+            => Arguments.GreaterThanOrEqualTo(rawValue, 0, nameof(rawValue), Arguments.NotNull(errorMessage, nameof(errorMessage)).Value);
     }
 }

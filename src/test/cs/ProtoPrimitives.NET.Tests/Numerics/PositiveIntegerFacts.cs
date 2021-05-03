@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Triplex.ProtoDomainPrimitives.Exceptions;
 using Triplex.ProtoDomainPrimitives.Numerics;
+using Triplex.ProtoDomainPrimitives.Tests.AbstractDomainPrimitiveFacts;
 
 namespace Triplex.ProtoDomainPrimitives.Tests.Numerics
 {
@@ -89,56 +90,22 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Numerics
             }
         }
 
-        internal sealed class EqualsMessage : RawValueAndErrorMessageBaseFixture
+        [TestFixture(false)]
+        [TestFixture(true)]
+        internal sealed class EqualsMessage : IEquatableEqualsFacts<PositiveInteger, int>, IOptionalCustomMessageTestFixture
         {
-            public EqualsMessage(bool useCustomMessage) : base(useCustomMessage)
+            public bool UseCustomMessage { get; }
+
+            protected override Context CreateContext()
             {
+                return new IEquatableEqualsFacts<PositiveInteger, int>.Context(
+                    subject: UseCustomMessage ? new PositiveInteger(DefaultRawValue, CustomErrorMessage) : new PositiveInteger(DefaultRawValue),
+                    subjectValueCopy: UseCustomMessage ? new PositiveInteger(DefaultRawValue, CustomErrorMessage) : new PositiveInteger(DefaultRawValue),
+                    differentSubject: UseCustomMessage ? new PositiveInteger(DefaultRawValue * 2, CustomErrorMessage) : new PositiveInteger(DefaultRawValue * 2) 
+                );
             }
 
-            [Test]
-            public void With_Null_Returns_False()
-            {
-                PositiveInteger ps = Build(DefaultRawValue, UseCustomMessage);
-
-                Assert.That(ps.Equals(null), Is.False);
-            }
-
-            [Test]
-            public void With_Self_Returns_True()
-            {
-                PositiveInteger ps = Build(DefaultRawValue, UseCustomMessage);
-
-                Assert.That(ps.Equals(ps), Is.True);
-            }
-
-            [TestCase(DefaultRawValue)]
-            [TestCase("peter")]
-            [TestCase(true)]
-            [TestCase(1.25)]
-            public void With_Other_Types_Returns_False(in object other)
-            {
-                PositiveInteger ps = Build(DefaultRawValue, UseCustomMessage);
-
-                Assert.That(ps.Equals(other), Is.False);
-            }
-
-            [Test]
-            public void With_Same_Value_Returns_True()
-            {
-                (PositiveInteger positiveIntA, PositiveInteger positiveIntB)
-                    = (Build(DefaultRawValue, UseCustomMessage), Build(DefaultRawValue, UseCustomMessage));
-
-                Assert.That(positiveIntA.Equals(positiveIntB), Is.True);
-            }
-
-            [Test]
-            public void With_Different_Values_Returns_False()
-            {
-                (PositiveInteger positiveIntA, PositiveInteger positiveIntB)
-                    = (Build(DefaultRawValue, UseCustomMessage), Build(DefaultRawValue + 2, UseCustomMessage));
-
-                Assert.That(positiveIntA.Equals(positiveIntB), Is.False);
-            }
+            public EqualsMessage(bool useCustomMessage) => UseCustomMessage = useCustomMessage;
         }
 
         internal sealed class CompareToMessage : RawValueAndErrorMessageBaseFixture
@@ -164,12 +131,26 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Numerics
             }
 
             [Test]
-            public void Same_As_Raw_Value([Values(1, 2)] in int rawValueA, [Values(1, 2)] in int rawValueB)
+            public void Same_As_Raw_Value([Values(1, 2)] int rawValueA, [Values(1, 2)] int rawValueB)
             {
                 (PositiveInteger positiveIntA, PositiveInteger positiveIntB)
                     = (Build(rawValueA, UseCustomMessage), Build(rawValueB, UseCustomMessage));
 
                 Assert.That(positiveIntA.CompareTo(positiveIntB), Is.EqualTo(rawValueA.CompareTo(rawValueB)));
+            }
+        }
+
+        internal sealed class RelationalOperatorsFacts : IComparableCompareToAndRelationalOperatorsFacts<PositiveInteger, int>
+        {
+            protected override Context CreateContext()
+            {
+                var subject = new PositiveInteger(10);
+                return new IComparableCompareToAndRelationalOperatorsFacts<PositiveInteger, int>.Context(
+                    lessThanSubject: new PositiveInteger(subject.Value - 1),
+                    subject: subject,
+                    copyOfSubject: new PositiveInteger(subject.Value),
+                    greaterThanSubject: new PositiveInteger(subject.Value + 1)
+                );
             }
         }
 

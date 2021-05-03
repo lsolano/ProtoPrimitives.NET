@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Triplex.ProtoDomainPrimitives.Exceptions;
 using Triplex.ProtoDomainPrimitives.Numerics;
+using Triplex.ProtoDomainPrimitives.Tests.AbstractDomainPrimitiveFacts;
 
 namespace Triplex.ProtoDomainPrimitives.Tests.Numerics
 {
@@ -89,56 +90,22 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Numerics
             }
         }
 
-        internal sealed class EqualsMessage : RawValueAndErrorMessageBaseFixture
+        [TestFixture(false)]
+        [TestFixture(true)]
+        internal sealed class EqualsMessage : IEquatableEqualsFacts<NegativeInteger, int>, IOptionalCustomMessageTestFixture
         {
-            public EqualsMessage(bool useCustomMessage) : base(useCustomMessage)
+            public bool UseCustomMessage { get; }
+
+            protected override Context CreateContext()
             {
+                return new IEquatableEqualsFacts<NegativeInteger, int>.Context(
+                    subject: UseCustomMessage ? new NegativeInteger(DefaultRawValue, CustomErrorMessage) : new NegativeInteger(DefaultRawValue),
+                    subjectValueCopy: UseCustomMessage ? new NegativeInteger(DefaultRawValue, CustomErrorMessage) : new NegativeInteger(DefaultRawValue),
+                    differentSubject: UseCustomMessage ? new NegativeInteger(DefaultRawValue * 2, CustomErrorMessage) : new NegativeInteger(DefaultRawValue * 2) 
+                );
             }
-
-            [Test]
-            public void With_Null_Returns_False()
-            {
-                NegativeInteger ns = Build(DefaultRawValue, UseCustomMessage);
-
-                Assert.That(ns.Equals(null), Is.False);
-            }
-
-            [Test]
-            public void With_Self_Returns_True()
-            {
-                NegativeInteger ns = Build(DefaultRawValue, UseCustomMessage);
-
-                Assert.That(ns.Equals(ns), Is.True);
-            }
-
-            [TestCase(DefaultRawValue)]
-            [TestCase("peter")]
-            [TestCase(true)]
-            [TestCase(1.25)]
-            public void With_Other_Types_Returns_False(in object other)
-            {
-                NegativeInteger ns = Build(DefaultRawValue, UseCustomMessage);
-
-                Assert.That(ns.Equals(other), Is.False);
-            }
-
-            [Test]
-            public void With_Same_Value_Returns_True()
-            {
-                (NegativeInteger positiveIntA, NegativeInteger positiveIntB)
-                    = (Build(DefaultRawValue, UseCustomMessage), Build(DefaultRawValue, UseCustomMessage));
-
-                Assert.That(positiveIntA.Equals(positiveIntB), Is.True);
-            }
-
-            [Test]
-            public void With_Different_Values_Returns_False()
-            {
-                (NegativeInteger positiveIntA, NegativeInteger positiveIntB)
-                    = (Build(DefaultRawValue, UseCustomMessage), Build(DefaultRawValue + 2, UseCustomMessage));
-
-                Assert.That(positiveIntA.Equals(positiveIntB), Is.False);
-            }
+            
+            public EqualsMessage(bool useCustomMessage) => UseCustomMessage = useCustomMessage;
         }
 
         internal sealed class CompareToMessage : RawValueAndErrorMessageBaseFixture
@@ -170,6 +137,20 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Numerics
                     = (Build(rawValueA, UseCustomMessage), Build(rawValueB, UseCustomMessage));
 
                 Assert.That(positiveIntA.CompareTo(positiveIntB), Is.EqualTo(rawValueA.CompareTo(rawValueB)));
+            }
+        }
+
+        internal sealed class RelationalOperatorsFacts : IComparableCompareToAndRelationalOperatorsFacts<NegativeInteger, int>
+        {
+            protected override Context CreateContext()
+            {
+                var subject = new NegativeInteger(-10);
+                return new IComparableCompareToAndRelationalOperatorsFacts<NegativeInteger, int>.Context(
+                    lessThanSubject: new NegativeInteger(subject.Value - 1),
+                    subject: subject,
+                    copyOfSubject: new NegativeInteger(subject.Value),
+                    greaterThanSubject: new NegativeInteger(subject.Value + 1)
+                );
             }
         }
 

@@ -1,7 +1,8 @@
-﻿using Triplex.ProtoDomainPrimitives.Exceptions;
-using Triplex.ProtoDomainPrimitives.Numerics;
-using System;
+﻿using System;
 using System.Text.RegularExpressions;
+
+using Triplex.ProtoDomainPrimitives.Exceptions;
+using Triplex.ProtoDomainPrimitives.Numerics;
 using Triplex.Validations;
 
 namespace Triplex.ProtoDomainPrimitives.Strings
@@ -71,10 +72,95 @@ namespace Triplex.ProtoDomainPrimitives.Strings
         /// Same as <see cref="Value"/>.
         /// </summary>
         /// <returns></returns>
-        public override int GetHashCode() => Value.GetHashCode();
+        public override int GetHashCode() => Value.GetHashCode(_comparisonStrategy);
 
         /// <inheritdoc cref="object.ToString()"/>
         public override string ToString() => Value;
+
+        /// <summary>
+        /// Indicates if two instances are not equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator !=(in ConfigurableString left, in ConfigurableString right) => !(left == right);
+
+        /// <summary>
+        /// Indicates if two instances are equals.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator ==(in ConfigurableString left, in ConfigurableString right)
+        {
+            if (left is null) {
+                return right is null;
+            }
+
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        /// Indicates if <paramref name="left"/> is less than <paramref name="right"/>.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator <(in ConfigurableString left, in ConfigurableString right) {
+            if (left is null) {
+                return right is not null;
+            }
+
+            return left.CompareTo(right) < 0;
+        }
+
+        /// <summary>
+        /// Indicates if <paramref name="left"/> is less than or equals to <paramref name="right"/>.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator <=(in ConfigurableString left, in ConfigurableString right) {
+            if (left is null) {
+                return true;
+            }
+
+            return left.CompareTo(right) <= 0;
+        }
+
+        /// <summary>
+        /// Indicates if <paramref name="left"/> is greater than <paramref name="right"/>.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator >(in ConfigurableString left, in ConfigurableString right) {
+            if (left is null) {
+                return false;
+                
+            } else if (right is null) {
+                return true;
+            }
+
+            return left.CompareTo(right) > 0;
+        }
+
+        /// <summary>
+        /// Indicates if <paramref name="left"/> is greater than or equals to <paramref name="right"/>.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator >=(in ConfigurableString left, in ConfigurableString right) {
+            if (right is null) {
+                return true;
+
+            } else if (left is null) {
+                return false;
+            }
+
+            return left.CompareTo(right) >= 0;
+        }
 
         /// <summary>
         /// Fluent builder for <see cref="ConfigurableString"/>s.
@@ -497,13 +583,13 @@ namespace Triplex.ProtoDomainPrimitives.Strings
             {
                 StringLengthRange.Validate(_minLength ?? StringLength.Min, _maxLength ?? StringLength.Max);
 
-                if (_minLength != null)
+                if (_minLength is not null)
                 {
                     Arguments.GreaterThanOrEqualTo(rawValue.Length, _minLength.Value, nameof(rawValue),
                         _tooShortErrorMessage.Value);
                 }
 
-                if (_maxLength != null)
+                if (_maxLength is not null)
                 {
                     Arguments.LessThanOrEqualTo(rawValue.Length, _maxLength.Value, nameof(rawValue),
                         _tooLongErrorMessage.Value);
@@ -566,7 +652,7 @@ namespace Triplex.ProtoDomainPrimitives.Strings
 
             private void CheckForWhiteSpaces(in string rawValue)
             {
-                bool CanNotBeEmpty() => _minLength != null && _minLength.Value > 0;
+                bool CanNotBeEmpty() => _minLength is not null && _minLength.Value > 0;
 
                 if (DoesNotAllowWhiteSpacesOnly && CanNotBeEmpty() && rawValue.IsWhiteSpaceOnly())
                 {

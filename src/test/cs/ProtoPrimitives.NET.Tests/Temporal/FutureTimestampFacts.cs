@@ -1,11 +1,14 @@
-﻿using NUnit.Framework;
-using NUnit.Framework.Constraints;
-using Triplex.ProtoDomainPrimitives.Exceptions;
-using Triplex.ProtoDomainPrimitives.Temporal;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using static Triplex.ProtoDomainPrimitives.Tests.Temporal.TemporalExtensions;
+
+using NUnit.Framework;
+using NUnit.Framework.Constraints;
+
+using Triplex.ProtoDomainPrimitives.Exceptions;
+using Triplex.ProtoDomainPrimitives.Temporal;
+
+using static Triplex.ProtoDomainPrimitives.Tests.Temporal.TemporalExtensions;using Triplex.ProtoDomainPrimitives.Tests.AbstractDomainPrimitiveFacts;
 
 namespace Triplex.ProtoDomainPrimitives.Tests.Temporal
 {
@@ -116,53 +119,16 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Temporal
         }
 
         [TestFixture]
-        internal sealed class EqualsMessage
+        internal sealed class EqualsMessage : IEquatableEqualsFacts<FutureTimestamp, DateTimeOffset>
         {
-            [Test]
-            public void With_Null_Returns_False()
+            protected override Context CreateContext()
             {
-                (FutureTimestamp futureTimestamp, _) = CreateWithFiveMinutesInTheFuture();
-
-                Assert.That(futureTimestamp.Equals(null), Is.False);
-            }
-
-            [Test]
-            public void With_Self_Returns_True()
-            {
-                (FutureTimestamp futureTimestamp, _) = CreateWithFiveMinutesInTheFuture();
-
-                Assert.That(futureTimestamp.Equals(futureTimestamp), Is.True);
-            }
-
-            [TestCase(1024)]
-            [TestCase("peter")]
-            [TestCase(true)]
-            [TestCase(1.25)]
-            public void With_Other_Types_Returns_False(in object other)
-            {
-                (FutureTimestamp futureTimestamp, _) = CreateWithFiveMinutesInTheFuture();
-
-                Assert.That(futureTimestamp.Equals(other), Is.False);
-            }
-
-            [Test]
-            public void With_Same_Value_Returns_True()
-            {
-                DateTimeOffset rawValue = DateTimeOffset.UtcNow.AddMinutes(5);
-                var (futureTimestampA, futureTimestampB) = (new FutureTimestamp(rawValue), new FutureTimestamp(rawValue));
-
-                Assert.That(futureTimestampA.Equals(futureTimestampB), Is.True);
-            }
-
-            [Test]
-            public void With_Different_Values_Returns_False()
-            {
-                DateTimeOffset rawValueA = DateTimeOffset.UtcNow.AddMinutes(5);
-                DateTimeOffset rawValueB = DateTimeOffset.UtcNow.AddMinutes(15);
-                var (futureTimestampA, futureTimestampB) 
-                    = (new FutureTimestamp(rawValueA), new FutureTimestamp(rawValueB));
-
-                Assert.That(futureTimestampA.Equals(futureTimestampB), Is.False);
+                FutureTimestamp subject = CreateWithFiveMinutesInTheFuture().futureTimestamp;
+                return new IEquatableEqualsFacts<FutureTimestamp, DateTimeOffset>.Context(
+                    subject: subject,
+                    subjectValueCopy: new FutureTimestamp(subject.Value),
+                    differentSubject: new FutureTimestamp(subject.Value.AddMinutes(15)) 
+                );
             }
         }
 
