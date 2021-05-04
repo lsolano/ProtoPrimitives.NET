@@ -1,5 +1,6 @@
-﻿using Triplex.ProtoDomainPrimitives.Exceptions;
-using System;
+﻿using System;
+
+using Triplex.ProtoDomainPrimitives.Exceptions;
 using Triplex.Validations;
 
 namespace Triplex.ProtoDomainPrimitives.Temporal
@@ -7,7 +8,7 @@ namespace Triplex.ProtoDomainPrimitives.Temporal
     /// <summary>
     /// Represents a <see cref="DateTimeOffset"/> in the future, respect to the system time.
     /// </summary>
-    public sealed class FutureTimestamp : AbstractDomainPrimitive<DateTimeOffset>
+    public sealed class FutureTimestamp : AbstractDomainPrimitive<DateTimeOffset>, IComparable<FutureTimestamp>, IEquatable<FutureTimestamp>
     {
         /// <summary>
         /// Default error message.
@@ -36,5 +37,76 @@ namespace Triplex.ProtoDomainPrimitives.Temporal
 
         private static DateTimeOffset Validate(in DateTimeOffset rawValue, in Message errorMessage)
             => Arguments.GreaterThan(rawValue, DateTimeOffset.UtcNow, nameof(rawValue), errorMessage.Value);
+
+        /// <inheritdoc cref="AbstractDomainPrimitive{TRawType}.CompareTo(IDomainPrimitive{TRawType}?)"/>
+        public int CompareTo(FutureTimestamp? other) => base.CompareTo(other);
+
+        /// <inheritdoc cref="AbstractDomainPrimitive{TRawType}.Equals(IDomainPrimitive{TRawType}?)"/>
+        public override bool Equals(object? obj) => Equals(obj as FutureTimestamp);
+
+        /// <inheritdoc cref="AbstractDomainPrimitive{TRawType}.Equals(object?)"/>
+        public bool Equals(FutureTimestamp? other) => base.Equals(other);
+
+        /// <inheritdoc cref="AbstractDomainPrimitive{TRawType}.GetHashCode()"/>
+        public override int GetHashCode() => base.GetHashCode();
+
+        
+        #region Relational Operators
+
+        /// <summary>
+        /// Indicates if two instances are not equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator !=(in FutureTimestamp left, in FutureTimestamp right)
+            => RelationalOperatorsOverloadHelper.NotEquals<FutureTimestamp>(left, right);
+
+        /// <summary>
+        /// Indicates if two instances are equals.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator ==(in FutureTimestamp left, in FutureTimestamp right)
+            => RelationalOperatorsOverloadHelper.Equals<FutureTimestamp>(left, right);
+
+        /// <summary>
+        /// Indicates if <paramref name="left"/> is less than <paramref name="right"/>.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator <(in FutureTimestamp left, in FutureTimestamp right)
+            => RelationalOperatorsOverloadHelper.LessThan<FutureTimestamp>(left, right);
+
+        /// <summary>
+        /// Indicates if <paramref name="left"/> is less than or equals to <paramref name="right"/>.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator <=(in FutureTimestamp left, in FutureTimestamp right)
+            => RelationalOperatorsOverloadHelper.LessThanOrEqualsTo<FutureTimestamp>(left, right);
+
+        /// <summary>
+        /// Indicates if <paramref name="left"/> is greater than <paramref name="right"/>.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator >(in FutureTimestamp left, in FutureTimestamp right)
+            => RelationalOperatorsOverloadHelper.GreaterThan<FutureTimestamp>(left, right);
+
+        /// <summary>
+        /// Indicates if <paramref name="left"/> is greater than or equals to <paramref name="right"/>.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator >=(in FutureTimestamp left, in FutureTimestamp right)
+            => RelationalOperatorsOverloadHelper.GreaterThanOrEqualsTo<FutureTimestamp>(left, right);
+        
+        #endregion //Relational Operators
     }
 }

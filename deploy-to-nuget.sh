@@ -19,12 +19,14 @@ fi
 # Cleaning dotnet build output
 dotnet clean --configuration Release
 
+RELEASE_DIR=src/main/cs/ProtoPrimitives.NET/bin/Release
+
 # Removing previous packages
-rm src/main/cs/ProtoPrimitives.NET/bin/Release/Triplex.ProtoDomainPrimitives*.nupkg
+rm $RELEASE_DIR/Triplex.ProtoDomainPrimitives*.nupkg
 
 # Building and creating packages
 dotnet build --configuration Release
 
 # Move to packages root and issue publish command
-cd src/Validations/bin/Release
+cd $RELEASE_DIR
 dotnet nuget push *.nupkg -k $1 -s $SOURCE

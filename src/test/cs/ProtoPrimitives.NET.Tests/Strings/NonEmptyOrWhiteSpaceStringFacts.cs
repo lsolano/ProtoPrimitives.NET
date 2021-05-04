@@ -1,5 +1,8 @@
 ﻿using System;
+
 using NUnit.Framework;
+
+using Triplex.ProtoDomainPrimitives.Exceptions;
 using Triplex.ProtoDomainPrimitives.Strings;
 
 namespace Triplex.ProtoDomainPrimitives.Tests.Strings
@@ -7,7 +10,7 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings
     internal static class NonEmptyOrWhiteSpaceStringFacts
     {
         private const string ValidSampleValue = "Hello World!!!";
-        private const string CustomErrorMessage = "Use me if something is not OK with rawValue";
+        private static readonly Message CustomErrorMessage = new Message("Use me if something is not OK with rawValue");
 
         private static NonEmptyOrWhiteSpaceString Build(in string rawValue, in bool useCustomMessage)
         {
@@ -21,7 +24,7 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings
             private const string ParamName = "rawValue";
             private const string ErrorMessageParamName = "errorMessage";
 
-            private readonly string _expectedErrorMessage;
+            private readonly Message _expectedErrorMessage;
 
             public ConstructorMessage(bool useCustomMessage) : base(useCustomMessage)
             {
@@ -32,7 +35,7 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings
             public void Rejects_Null()
                 => Assert.That(() => Build(null, UseCustomMessage),
                     Throws.ArgumentNullException
-                        .With.Message.StartWith(_expectedErrorMessage)
+                        .With.Message.StartWith(_expectedErrorMessage.Value)
                         .And.Message.Contain(ParamName)
                         .And.Property("ParamName").EqualTo(ParamName));
 
@@ -41,14 +44,14 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings
                 [Values(" ", "\n", "\r", "\t")] string rawValue)
                 => Assert.That(() => Build(rawValue, UseCustomMessage), 
                     Throws.InstanceOf<FormatException>()
-                        .With.Message.StartWith(_expectedErrorMessage)
+                        .With.Message.StartWith(_expectedErrorMessage.Value)
                         .And.Message.Contain(ParamName));
 
             [Test]
             public void Rejects_Empty_With_ArgumentOutOfRangeException() {
                 Assert.That(() => Build(string.Empty, UseCustomMessage),
                     Throws.InstanceOf<ArgumentOutOfRangeException>()
-                        .With.Message.StartWith(_expectedErrorMessage)
+                        .With.Message.StartWith(_expectedErrorMessage.Value)
                         .And.Message.Contain(ParamName));
             }
 
@@ -59,17 +62,6 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings
                         .With.Message.StartWith(NonEmptyOrWhiteSpaceString.InvalidCustomErrorMessageMessage)
                         .And.Message.Contain(ErrorMessageParamName)
                         .And.Property(nameof(ArgumentNullException.ParamName)).EqualTo(ErrorMessageParamName));
-
-            [TestCase("")]
-            [TestCase(" ")]
-            [TestCase("\n")]
-            [TestCase("\r")]
-            [TestCase("\t")]
-            public void Rejects_Invalid_Error_Message(string rawErrorMessage)
-                => Assert.That(() => new NonEmptyOrWhiteSpaceString(ValidSampleValue, rawErrorMessage), 
-                    Throws.InstanceOf<FormatException>()
-                        .With.Message.StartWith(NonEmptyOrWhiteSpaceString.InvalidCustomErrorMessageMessage)
-                        .And.Message.Contain(ErrorMessageParamName));
 
             [TestCase("a")]
             [TestCase("ab")]

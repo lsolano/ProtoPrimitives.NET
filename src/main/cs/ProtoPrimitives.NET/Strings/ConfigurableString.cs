@@ -16,7 +16,7 @@ namespace Triplex.ProtoDomainPrimitives.Strings
     /// Be aware that wrapped value van not be <see langword="null"/> above all other validations.
     /// </para>
     /// </summary>
-    public sealed class ConfigurableString : IDomainPrimitive<string>
+    public sealed class ConfigurableString : IDomainPrimitive<string>, IComparable<ConfigurableString>, IEquatable<ConfigurableString>
     {
         private readonly StringComparison _comparisonStrategy;
 
@@ -32,21 +32,6 @@ namespace Triplex.ProtoDomainPrimitives.Strings
         public string Value { get; }
 
         /// <summary>
-        /// Compares using the strategy specified by builder <see cref="Builder.WithComparisonStrategy"/>.
-        /// </summary>
-        /// <param name="other">other</param>
-        /// <returns></returns>
-        public int CompareTo(IDomainPrimitive<string>? other)
-        {
-            if (other == null)
-            {
-                return 1;
-            }
-
-            return ReferenceEquals(this, other) ? 0 : string.Compare(Value, other.Value, _comparisonStrategy);
-        }
-
-        /// <summary>
         /// Checks for equality using the strategy specified by builder <see cref="Builder.WithComparisonStrategy"/>.
         /// </summary>
         /// <param name="obj"></param>
@@ -60,7 +45,7 @@ namespace Triplex.ProtoDomainPrimitives.Strings
         /// <returns></returns>
         public bool Equals(IDomainPrimitive<string>? other)
         {
-            if (other == null)
+            if (other is null)
             {
                 return false;
             }
@@ -69,7 +54,7 @@ namespace Triplex.ProtoDomainPrimitives.Strings
         }
 
         /// <summary>
-        /// Same as <see cref="Value"/>.
+        /// Categorize based on values and provided comparison strategy.
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode() => Value.GetHashCode(_comparisonStrategy);
@@ -78,12 +63,41 @@ namespace Triplex.ProtoDomainPrimitives.Strings
         public override string ToString() => Value;
 
         /// <summary>
+        /// Compares using the strategy specified by builder <see cref="Builder.WithComparisonStrategy"/>.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public int CompareTo(ConfigurableString? other)
+        {
+            if (other is null) {
+                return 1;
+            }
+
+            return ReferenceEquals(this, other)? 0 : string.Compare(Value, other.Value, _comparisonStrategy);
+        }
+
+        /// <summary>
+        /// Checks for equality using the strategy specified by builder <see cref="Builder.WithComparisonStrategy"/>.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(ConfigurableString? other)
+        {
+            if (other is null) {
+                return false;
+            }
+
+            return ReferenceEquals(this, other) || Value.Equals(other.Value, _comparisonStrategy);
+        }
+
+        /// <summary>
         /// Indicates if two instances are not equal.
         /// </summary>
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public static bool operator !=(in ConfigurableString left, in ConfigurableString right) => !(left == right);
+        public static bool operator !=(in ConfigurableString left, in ConfigurableString right)
+            => RelationalOperatorsOverloadHelper.NotEquals<ConfigurableString>(left, right);
 
         /// <summary>
         /// Indicates if two instances are equals.
@@ -92,13 +106,7 @@ namespace Triplex.ProtoDomainPrimitives.Strings
         /// <param name="right"></param>
         /// <returns></returns>
         public static bool operator ==(in ConfigurableString left, in ConfigurableString right)
-        {
-            if (left is null) {
-                return right is null;
-            }
-
-            return left.Equals(right);
-        }
+            => RelationalOperatorsOverloadHelper.Equals<ConfigurableString>(left, right);
 
         /// <summary>
         /// Indicates if <paramref name="left"/> is less than <paramref name="right"/>.
@@ -106,13 +114,8 @@ namespace Triplex.ProtoDomainPrimitives.Strings
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public static bool operator <(in ConfigurableString left, in ConfigurableString right) {
-            if (left is null) {
-                return right is not null;
-            }
-
-            return left.CompareTo(right) < 0;
-        }
+        public static bool operator <(in ConfigurableString left, in ConfigurableString right)
+            => RelationalOperatorsOverloadHelper.LessThan<ConfigurableString>(left, right);
 
         /// <summary>
         /// Indicates if <paramref name="left"/> is less than or equals to <paramref name="right"/>.
@@ -120,13 +123,8 @@ namespace Triplex.ProtoDomainPrimitives.Strings
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public static bool operator <=(in ConfigurableString left, in ConfigurableString right) {
-            if (left is null) {
-                return true;
-            }
-
-            return left.CompareTo(right) <= 0;
-        }
+        public static bool operator <=(in ConfigurableString left, in ConfigurableString right) 
+            => RelationalOperatorsOverloadHelper.LessThanOrEqualsTo<ConfigurableString>(left, right);
 
         /// <summary>
         /// Indicates if <paramref name="left"/> is greater than <paramref name="right"/>.
@@ -134,16 +132,8 @@ namespace Triplex.ProtoDomainPrimitives.Strings
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public static bool operator >(in ConfigurableString left, in ConfigurableString right) {
-            if (left is null) {
-                return false;
-                
-            } else if (right is null) {
-                return true;
-            }
-
-            return left.CompareTo(right) > 0;
-        }
+        public static bool operator >(in ConfigurableString left, in ConfigurableString right)
+            => RelationalOperatorsOverloadHelper.GreaterThan<ConfigurableString>(left, right);
 
         /// <summary>
         /// Indicates if <paramref name="left"/> is greater than or equals to <paramref name="right"/>.
@@ -151,16 +141,8 @@ namespace Triplex.ProtoDomainPrimitives.Strings
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public static bool operator >=(in ConfigurableString left, in ConfigurableString right) {
-            if (right is null) {
-                return true;
-
-            } else if (left is null) {
-                return false;
-            }
-
-            return left.CompareTo(right) >= 0;
-        }
+        public static bool operator >=(in ConfigurableString left, in ConfigurableString right)
+            => RelationalOperatorsOverloadHelper.GreaterThanOrEqualsTo<ConfigurableString>(left, right);
 
         /// <summary>
         /// Fluent builder for <see cref="ConfigurableString"/>s.
@@ -563,15 +545,9 @@ namespace Triplex.ProtoDomainPrimitives.Strings
                 _built = true;
 
                 return new ConfigurableString(rawValue, _comparisonStrategy);
-            }            
-
-            private void EnsureNotBuilt()
-            {
-                if (_built)
-                {
-                    throw new InvalidOperationException("Already built.");
-                }
             }
+
+            private void EnsureNotBuilt() => State.IsFalse(_built, "Already built.");
 
             private void CheckForNull(in string rawValue, in Action<string> customParser)
             {

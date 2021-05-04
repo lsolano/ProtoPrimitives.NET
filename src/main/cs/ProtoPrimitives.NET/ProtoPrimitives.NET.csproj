@@ -13,23 +13,21 @@
     <AnalysisLevel>latest</AnalysisLevel>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Version>1.0.0</Version>
+    <Version>2.0.0</Version>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageTags>Domain Primitives;Invariants;DDD;Domain Driven Design</PackageTags>
     <PackageReleaseNotes>
 Breaking changes: 
-  - Triplex.ProtoDomainPrimitives.Exceptions.Message(string) now throws Triplex.Validations.Exceptions.ArgumentFormatException instead of System.FormatException.
+  - Triplex.ProtoDomainPrimitives.IDomainPrimitive{T} does not extendes System.IComparable{T} nor System.IEquatable{T}.
+  - Triplex.ProtoDomainPrimitives.Exceptions.Message now implements System.IComparable{T} nor System.IEquatable{T}.
 
 New Features:
-  - Relational operators overload for AbstractDomainPrimitive and common derived types: NegativeInteger, PositiveInteger.
-  - Mark assembly as CLS-Compliant
-  - Use String.GetHashCode(StringComparison) for all domain primitives wrapping String
+  - Triplex.ProtoDomainPrimitives.Numerics.StringLength now have relational operators overloaded.
 
-Internal:
-  - Add publish to nuget script.
-  - Parallelize tests execution.
-  - Add code analysis as recommended by new .net5 SDK (using EnableNETAnalyzers, AnalysisLevel, and AnalysisMode).
+Internal Improvements:
+  - Reduce code duplication by extracting common comparisons logic to Triplex.ProtoDomainPrimitives.RelationalOperatorsOverloadHelper.
+  - Fix typos in documentation (XML Docs).
     </PackageReleaseNotes>
 
   </PropertyGroup>

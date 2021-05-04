@@ -63,7 +63,7 @@ namespace Triplex.ProtoDomainPrimitives
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public int CompareTo(IDomainPrimitive<TRawType>? other)
+        public virtual int CompareTo(IDomainPrimitive<TRawType>? other)
         {
             if (other is null)
             {
@@ -78,7 +78,7 @@ namespace Triplex.ProtoDomainPrimitives
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public bool Equals(IDomainPrimitive<TRawType>? other)
+        public virtual bool Equals(IDomainPrimitive<TRawType>? other)
         {
             if (other is null)
             {

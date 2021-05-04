@@ -1,4 +1,5 @@
 ﻿using System;
+
 using Triplex.Validations;
 
 namespace Triplex.ProtoDomainPrimitives.Numerics
@@ -11,8 +12,8 @@ namespace Triplex.ProtoDomainPrimitives.Numerics
         /// <summary>
         /// Validates that the given input conform a valid range and sets properties.
         /// </summary>
-        /// <param name="min">Can be equals to <paramref name="max"/> but not <see langword="nulll"/></param>
-        /// <param name="max">Can be equals to <paramref name="min"/> but not <see langword="nulll"/></param>
+        /// <param name="min">Can be equals to <paramref name="max"/> but not <see langword="null"/></param>
+        /// <param name="max">Can be equals to <paramref name="min"/> but not <see langword="null"/></param>
         public StringLengthRange(in StringLength min, in StringLength max)
         {
             Validate(min, max);
@@ -34,11 +35,7 @@ namespace Triplex.ProtoDomainPrimitives.Numerics
         {
             Arguments.NotNull(min, nameof(min));
             Arguments.NotNull(max, nameof(max));
-
-            if (min.CompareTo(max) > 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(min), min, $"{nameof(min)} must be less than or equals to (<=) {nameof(max)} ({max}).");
-            }
+            Arguments.LessThan(min, max, nameof(min), $"{nameof(min)} must be less than or equals to (<=) {nameof(max)} ({max}).");
         }
     }
 }

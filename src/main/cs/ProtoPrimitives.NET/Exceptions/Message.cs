@@ -8,7 +8,7 @@ namespace Triplex.ProtoDomainPrimitives.Exceptions
     /// <summary>
     /// Non-empty or null exception message. Comparison other <see cref="String"/>-related operation are done using <see cref="StringComparison.Ordinal"/>.
     /// </summary>
-    public sealed class Message : IDomainPrimitive<string>
+    public sealed class Message : IDomainPrimitive<string>, IComparable<Message>, IEquatable<Message>
     {
         /// <summary>
         /// Validates input and returns new instance if everything is OK.
@@ -25,32 +25,37 @@ namespace Triplex.ProtoDomainPrimitives.Exceptions
         public string Value { get; }
 
         /// <summary>
-        /// Same as wrapped value comparison.
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        int IComparable<IDomainPrimitive<string>>.CompareTo(IDomainPrimitive<string>? other) => CompareTo(other as Message);
-
-        /// <summary>
         /// Compares with <see cref="StringComparison.Ordinal"/> strategy both wrapped values.
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public int CompareTo(in Message? other) => string.Compare(Value, other?.Value, StringComparison.Ordinal);
+        public int CompareTo(Message? other) {
+            if (other is null) {
+                return 1;
+            }
+
+            return ReferenceEquals(this, other)? 0 : string.Compare(Value, other.Value, StringComparison.Ordinal);
+        }
+
+        /// <summary>
+        /// Same as <see cref="Equals(Message?)"/> after casting the argument.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object? obj) => Equals(obj as Message);
 
         /// <summary>
         /// Same as wrapped value equality.
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public bool Equals(IDomainPrimitive<string>? other) => Value.Equals(other?.Value, StringComparison.Ordinal);
+        public bool Equals(Message? other) {
+            if (other is null) {
+                return false;
+            }
 
-        /// <summary>
-        /// Same as <see cref="Equals(IDomainPrimitive{string}?)"/> after casting the argument.
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override bool Equals(object? obj) => Equals(obj as IDomainPrimitive<string>);
+            return ReferenceEquals(this, other) || Value.Equals(other.Value, StringComparison.Ordinal);
+        }
 
         /// <summary>
         /// Gets hashcode based on <see cref="Value"/>
@@ -64,13 +69,17 @@ namespace Triplex.ProtoDomainPrimitives.Exceptions
         /// <returns></returns>
         public override string? ToString() => Value;
 
+
+        #region Relational Operators
+
         /// <summary>
         /// Indicates if two instances are not equal.
         /// </summary>
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public static bool operator !=(in Message left, in Message right) => !(left == right);
+        public static bool operator !=(in Message left, in Message right)
+            => RelationalOperatorsOverloadHelper.NotEquals<Message>(left, right);
 
         /// <summary>
         /// Indicates if two instances are equals.
@@ -79,13 +88,7 @@ namespace Triplex.ProtoDomainPrimitives.Exceptions
         /// <param name="right"></param>
         /// <returns></returns>
         public static bool operator ==(in Message left, in Message right)
-        {
-            if (left is null) {
-                return right is null;
-            }
-
-            return left.Equals(right);
-        }
+            => RelationalOperatorsOverloadHelper.Equals<Message>(left, right);
 
         /// <summary>
         /// Indicates if <paramref name="left"/> is less than <paramref name="right"/>.
@@ -93,13 +96,8 @@ namespace Triplex.ProtoDomainPrimitives.Exceptions
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public static bool operator <(in Message left, in Message right) {
-            if (left is null) {
-                return right is not null;
-            }
-
-            return left.CompareTo(right) < 0;
-        }
+        public static bool operator <(in Message left, in Message right)
+            => RelationalOperatorsOverloadHelper.LessThan<Message>(left, right);
 
         /// <summary>
         /// Indicates if <paramref name="left"/> is less than or equals to <paramref name="right"/>.
@@ -107,13 +105,8 @@ namespace Triplex.ProtoDomainPrimitives.Exceptions
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public static bool operator <=(in Message left, in Message right) {
-            if (left is null) {
-                return true;
-            }
-
-            return left.CompareTo(right) <= 0;
-        }
+        public static bool operator <=(in Message left, in Message right)
+            => RelationalOperatorsOverloadHelper.LessThanOrEqualsTo<Message>(left, right);
 
         /// <summary>
         /// Indicates if <paramref name="left"/> is greater than <paramref name="right"/>.
@@ -121,16 +114,8 @@ namespace Triplex.ProtoDomainPrimitives.Exceptions
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public static bool operator >(in Message left, in Message right) {
-            if (left is null) {
-                return false;
-                
-            } else if (right is null) {
-                return true;
-            }
-
-            return left.CompareTo(right) > 0;
-        }
+        public static bool operator >(in Message left, in Message right)
+            => RelationalOperatorsOverloadHelper.GreaterThan<Message>(left, right);
 
         /// <summary>
         /// Indicates if <paramref name="left"/> is greater than or equals to <paramref name="right"/>.
@@ -138,15 +123,9 @@ namespace Triplex.ProtoDomainPrimitives.Exceptions
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public static bool operator >=(in Message left, in Message right) {
-            if (right is null) {
-                return true;
-
-            } else if (left is null) {
-                return false;
-            }
-
-            return left.CompareTo(right) >= 0;
-        }
+        public static bool operator >=(in Message left, in Message right)
+            => RelationalOperatorsOverloadHelper.GreaterThanOrEqualsTo<Message>(left, right);
+        
+        #endregion //Relational Operators
     }
 }
