@@ -59,34 +59,22 @@ namespace Triplex.ProtoDomainPrimitives
         #pragma warning restore CS8603 // Value can not be null here.
 
         /// <summary>
-        /// Same as wrapped instance CompareTo.
+        /// Same as wrapped instance <see cref="IComparable{T}.CompareTo"/>.
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
         public virtual int CompareTo(IDomainPrimitive<TRawType>? other)
-        {
-            if (other is null)
-            {
-                return 1;
-            }
-
-            return ReferenceEquals(this, other) ? 0 : Value.CompareTo(other.Value);
-        }
+            => RelationalOperatorsOverloadHelper
+                .SelfComparedToOther<IDomainPrimitive<TRawType>>(this, other, o => Value.CompareTo(o.Value));
 
         /// <summary>
-        /// Same as wrapped instances equals.
+        /// Same as wrapped instances <see cref="IEquatable{T}.Equals"/>>.
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
         public virtual bool Equals(IDomainPrimitive<TRawType>? other)
-        {
-            if (other is null)
-            {
-                return false;
-            }
-
-            return ReferenceEquals(this, other) || Value.Equals(other.Value);
-        }
+            => RelationalOperatorsOverloadHelper
+                .SelfIsEqualsTo<IDomainPrimitive<TRawType>>(this, other, o => Value.Equals(o.Value));
 
         /// <summary>
         /// Indicates if two instances are not equal.

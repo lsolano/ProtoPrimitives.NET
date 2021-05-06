@@ -29,13 +29,9 @@ namespace Triplex.ProtoDomainPrimitives.Exceptions
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public int CompareTo(Message? other) {
-            if (other is null) {
-                return 1;
-            }
-
-            return ReferenceEquals(this, other)? 0 : string.Compare(Value, other.Value, StringComparison.Ordinal);
-        }
+        public int CompareTo(Message? other)
+            => RelationalOperatorsOverloadHelper
+                .SelfComparedToOther<Message>(this, other, o => string.Compare(Value, o.Value, StringComparison.Ordinal));
 
         /// <summary>
         /// Same as <see cref="Equals(Message?)"/> after casting the argument.
@@ -49,13 +45,9 @@ namespace Triplex.ProtoDomainPrimitives.Exceptions
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public bool Equals(Message? other) {
-            if (other is null) {
-                return false;
-            }
-
-            return ReferenceEquals(this, other) || Value.Equals(other.Value, StringComparison.Ordinal);
-        }
+        public bool Equals(Message? other)
+            => RelationalOperatorsOverloadHelper
+                .SelfIsEqualsTo<Message>(this, other, o => Value.Equals(o.Value, StringComparison.Ordinal));
 
         /// <summary>
         /// Gets hashcode based on <see cref="Value"/>

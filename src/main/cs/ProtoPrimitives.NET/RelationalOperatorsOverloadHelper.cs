@@ -1,5 +1,7 @@
 using System;
 
+using Triplex.Validations;
+
 namespace Triplex.ProtoDomainPrimitives
 {
     /// <summary>
@@ -44,7 +46,65 @@ namespace Triplex.ProtoDomainPrimitives
     /// </example>
     /// 
     //public static class RelationalOperatorsOverloadHelper<TType> where TType : IComparable<TType>, IEquatable<TType> {
-    public static class RelationalOperatorsOverloadHelper {
+    public static class RelationalOperatorsOverloadHelper
+    {   
+        /// <summary>
+        /// Generic Comparison procedure. Before delegating to actual value comparator function, checks for <see langword="null"/> and reference equality.
+        /// </summary>
+        /// <param name="self">
+        /// Object receiving the <see cref="System.IComparable{TType}.CompareTo"/> message. Can not be <see langword="null"/>.
+        /// </param>
+        /// <param name="other">
+        /// Parameter of <see cref="System.IComparable{TType}.CompareTo"/>. Can be <see langword="null"/>.
+        /// </param>
+        /// <param name="valueComparator">
+        /// Comparator function, receives <paramref name="other"/> after checking it for <see langword="null"/>.
+        /// This function is assumed to be a lambda capturing 'this' and using it to compare based on <typeparamref name="TType"/> comparison strategy.
+        /// Can be <see langword="null"/>.
+        /// </param>
+        /// <typeparam name="TType"></typeparam>
+        /// <returns></returns>
+        public static int SelfComparedToOther<TType>(in TType self, in TType? other, in Func<TType, int> valueComparator)
+            where TType : class
+        {
+            Arguments.NotNull(self, nameof(self));
+            Arguments.NotNull(valueComparator, nameof(valueComparator));
+
+            if (other is null) {
+                return 1;
+            }
+
+            return object.ReferenceEquals(self, other)? 0 : valueComparator(other);
+        }
+
+        /// <summary>
+        /// Generic Equality procedure. Before delegating to actual value comparator function, checks for <see langword="null"/> and reference equality.
+        /// </summary>
+        /// <param name="self">
+        /// Object receiving the <see cref="Object.Equals(object?)"/> message. Can not be <see langword="null"/>.
+        /// </param>
+        /// <param name="other">
+        /// Parameter of <see cref="Object.Equals(object?)"/>. Can be <see langword="null"/>.
+        /// </param>
+        /// <param name="valueComparator">
+        /// Comparator function, receives <paramref name="other"/> after checking it for <see langword="null"/>.
+        /// This function is assumed to be a lambda capturing 'this' and using it to compare based on <typeparamref name="TType"/> equality strategy.
+        /// Can be <see langword="null"/>.
+        /// </param>
+        /// <typeparam name="TType"></typeparam>
+        /// <returns></returns>
+        public static bool SelfIsEqualsTo<TType>(in TType self, in TType? other, in Func<TType, bool> valueComparator)
+            where TType : class
+        {
+            Arguments.NotNull(self, nameof(self));
+            Arguments.NotNull(valueComparator, nameof(valueComparator));
+
+            if (other is null) {
+                return false;
+            }
+
+            return object.ReferenceEquals(self, other) || valueComparator(other);
+        }
 
         /// <summary>
         /// Not equals operator (!=) logic. Use it as:

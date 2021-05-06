@@ -68,13 +68,9 @@ namespace Triplex.ProtoDomainPrimitives.Strings
         /// <param name="other"></param>
         /// <returns></returns>
         public int CompareTo(ConfigurableString? other)
-        {
-            if (other is null) {
-                return 1;
-            }
+            => RelationalOperatorsOverloadHelper
+                .SelfComparedToOther(this, other, o => string.Compare(Value, o.Value, _comparisonStrategy));
 
-            return ReferenceEquals(this, other)? 0 : string.Compare(Value, other.Value, _comparisonStrategy);
-        }
 
         /// <summary>
         /// Checks for equality using the strategy specified by builder <see cref="Builder.WithComparisonStrategy"/>.
@@ -82,13 +78,8 @@ namespace Triplex.ProtoDomainPrimitives.Strings
         /// <param name="other"></param>
         /// <returns></returns>
         public bool Equals(ConfigurableString? other)
-        {
-            if (other is null) {
-                return false;
-            }
-
-            return ReferenceEquals(this, other) || Value.Equals(other.Value, _comparisonStrategy);
-        }
+            => RelationalOperatorsOverloadHelper
+                .SelfIsEqualsTo<ConfigurableString>(this, other, o => Value.Equals(o.Value, _comparisonStrategy));
 
         /// <summary>
         /// Indicates if two instances are not equal.

@@ -13,14 +13,16 @@
     <AnalysisLevel>latest</AnalysisLevel>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Version>2.0.1</Version>
+    <Version>2.1.0</Version>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageTags>Domain Primitives;Invariants;DDD;Domain Driven Design</PackageTags>
     <PackageReleaseNotes>
-Fixes: 
-  - Triplex.ProtoDomainPrimitives.Numerics.PositiveInteger and Triplex.ProtoDomainPrimitives.Numerics.NegativeInteger implement both IComparable{T} and IEquatable{T}.
-  - Triplex.ProtoDomainPrimitives.Numerics.PositiveInteger and Triplex.ProtoDomainPrimitives.Numerics.NegativeInteger override all six (6) relational operators.
+New Features:
+  - RelationalOperatorsOverloadHelper.SelfComparedToOther and RelationalOperatorsOverloadHelper.SelfIsEqualsTo.
+
+Improvements: 
+  - Reduce code duplication by using RelationalOperatorsOverloadHelper.SelfComparedToOther and RelationalOperatorsOverloadHelper.SelfIsEqualsTo.
     </PackageReleaseNotes>
 
   </PropertyGroup>
