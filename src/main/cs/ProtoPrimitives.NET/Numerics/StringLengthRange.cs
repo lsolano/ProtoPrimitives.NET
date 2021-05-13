@@ -1,6 +1,4 @@
-﻿using System;
-
-using Triplex.Validations;
+﻿using Triplex.Validations;
 
 namespace Triplex.ProtoDomainPrimitives.Numerics
 {
@@ -35,7 +33,7 @@ namespace Triplex.ProtoDomainPrimitives.Numerics
         {
             Arguments.NotNull(min, nameof(min));
             Arguments.NotNull(max, nameof(max));
-            Arguments.LessThan(min, max, nameof(min), $"{nameof(min)} must be less than or equals to (<=) {nameof(max)} ({max}).");
+            Arguments.LessThanOrEqualTo(min, max, nameof(min), $"{nameof(min)} must be less than or equals to (<=) {nameof(max)} ({max}).");
         }
     }
 }

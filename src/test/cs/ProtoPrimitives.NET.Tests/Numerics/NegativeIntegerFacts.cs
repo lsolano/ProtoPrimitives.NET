@@ -1,5 +1,7 @@
 ﻿using System;
+
 using NUnit.Framework;
+
 using Triplex.ProtoDomainPrimitives.Exceptions;
 using Triplex.ProtoDomainPrimitives.Numerics;
 using Triplex.ProtoDomainPrimitives.Tests.AbstractDomainPrimitiveFacts;

@@ -13,16 +13,13 @@
     <AnalysisLevel>latest</AnalysisLevel>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Version>2.1.0</Version>
+    <Version>2.1.1</Version>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageTags>Domain Primitives;Invariants;DDD;Domain Driven Design</PackageTags>
     <PackageReleaseNotes>
-New Features:
-  - RelationalOperatorsOverloadHelper.SelfComparedToOther and RelationalOperatorsOverloadHelper.SelfIsEqualsTo.
-
-Improvements: 
-  - Reduce code duplication by using RelationalOperatorsOverloadHelper.SelfComparedToOther and RelationalOperatorsOverloadHelper.SelfIsEqualsTo.
+Bug Fixes:
+  - #1  ConfigurableString fails with same value for Min and Max length. #1 ( https://github.com/lsolano/ProtoPrimitives.NET/issues/1 )
     </PackageReleaseNotes>
 
   </PropertyGroup>

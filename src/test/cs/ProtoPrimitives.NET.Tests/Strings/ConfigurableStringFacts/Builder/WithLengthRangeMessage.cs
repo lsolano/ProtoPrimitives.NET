@@ -1,8 +1,11 @@
 using System;
+
 using NUnit.Framework;
+
 using Triplex.ProtoDomainPrimitives.Exceptions;
 using Triplex.ProtoDomainPrimitives.Numerics;
 using Triplex.ProtoDomainPrimitives.Strings;
+
 using static Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Builder.ConstructorMessage;
 
 namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Builder
@@ -46,12 +49,16 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Bu
                     .With.Property(nameof(ArgumentNullException.ParamName)).EqualTo("lengthRange"));
         }
 
-        [Test]
-        public void With_Valid_LengthRange_Throws_Nothing()
+        [TestCase(0, 4)]
+        [TestCase(1, 4)]
+        [TestCase(3, 4)]
+        [TestCase(4, 4)]
+        public void With_Valid_LengthRange_Throws_Nothing(int rawMin, int rawMax)
         {
             ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
 
-            Assert.That(() => builder.WithLengthRange(SomeRange, DefaultTooLongMessage, DefaultTooLongMessage),
+            StringLengthRange range = new StringLengthRange(new StringLength(rawMin), new StringLength(rawMax));
+            Assert.That(() => builder.WithLengthRange(range, DefaultTooLongMessage, DefaultTooLongMessage),
                 Throws.Nothing);
         }
 
