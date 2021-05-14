@@ -1,7 +1,10 @@
 using System;
+
 using NUnit.Framework;
+
 using Triplex.ProtoDomainPrimitives.Exceptions;
 using Triplex.ProtoDomainPrimitives.Strings;
+
 using static Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Builder.ConstructorMessage;
 
 namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Builder
@@ -15,21 +18,21 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Bu
         }
 
         [Test]
-        public void With_Null_InvalidFormatMessage_ArgumentNullException([Values(false, true)] bool requiresTrimmed)
+        public void With_Null_InvalidFormatMessage_ArgumentNullException([Values] bool requiresTrimmed)
         {
             ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
 
-            Assert.That(() => WithRequiresTrimmed(builder, requiresTrimmed, null, true),
+            Assert.That(() => WithRequiresTrimmed(builder, requiresTrimmed, null, true, parameterless: false),
                 Throws.ArgumentNullException
                     .With.Property(nameof(ArgumentNullException.ParamName)).EqualTo("invalidFormatErrorMessage"));
         }
 
         [Test]
-        public void With_Valid_Input_Throws_Nothing([Values(false, true)] bool requiresTrimmed, [Values(false, true)] bool sendMessage)
+        public void With_Valid_Input_Throws_Nothing([Values] bool requiresTrimmed, [Values] bool sendMessage)
         {
             ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
 
-            Assert.That(() => WithRequiresTrimmed(builder, requiresTrimmed, DefaultInvalidFormatMessage, sendMessage),
+            Assert.That(() => WithRequiresTrimmed(builder, requiresTrimmed, DefaultInvalidFormatMessage, sendMessage, parameterless: false),
                 Throws.Nothing);
         }
 
@@ -37,22 +40,30 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Bu
         public void Rejects_Leading_And_Trailing_White_Spaces_When_True(
             [Values(" ", "\t", "\n", "\r", "\t\r\n")] string whiteSpace,
             [Values(WhiteSpacePosition.Leading, WhiteSpacePosition.Trailing, WhiteSpacePosition.Both)] WhiteSpacePosition position,
-            [Values(false, true)] bool requiresTrimmed,
-            [Values(false, true)] bool sendMessage)
+            [Values] bool sendMessage,
+            [Values] bool parameterless)
         {
+            Assume.That(!parameterless || !sendMessage, Is.True);
+
             string rawValue = ConcatWhiteSpacesAtPosition(position, whiteSpace);
             ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
-            WithRequiresTrimmed(builder, requiresTrimmed, DefaultInvalidFormatMessage, sendMessage);
+            WithRequiresTrimmed(builder, true, DefaultInvalidFormatMessage, sendMessage, parameterless);
 
-            if (requiresTrimmed)
-            {
-                Assert.That(() => builder.Build(rawValue), Throws.InstanceOf<FormatException>());
-            }
-            else
-            {
-                ConfigurableString str = builder.Build(rawValue);
-                Assert.That(str.Value, Is.SameAs(rawValue));
-            }
+            Assert.That(() => builder.Build(rawValue), Throws.InstanceOf<FormatException>());
+        }
+
+        [Test]
+        public void Accepts_Leading_And_Trailing_White_Spaces_When_False(
+            [Values(" ", "\t", "\n", "\r", "\t\r\n")] string whiteSpace,
+            [Values(WhiteSpacePosition.Leading, WhiteSpacePosition.Trailing, WhiteSpacePosition.Both)] WhiteSpacePosition position,
+            [Values] bool sendMessage)
+        {   
+            string rawValue = ConcatWhiteSpacesAtPosition(position, whiteSpace);
+            ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
+            WithRequiresTrimmed(builder, false, DefaultInvalidFormatMessage, sendMessage, parameterless: false);
+
+            ConfigurableString str = builder.Build(rawValue);
+            Assert.That(str.Value, Is.SameAs(rawValue));            
         }
 
         public enum WhiteSpacePosition { None, Leading, Trailing, Both }
@@ -64,12 +75,14 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Bu
         public void Overrides_AllowLeadingWhiteSpace_Option_When_True(
              [Values(" ", "\t", "\n", "\r", "\t\r\n")] string whiteSpace,
              [Values(WhiteSpacePosition.Leading, WhiteSpacePosition.Both)] WhiteSpacePosition position,
-             [Values(false, true)] bool sendMessage)
+             [Values] bool sendMessage, [Values] bool parameterless)
         {
+            Assume.That(!parameterless || !sendMessage, Is.True);
+
             string rawValue = ConcatWhiteSpacesAtPosition(position, whiteSpace);
             ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
             builder.WithAllowLeadingWhiteSpace(true);
-            WithRequiresTrimmed(builder, true, DefaultInvalidFormatMessage, sendMessage);
+            WithRequiresTrimmed(builder, true, DefaultInvalidFormatMessage, sendMessage, parameterless);
 
             Assert.That(() => builder.Build(rawValue), Throws.InstanceOf<FormatException>());
         }
@@ -78,8 +91,15 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Bu
             in ConfigurableString.Builder builder,
             in bool requiresTrimmed,
             in Message invalidFormatMsg,
-            in bool sendMessage) => sendMessage ? builder.WithRequiresTrimmed(requiresTrimmed, invalidFormatMsg)
+            in bool sendMessage,
+            in bool parameterless)  {
+                if (parameterless && requiresTrimmed && !sendMessage) {
+                    builder.WithRequiresTrimmed();
+                }
+
+                return sendMessage ? builder.WithRequiresTrimmed(requiresTrimmed, invalidFormatMsg)
                 : builder.WithRequiresTrimmed(requiresTrimmed);
+            }
 
         private static string ConcatWhiteSpacesAtPosition(in WhiteSpacePosition position, in string whiteSpace)
         {

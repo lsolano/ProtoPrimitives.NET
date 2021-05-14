@@ -44,14 +44,7 @@ namespace Triplex.ProtoDomainPrimitives.Strings
         /// <param name="other"></param>
         /// <returns></returns>
         public bool Equals(IDomainPrimitive<string>? other)
-        {
-            if (other is null)
-            {
-                return false;
-            }
-
-            return ReferenceEquals(this, other) || Value.Equals(other.Value, _comparisonStrategy);
-        }
+            => RelationalOperatorsOverloadHelper.SelfIsEqualsTo(this, other, o => Value.Equals(o.Value, _comparisonStrategy));
 
         /// <summary>
         /// Categorize based on values and provided comparison strategy.
@@ -283,6 +276,14 @@ namespace Triplex.ProtoDomainPrimitives.Strings
                     _maxLength = lengthRange.Max;
                 });
             }
+
+            /// <summary>
+            /// Indicates tha the given input must be trimmed (can not have white space characters at the biginning or end). Same as <see cref="WithRequiresTrimmed(bool)"/> with <see langword="true"/>.
+            /// </summary>
+            /// <returns>Self</returns>
+            /// <exception cref="InvalidOperationException">If already built.</exception>
+            public Builder WithRequiresTrimmed()
+                => WithRequiresTrimmed(true, _invalidFormatErrorMessage ?? DefaultInvalidFormatErrorMessage);
 
             /// <summary>
             /// Indicates if the given input must be trimmed (can not have white space characters at the biginning or end).

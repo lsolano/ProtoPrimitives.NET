@@ -6,6 +6,7 @@
     <IsTestProject>false</IsTestProject>
     <RootNamespace>Triplex.ProtoDomainPrimitives</RootNamespace>
     <AssemblyName>Triplex.ProtoDomainPrimitives</AssemblyName>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
     <Nullable>enable</Nullable>
@@ -13,19 +14,20 @@
     <AnalysisLevel>latest</AnalysisLevel>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Version>2.1.1</Version>
+    <Version>2.3.0</Version>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageTags>Domain Primitives;Invariants;DDD;Domain Driven Design</PackageTags>
+    <PackageIcon>icon.png</PackageIcon>
     <PackageReleaseNotes>
-Bug Fixes:
-  - #1  ConfigurableString fails with same value for Min and Max length. #1 ( https://github.com/lsolano/ProtoPrimitives.NET/issues/1 )
+Improvements:
+  - Add icon to package.
     </PackageReleaseNotes>
 
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Triplex.Validations" Version="0.7.0" />
+    <PackageReference Include="Triplex.Validations" Version="0.9.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,5 +35,6 @@ Bug Fixes:
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
+    <None Include="..\..\..\..\icon.png" Pack="true" PackagePath="/" />
   </ItemGroup>
 </Project>
