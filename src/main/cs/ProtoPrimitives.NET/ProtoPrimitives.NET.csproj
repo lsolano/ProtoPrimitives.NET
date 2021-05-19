@@ -15,12 +15,14 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+    <Authors>Lorenzo Solano Martinez</Authors>
+    <Description>Use these Proto-Domain-Primitives as building blocks for your Domain Primitives and Entities (DDD) for your .NET projects.</Description>
     <Nullable>enable</Nullable>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisLevel>latest</AnalysisLevel>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Version>2.3.0</Version>
+    <Version>2.4.0</Version>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageTags>Domain Primitives;Invariants;DDD;Domain Driven Design</PackageTags>
