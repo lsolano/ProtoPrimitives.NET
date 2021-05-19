@@ -6,6 +6,12 @@
     <IsTestProject>false</IsTestProject>
     <RootNamespace>Triplex.ProtoDomainPrimitives</RootNamespace>
     <AssemblyName>Triplex.ProtoDomainPrimitives</AssemblyName>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/lsolano/ProtoPrimitives.NET</RepositoryUrl>
+    <Year>$([System.DateTime]::Now.Year.ToString("####"))</Year>
+    <CopyrightStartYear>2019</CopyrightStartYear>
+    <CopyrightEndYear Condition="$(Year) != '$(CopyrightStartYear)'">-$(Year)</CopyrightEndYear>
+    <Copyright>(C) Lorenzo Solano Martinez (https://lorenzosolano.com/) $(CopyrightStartYear)$(CopyrightEndYear). All Rights Reserved.</Copyright>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
@@ -21,13 +27,13 @@
     <PackageIcon>icon.png</PackageIcon>
     <PackageReleaseNotes>
 Improvements:
-  - Add icon to package.
+  - Add package metadata (reository type and URL, and CP.).
     </PackageReleaseNotes>
 
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Triplex.Validations" Version="0.9.0" />
+    <PackageReference Include="Triplex.Validations" Version="0.10.0" />
   </ItemGroup>
 
   <ItemGroup>
