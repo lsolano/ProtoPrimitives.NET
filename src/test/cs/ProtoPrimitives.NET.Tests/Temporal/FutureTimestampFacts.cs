@@ -106,6 +106,22 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Temporal
             }
         }
 
+                [TestFixture]
+        internal sealed class ToISOStringMessage
+        {
+            [Test]
+            public void Formats_String_Using_Full_Date_And_Time_ISO_8601_With_UTC_Z_Indicator()
+            {
+                int lastYear = DateTimeOffset.UtcNow.Year + 1;
+                var rawCreatedTimestamp = new DateTimeOffset(year: lastYear, month: 01, day: 02, hour: 03, minute: 04,
+                second: 05, millisecond: 006, offset: TimeSpan.Zero);
+
+                var futureTimestamp = new FutureTimestamp(rawCreatedTimestamp);
+
+                Assert.That(futureTimestamp.ToISOString(), Is.EqualTo($"{lastYear}-01-02T03:04:05.006Z"));
+            }
+        }
+
         [TestFixture]
         internal sealed class GetHashCodeMessage
         {

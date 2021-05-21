@@ -8,7 +8,8 @@ using NUnit.Framework.Constraints;
 using Triplex.ProtoDomainPrimitives.Exceptions;
 using Triplex.ProtoDomainPrimitives.Temporal;
 
-using static Triplex.ProtoDomainPrimitives.Tests.Temporal.TemporalExtensions;using Triplex.ProtoDomainPrimitives.Tests.AbstractDomainPrimitiveFacts;
+using static Triplex.ProtoDomainPrimitives.Tests.Temporal.TemporalExtensions;
+using Triplex.ProtoDomainPrimitives.Tests.AbstractDomainPrimitiveFacts;
 
 namespace Triplex.ProtoDomainPrimitives.Tests.Temporal
 {
@@ -98,6 +99,22 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Temporal
                 var pastOrPresentTimestamp = new PastOrPresentTimestamp(rawValue);
 
                 Assert.That(pastOrPresentTimestamp.ToString(), Is.EqualTo(rawValue.ToString()));
+            }
+        }
+
+        [TestFixture]
+        internal sealed class ToISOStringMessage
+        {
+            [Test]
+            public void Formats_String_Using_Full_Date_And_Time_ISO_8601_With_UTC_Z_Indicator()
+            {
+                int lastYear = DateTimeOffset.UtcNow.Year - 1;
+                var rawCreatedTimestamp = new DateTimeOffset(year: lastYear, month: 01, day: 02, hour: 03, minute: 04,
+                second: 05, millisecond: 006, offset: TimeSpan.Zero);
+
+                var pastOrPresentTimestamp = new PastOrPresentTimestamp(rawCreatedTimestamp);
+
+                Assert.That(pastOrPresentTimestamp.ToISOString(), Is.EqualTo($"{lastYear}-01-02T03:04:05.006Z"));
             }
         }
 

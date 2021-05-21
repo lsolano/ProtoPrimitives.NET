@@ -22,20 +22,20 @@
     <AnalysisLevel>latest</AnalysisLevel>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Version>2.4.0</Version>
+    <Version>2.5.0</Version>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageTags>Domain Primitives;Invariants;DDD;Domain Driven Design</PackageTags>
     <PackageIcon>icon.png</PackageIcon>
     <PackageReleaseNotes>
 Improvements:
-  - Add package metadata (reository type and URL, and CP.).
+  - Adding ToISOString() method for both Triplex.ProtoDomainPrimitives.Temporal.PastOrPresentTimestamp and Triplex.ProtoDomainPrimitives.Temporal.FutureTimestamp.
     </PackageReleaseNotes>
 
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Triplex.Validations" Version="0.10.0" />
+    <PackageReference Include="Triplex.Validations" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>
