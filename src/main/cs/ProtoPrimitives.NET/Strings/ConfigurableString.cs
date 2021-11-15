@@ -12,15 +12,15 @@ namespace Triplex.ProtoDomainPrimitives.Strings;
 /// Be aware that wrapped value van not be <see langword="null"/> above all other validations.
 /// </para>
 /// </summary>
-public sealed class ConfigurableString : AbstractDomainPrimitive<string>, IDomainPrimitive<string>,
-    IComparable<ConfigurableString>, IEquatable<ConfigurableString>
+public sealed class ConfigurableString : AbstractDomainPrimitive<string>, IComparable<ConfigurableString>,
+    IEquatable<ConfigurableString>
 {
     private static readonly Message FallbackMessage = new("Invalid input.");
 
     private readonly StringComparison _comparisonStrategy;
 
     private ConfigurableString(string rawValue, StringComparison comparisonStrategy) :
-        base(rawValue, FallbackMessage, (val, msg) => val!) => _comparisonStrategy = comparisonStrategy;
+        base(rawValue, FallbackMessage, (val, _) => val!) => _comparisonStrategy = comparisonStrategy;
 
     /// <summary>
     /// Checks for equality using the strategy specified by builder <see cref="Builder.WithComparisonStrategy"/>.

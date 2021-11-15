@@ -11,7 +11,7 @@ public sealed class NonEmptyOrWhiteSpaceString : AbstractDomainPrimitive<string>
     /// <summary>
     /// Comparison strategy used.
     /// </summary>
-    public const StringComparison ComparisonStrategy = StringComparison.Ordinal;
+    public static readonly StringComparison ComparisonStrategy = StringComparison.Ordinal;
 
     /// <summary>
     /// Default error message.
@@ -21,7 +21,7 @@ public sealed class NonEmptyOrWhiteSpaceString : AbstractDomainPrimitive<string>
     /// <summary>
     /// Error message used when <code>errorMessage</code> parameter is invalid.
     /// </summary>
-    public const string InvalidCustomErrorMessageMessage =
+    public static readonly string InvalidCustomErrorMessageMessage =
         "'errorMessage' could not be null, empty or white-space only.";
 
     /// <summary>

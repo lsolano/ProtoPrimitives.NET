@@ -63,7 +63,9 @@ public sealed class PastOrPresentTimestamp : AbstractDomainPrimitive<DateTimeOff
     /// </para>
     /// <para>
     /// Inspired on 
-    /// <see href="https://tc39.es/ecma262/#sec-date.prototype.toisostring">21.4.4.36 Date.prototype.toISOString()</see> 
+    /// <see href="https://tc39.es/ecma262/#sec-date.prototype.toisostring">
+    /// 21.4.4.36 Date.prototype.toISOString()
+    /// </see> 
     /// as of '2021-05-21T16:29:04.613Z' (formated accordinly to this method).
     /// </para>
     /// </summary>
