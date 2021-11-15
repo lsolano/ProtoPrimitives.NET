@@ -49,7 +49,7 @@ jobs:
         shell: powershell
         run: |
           $workingDir=pwd
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"lsolano_ProtoPrimitives.NET" /o:"lsolano" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.dotnet.excludeTestProjects=true /d:sonar.exclusions=test/**,src/**/GlobalUsings.cs /d:sonar.cs.opencover.reportsPaths="$workingDir/test-results/coverage.net6.0.opencover.xml"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"lsolano_ProtoPrimitives.NET" /o:"lsolano" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.dotnet.excludeTestProjects=true /d:sonar.exclusions=test/**,**/GlobalUsings.cs /d:sonar.cs.opencover.reportsPaths="$workingDir/test-results/coverage.net6.0.opencover.xml"
           if ("$GITHUB_REF" -ceq "refs/heads/master") {$configuration="Release"} else {$configuration="Debug"}
           dotnet clean -c "$configuration"
           dotnet build -c "$configuration"
