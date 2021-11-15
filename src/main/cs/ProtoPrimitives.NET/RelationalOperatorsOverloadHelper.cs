@@ -102,14 +102,7 @@ public static class RelationalOperatorsOverloadHelper
         Arguments.NotNull(self, nameof(self));
         Arguments.NotNull(valueComparator, nameof(valueComparator));
 
-        if (other is null)
-        {
-            return false;
-        }
-        else
-        {
-            return ReferenceEquals(self, other) || valueComparator(other);
-        }
+        return other is not null && (ReferenceEquals(self, other) || valueComparator(other));
     }
 
     /// <summary>
@@ -139,16 +132,7 @@ public static class RelationalOperatorsOverloadHelper
     /// <see langword="true"/> if both are <see langword="null"/>, or result of <code>left.Equals(right)</code>
     /// </returns>
     public static bool Equals<TType>(TType left, TType right) where TType : IComparable<TType>, IEquatable<TType>
-    {
-        if (left is null)
-        {
-            return right is null;
-        }
-        else
-        {
-            return left.Equals(right);
-        }
-    }
+        => left is null ? right is null : left.Equals(right);
 
     /// <summary>
     /// Less than operator (&lt;) logic. Use it as
@@ -164,16 +148,7 @@ public static class RelationalOperatorsOverloadHelper
     /// or result of <code>left.CompareTo(right) &lt; 0</code></returns>
     public static bool LessThan<TType>(TType left, TType right)
         where TType : IComparable<TType>, IEquatable<TType>
-    {
-        if (left is null)
-        {
-            return right is not null;
-        }
-        else
-        {
-            return left.CompareTo(right) < 0;
-        }
-    }
+        => left is null ? right is not null : left.CompareTo(right) < 0;
 
     /// <summary>
     /// Less than or equals to operator (&lt;=) logic. Use it as
@@ -189,16 +164,7 @@ public static class RelationalOperatorsOverloadHelper
     /// or result of <code>left.CompareTo(right) &lt;= 0</code></returns>
     public static bool LessThanOrEqualsTo<TType>(TType left, TType right)
         where TType : IComparable<TType>, IEquatable<TType>
-    {
-        if (left is null)
-        {
-            return true;
-        }
-        else
-        {
-            return left.CompareTo(right) <= 0;
-        }
-    }
+        => left is null || left.CompareTo(right) <= 0;
 
     /// <summary>
     /// Greater than operator (&gt;) logic. Use it as
