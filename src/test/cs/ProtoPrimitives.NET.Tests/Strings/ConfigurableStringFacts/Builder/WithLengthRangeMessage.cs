@@ -12,10 +12,11 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Bu
 {
     internal sealed class WithLengthRangeMessage : ValidConstructorArgumentsFixture
     {
-        private static readonly StringLengthRange SomeRange = new StringLengthRange(new StringLength(32), new StringLength(64));
-        private static readonly Message DefaultTooLongMessage = new Message("Very large");
+        private static readonly StringLengthRange SomeRange = new(new StringLength(32), new StringLength(64));
+        private static readonly Message DefaultTooLongMessage = new("Very large");
 
-        public WithLengthRangeMessage(bool useSingleParamConstructor, bool useSingleMessage) : base(useSingleParamConstructor, useSingleMessage)
+        public WithLengthRangeMessage(bool useSingleParamConstructor, bool useSingleMessage) : 
+            base(useSingleParamConstructor, useSingleMessage)
         {
         }
 
@@ -24,7 +25,7 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Bu
         {
             ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
 
-            Assert.That(() => builder.WithLengthRange(SomeRange, null, DefaultTooLongMessage),
+            Assert.That(() => builder.WithLengthRange(SomeRange, null!, DefaultTooLongMessage),
                 Throws.ArgumentNullException
                     .With.Property(nameof(ArgumentNullException.ParamName)).EqualTo("tooShortErrorMessage"));
         }
@@ -34,7 +35,7 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Bu
         {
             ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
 
-            Assert.That(() => builder.WithLengthRange(SomeRange, DefaultTooLongMessage, null),
+            Assert.That(() => builder.WithLengthRange(SomeRange, DefaultTooLongMessage, null!),
                 Throws.ArgumentNullException
                     .With.Property(nameof(ArgumentNullException.ParamName)).EqualTo("tooLongErrorMessage"));
         }
@@ -44,7 +45,7 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Bu
         {
             ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
 
-            Assert.That(() => builder.WithLengthRange(null, DefaultTooLongMessage, DefaultTooLongMessage),
+            Assert.That(() => builder.WithLengthRange(null!, DefaultTooLongMessage, DefaultTooLongMessage),
                 Throws.ArgumentNullException
                     .With.Property(nameof(ArgumentNullException.ParamName)).EqualTo("lengthRange"));
         }
@@ -57,16 +58,17 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Bu
         {
             ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
 
-            StringLengthRange range = new StringLengthRange(new StringLength(rawMin), new StringLength(rawMax));
+            StringLengthRange range = new(new StringLength(rawMin), new StringLength(rawMax));
             Assert.That(() => builder.WithLengthRange(range, DefaultTooLongMessage, DefaultTooLongMessage),
                 Throws.Nothing);
         }
 
         [Test]
-        public void Uses_Set_LengthRange([Values("ab", "abc", "abcd")] in string rawValue)
+        public void Uses_Set_LengthRange([Values("ab", "abc", "abcd")] string rawValue)
         {
             ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
-            builder.WithLengthRange(new StringLengthRange(new StringLength(2), new StringLength(4)), DefaultTooLongMessage, DefaultTooLongMessage);
+            builder.WithLengthRange(new StringLengthRange(new StringLength(2), new StringLength(4)), 
+                DefaultTooLongMessage, DefaultTooLongMessage);
 
             Assert.That(builder.Build(rawValue).Value, Is.SameAs(rawValue));
         }
@@ -75,7 +77,8 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Bu
         public void Rejects_RawValues_Larger_Than_MaxLength([Values("abc", "abcd")]  string rawValue)
         {
             ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
-            builder.WithLengthRange(new StringLengthRange(new StringLength(1), new StringLength(2)), DefaultTooLongMessage, DefaultTooLongMessage);
+            builder.WithLengthRange(new StringLengthRange(new StringLength(1), new StringLength(2)), 
+                DefaultTooLongMessage, DefaultTooLongMessage);
 
             Assert.That(() => builder.Build(rawValue),
                 Throws.InstanceOf<ArgumentOutOfRangeException>()
@@ -87,7 +90,8 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Bu
         public void Rejects_RawValues_Shorter_Than_MinLength([Values("a", "ab")]  string rawValue)
         {
             ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
-            builder.WithLengthRange(new StringLengthRange(new StringLength(3), new StringLength(5)), DefaultTooLongMessage, DefaultTooLongMessage);
+            builder.WithLengthRange(new StringLengthRange(new StringLength(3), new StringLength(5)), 
+                DefaultTooLongMessage, DefaultTooLongMessage);
 
             Assert.That(() => builder.Build(rawValue),
                 Throws.InstanceOf<ArgumentOutOfRangeException>()

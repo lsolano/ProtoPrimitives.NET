@@ -1,5 +1,7 @@
 using System;
+
 using NUnit.Framework;
+
 using Triplex.ProtoDomainPrimitives.Exceptions;
 using Triplex.ProtoDomainPrimitives.Numerics;
 using Triplex.ProtoDomainPrimitives.Strings;
@@ -9,24 +11,25 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Bu
 {
     internal sealed class WithMaxLengthMessage : ValidConstructorArgumentsFixture
     {
-        private static readonly Message DefaultTooLongMessage = new Message("Very large");
+        private static readonly Message DefaultTooLongMessage = new("Very large");
 
-        public WithMaxLengthMessage(bool useSingleParamConstructor, bool useSingleMessage) : base(useSingleParamConstructor, useSingleMessage)
+        public WithMaxLengthMessage(bool useSingleParamConstructor, bool useSingleMessage) : 
+            base(useSingleParamConstructor, useSingleMessage)
         {
         }
 
         [Test]
-        public void With_Null_Throws_ArgumentNullException([Values(false, true)] bool doNotSendTooLongMessage)
+        public void With_Null_Throws_ArgumentNullException([Values] bool doNotSendTooLongMessage)
         {
             ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
 
-            Assert.That(() => SetMaxLength(doNotSendTooLongMessage, builder, null),
+            Assert.That(() => SetMaxLength(doNotSendTooLongMessage, builder, null!),
                 Throws.ArgumentNullException
                     .With.Property(nameof(ArgumentNullException.ParamName)).EqualTo("maxLength"));
         }
 
         [Test]
-        public void With_Valid_MaxLength_Throws_Nothing([Values(false, true)] bool doNotSendTooLongMessage)
+        public void With_Valid_MaxLength_Throws_Nothing([Values] bool doNotSendTooLongMessage)
         {
             ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
 
@@ -34,7 +37,7 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Bu
         }
 
         [Test]
-        public void Uses_Set_MaxLength([Values("abc", "abcd")] in string rawValue, [Values(false, true)] in bool doNotSendTooLongMessage)
+        public void Uses_Set_MaxLength([Values("abc", "abcd")] string rawValue, [Values] bool doNotSendTooLongMessage)
         {
             ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
             SetMaxLength(doNotSendTooLongMessage, builder, new StringLength(4));
@@ -43,7 +46,8 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Bu
         }
 
         [Test]
-        public void Rejects_RawValues_Larger_Than_MaxLength([Values("abc", "abcd")]  string rawValue, [Values(false, true)] in bool doNotSendTooLongMessage)
+        public void Rejects_RawValues_Larger_Than_MaxLength([Values("abc", "abcd")]  string rawValue, 
+            [Values] bool doNotSendTooLongMessage)
         {
             ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
             SetMaxLength(doNotSendTooLongMessage, builder, new StringLength(2));
@@ -54,7 +58,8 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Bu
                     .And.Property(nameof(ArgumentOutOfRangeException.ActualValue)).EqualTo(rawValue.Length));
         }
 
-        private static void SetMaxLength(in bool doNotSendTooLongMessage, in ConfigurableString.Builder builder, in StringLength maxLength)
+        private static void SetMaxLength(bool doNotSendTooLongMessage, ConfigurableString.Builder builder, 
+            StringLength maxLength)
         {
             if (doNotSendTooLongMessage)
             {

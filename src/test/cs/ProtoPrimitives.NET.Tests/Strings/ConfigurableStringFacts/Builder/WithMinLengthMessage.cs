@@ -1,5 +1,7 @@
 using System;
+
 using NUnit.Framework;
+
 using Triplex.ProtoDomainPrimitives.Exceptions;
 using Triplex.ProtoDomainPrimitives.Numerics;
 using Triplex.ProtoDomainPrimitives.Strings;
@@ -9,24 +11,25 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Bu
 {
     internal sealed class WithMinLengthMessage : ValidConstructorArgumentsFixture
     {
-        private static readonly Message DefaultTooShortMessage = new Message("Shorty");
+        private static readonly Message DefaultTooShortMessage = new("Shorty");
 
-        public WithMinLengthMessage(bool useSingleParamConstructor, bool useSingleMessage) : base(useSingleParamConstructor, useSingleMessage)
+        public WithMinLengthMessage(bool useSingleParamConstructor, bool useSingleMessage) : 
+            base(useSingleParamConstructor, useSingleMessage)
         {
         }
 
         [Test]
-        public void With_Null_Throws_ArgumentNullException([Values(false, true)] bool doNotSendTooShortMessage)
+        public void With_Null_Throws_ArgumentNullException([Values] bool doNotSendTooShortMessage)
         {
             ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
 
-            Assert.That(() => SetMinLength(doNotSendTooShortMessage, builder, null),
+            Assert.That(() => SetMinLength(doNotSendTooShortMessage, builder, null!),
                 Throws.ArgumentNullException
                     .With.Property(nameof(ArgumentNullException.ParamName)).EqualTo("minLength"));
         }
 
         [Test]
-        public void With_Valid_MinLength_Throws_Nothing([Values(false, true)] bool doNotSendTooShortMessage)
+        public void With_Valid_MinLength_Throws_Nothing([Values] bool doNotSendTooShortMessage)
         {
             ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
 
@@ -34,7 +37,8 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Bu
         }
 
         [Test]
-        public void Uses_Set_MinLength([Values("abc", "abcd")] in string rawValue, [Values(false, true)] in bool doNotSendTooShortMessage)
+        public void Uses_Set_MinLength([Values("abc", "abcd")] string rawValue, 
+            [Values] bool doNotSendTooShortMessage)
         {
             ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
             SetMinLength(doNotSendTooShortMessage, builder, new StringLength(3));
@@ -43,7 +47,8 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Bu
         }
 
         [Test]
-        public void Rejects_RawValues_Shorter_Than_MinLength([Values("abc", "abcd")]  string rawValue, [Values(false, true)] in bool doNotSendTooShortMessage)
+        public void Rejects_RawValues_Shorter_Than_MinLength([Values("abc", "abcd")] string rawValue, 
+            [Values] bool doNotSendTooShortMessage)
         {
             ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
             SetMinLength(doNotSendTooShortMessage, builder, new StringLength(5));
@@ -54,7 +59,8 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Bu
                     .And.Property(nameof(ArgumentOutOfRangeException.ActualValue)).EqualTo(rawValue.Length));
         }
 
-        private static void SetMinLength(in bool doNotSendTooShortMessage, in ConfigurableString.Builder builder, in StringLength minLength)
+        private static void SetMinLength(bool doNotSendTooShortMessage, ConfigurableString.Builder builder, 
+            StringLength minLength)
         {
             if (doNotSendTooShortMessage)
             {

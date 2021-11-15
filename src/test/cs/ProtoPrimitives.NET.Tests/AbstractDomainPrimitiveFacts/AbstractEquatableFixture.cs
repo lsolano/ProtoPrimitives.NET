@@ -7,7 +7,7 @@ using Triplex.Validations;
 namespace Triplex.ProtoDomainPrimitives.Tests.AbstractDomainPrimitiveFacts
 {
     [TestFixture]
-    internal abstract class IEquatableEqualsFacts<TDomainPrimitive, TRawType>
+    internal abstract class AbstractEquatableFixture<TDomainPrimitive, TRawType>
         where TDomainPrimitive : AbstractDomainPrimitive<TRawType>
         where TRawType : IComparable<TRawType>, IEquatable<TRawType>
     {
@@ -29,7 +29,7 @@ namespace Triplex.ProtoDomainPrimitives.Tests.AbstractDomainPrimitiveFacts
 
         private readonly Context _context;
 
-        protected IEquatableEqualsFacts() => _context = CreateContext();
+        protected AbstractEquatableFixture() => _context = CreateContext();
 
         protected abstract Context CreateContext();
 

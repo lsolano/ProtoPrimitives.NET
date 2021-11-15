@@ -11,7 +11,7 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Numerics
     internal static class PositiveIntegerFacts
     {
         private const int DefaultRawValue = 1024;
-        private static  readonly Message CustomErrorMessage = new Message("Some dummy error message.");
+        private static  readonly Message CustomErrorMessage = new("Some dummy error message.");
 
         internal sealed class ConstructorMessage : RawValueAndErrorMessageBaseFixture
         {
@@ -41,7 +41,7 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Numerics
             [Test]
             public void Rejects_Null_Custom_Error_Message()
             {
-                Assert.That(() => new NegativeInteger(DefaultRawValue, null),
+                Assert.That(() => new NegativeInteger(DefaultRawValue, null!),
                     Throws.ArgumentNullException
                         .With.Property(nameof(ArgumentNullException.ParamName)).EqualTo("errorMessage"));
             }
@@ -94,13 +94,13 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Numerics
 
         [TestFixture(false)]
         [TestFixture(true)]
-        internal sealed class EqualsMessage : IEquatableEqualsFacts<PositiveInteger, int>, IOptionalCustomMessageTestFixture
+        internal sealed class EqualsMessage : AbstractEquatableFixture<PositiveInteger, int>, IOptionalCustomMessageTestFixture
         {
             public bool UseCustomMessage { get; }
 
             protected override Context CreateContext()
             {
-                return new IEquatableEqualsFacts<PositiveInteger, int>.Context(
+                return new AbstractEquatableFixture<PositiveInteger, int>.Context(
                     subject: UseCustomMessage ? new PositiveInteger(DefaultRawValue, CustomErrorMessage) : new PositiveInteger(DefaultRawValue),
                     subjectValueCopy: UseCustomMessage ? new PositiveInteger(DefaultRawValue, CustomErrorMessage) : new PositiveInteger(DefaultRawValue),
                     differentSubject: UseCustomMessage ? new PositiveInteger(DefaultRawValue * 2, CustomErrorMessage) : new PositiveInteger(DefaultRawValue * 2) 
@@ -110,49 +110,49 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Numerics
             public EqualsMessage(bool useCustomMessage) => UseCustomMessage = useCustomMessage;
         }
 
-        internal sealed class CompareToMessage : RawValueAndErrorMessageBaseFixture
-        {
-            public CompareToMessage(bool useCustomMessage) : base(useCustomMessage)
-            {
-            }
 
-            [Test]
-            public void With_Null_Returns_Positive()
-            {
-                PositiveInteger ps = Build(DefaultRawValue, UseCustomMessage);
-
-                Assert.That(ps.CompareTo(null), Is.GreaterThan(0));
-            }
-
-            [Test]
-            public void With_Self_Returns_Zero()
-            {
-                PositiveInteger ps = Build(DefaultRawValue, UseCustomMessage);
-
-                Assert.That(ps.CompareTo(ps), Is.Zero);
-            }
-
-            [Test]
-            public void Same_As_Raw_Value([Values(1, 2)] int rawValueA, [Values(1, 2)] int rawValueB)
-            {
-                (PositiveInteger positiveIntA, PositiveInteger positiveIntB)
-                    = (Build(rawValueA, UseCustomMessage), Build(rawValueB, UseCustomMessage));
-
-                Assert.That(positiveIntA.CompareTo(positiveIntB), Is.EqualTo(rawValueA.CompareTo(rawValueB)));
-            }
-        }
-
-        internal sealed class RelationalOperatorsFacts : IComparableCompareToAndRelationalOperatorsFacts<PositiveInteger, int>
+        internal sealed class RelationalOperatorsFacts : AbstractComparaToAndRelationalOperatorsFixture<PositiveInteger, int>
         {
             protected override Context CreateContext()
             {
                 var subject = new PositiveInteger(10);
-                return new IComparableCompareToAndRelationalOperatorsFacts<PositiveInteger, int>.Context(
+                return new Context(
                     lessThanSubject: new PositiveInteger(subject.Value - 1),
                     subject: subject,
                     copyOfSubject: new PositiveInteger(subject.Value),
                     greaterThanSubject: new PositiveInteger(subject.Value + 1)
                 );
+            }
+
+            protected override int ExecuteCompareTo(PositiveInteger self, PositiveInteger? other)
+                => self.CompareTo(other);
+
+            protected override bool ExecuteEqualsOperator(PositiveInteger? left, PositiveInteger? right)
+                => left! == right!;
+
+            protected override bool ExecuteGreaterThanOperator(PositiveInteger? left, PositiveInteger? right)
+            {
+                throw new NotImplementedException();
+            }
+
+            protected override bool ExecuteGreaterThanOrEqualsToOperator(PositiveInteger? left, PositiveInteger? right)
+            {
+                throw new NotImplementedException();
+            }
+
+            protected override bool ExecuteLessThanOperator(PositiveInteger? left, PositiveInteger? right)
+            {
+                throw new NotImplementedException();
+            }
+
+            protected override bool ExecuteLessThanOrEqualsToOperator(PositiveInteger? left, PositiveInteger? right)
+            {
+                throw new NotImplementedException();
+            }
+
+            protected override bool ExecuteNotEqualsOperator(PositiveInteger? left, PositiveInteger? right)
+            {
+                throw new NotImplementedException();
             }
         }
 

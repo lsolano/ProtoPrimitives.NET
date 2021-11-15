@@ -20,7 +20,7 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Temporal
             private static readonly IEnumerable<TimeMagnitude> Magnitudes = Enum.GetValues(typeof(TimeMagnitude)).Cast<TimeMagnitude>().ToList();
 
             private const string ParamName = "rawValue";
-            private static readonly Message CustomErrorMessage = new Message("Some custom error message");
+            private static readonly Message CustomErrorMessage = new("Some custom error message");
 
             [Test]
             public void Rejects_Past_Values_With_Default_Error_Message(
@@ -135,12 +135,12 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Temporal
         }
 
         [TestFixture]
-        internal sealed class EqualsMessage : IEquatableEqualsFacts<FutureTimestamp, DateTimeOffset>
+        internal sealed class EqualsMessage : AbstractEquatableFixture<FutureTimestamp, DateTimeOffset>
         {
             protected override Context CreateContext()
             {
                 FutureTimestamp subject = CreateWithFiveMinutesInTheFuture().futureTimestamp;
-                return new IEquatableEqualsFacts<FutureTimestamp, DateTimeOffset>.Context(
+                return new AbstractEquatableFixture<FutureTimestamp, DateTimeOffset>.Context(
                     subject: subject,
                     subjectValueCopy: new FutureTimestamp(subject.Value),
                     differentSubject: new FutureTimestamp(subject.Value.AddMinutes(15)) 

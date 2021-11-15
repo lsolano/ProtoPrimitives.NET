@@ -15,7 +15,7 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Bu
         public void With_Null_Rawvalue_Throws_ArgumentNullException()
         {
             ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
-            const string rawValue = null;
+            const string rawValue = null!;
 
             Assert.That(() => builder.Build(rawValue, val => { }),
                 Throws.ArgumentNullException
@@ -29,7 +29,7 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Bu
             ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
             const string rawValue = "Some value using custom parser";
 
-            Assert.That(() => builder.Build(rawValue, null),
+            Assert.That(() => builder.Build(rawValue, null!),
                 Throws.ArgumentNullException
                     .With.Property(nameof(ArgumentNullException.ParamName)).EqualTo("customParser"));
         }
@@ -64,9 +64,10 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Bu
             const string rawValue = "Some value using custom parser";
             const string customParserExceptionMessage = "I was thrown from custom parser.";
 
-            Func<ConfigurableString> testDelegate = () =>  builder.Build(rawValue, val => { throw new Exception(customParserExceptionMessage); });
+            ConfigurableString testDelegate()
+                => builder.Build(rawValue, val => { throw new Exception(customParserExceptionMessage); });
 
-            Assert.That(testDelegate, Throws.Exception
+            Assert.That((Func<ConfigurableString>)testDelegate, Throws.Exception
                                                 .With.InnerException.Null
                                                 .And.Message.EqualTo(customParserExceptionMessage));
         }

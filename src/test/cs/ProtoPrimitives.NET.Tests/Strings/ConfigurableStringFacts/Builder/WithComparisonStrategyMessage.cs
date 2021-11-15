@@ -101,7 +101,7 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Bu
 
         private static ConfigurableString[] FromRaw(in string[] rawValues, in bool useSingleParamConstructor, in bool useSingleMessage, in StringComparison? strategy)
         {
-            List<ConfigurableString> result = new List<ConfigurableString>();
+            List<ConfigurableString> result = new();
             foreach (string rawValue in rawValues)
             {
                 ConfigurableString.Builder builder = Create(useSingleParamConstructor, useSingleMessage);

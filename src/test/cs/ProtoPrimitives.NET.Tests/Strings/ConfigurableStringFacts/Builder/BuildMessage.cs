@@ -17,7 +17,7 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Bu
         public void With_Null_Rawvalue_Throws_ArgumentNullException()
         {
             ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
-            const string rawValue = null;
+            const string rawValue = null!;
 
             Assert.That(() => builder.Build(rawValue),
                 Throws.ArgumentNullException

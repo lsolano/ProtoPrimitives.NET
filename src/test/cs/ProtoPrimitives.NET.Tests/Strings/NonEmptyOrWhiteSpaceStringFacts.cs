@@ -10,7 +10,7 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings
     internal static class NonEmptyOrWhiteSpaceStringFacts
     {
         private const string ValidSampleValue = "Hello World!!!";
-        private static readonly Message CustomErrorMessage = new Message("Use me if something is not OK with rawValue");
+        private static readonly Message CustomErrorMessage = new("Use me if something is not OK with rawValue");
 
         private static NonEmptyOrWhiteSpaceString Build(in string rawValue, in bool useCustomMessage)
         {
@@ -33,7 +33,7 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings
             }
 
             public void Rejects_Null()
-                => Assert.That(() => Build(null, UseCustomMessage),
+                => Assert.That(() => Build(null!, UseCustomMessage),
                     Throws.ArgumentNullException
                         .With.Message.StartWith(_expectedErrorMessage.Value)
                         .And.Message.Contain(ParamName)
@@ -57,7 +57,7 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings
 
             [Test]
             public void Rejects_Null_Error_Message()
-                => Assert.That(() => new NonEmptyOrWhiteSpaceString(ValidSampleValue, null), 
+                => Assert.That(() => new NonEmptyOrWhiteSpaceString(ValidSampleValue, null!), 
                     Throws.ArgumentNullException
                         .With.Message.StartWith(NonEmptyOrWhiteSpaceString.InvalidCustomErrorMessageMessage)
                         .And.Message.Contain(ErrorMessageParamName)
@@ -70,7 +70,8 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings
             [TestCase("a b ")]
             [TestCase(" a b ")]
             [TestCase(ValidSampleValue)]
-            public void Accepts_Valid_Values(string rawValue) => Assert.That(() => Build(rawValue, UseCustomMessage), Throws.Nothing);
+            public void Accepts_Valid_Values(string rawValue) 
+                => Assert.That(() => Build(rawValue, UseCustomMessage), Throws.Nothing);
         }
 
         internal  sealed class ValueProperty : RawValueAndErrorMessageBaseFixture
@@ -154,7 +155,8 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings
             [Test]
             public void With_Same_Value_Returns_True()
             {
-                (NonEmptyOrWhiteSpaceString notEmptyOrWhiteSpaceStringA, NonEmptyOrWhiteSpaceString notEmptyOrWhiteSpaceStringB)
+                (NonEmptyOrWhiteSpaceString notEmptyOrWhiteSpaceStringA, 
+                 NonEmptyOrWhiteSpaceString notEmptyOrWhiteSpaceStringB)
                     = (Build(ValidSampleValue, UseCustomMessage), Build(ValidSampleValue, UseCustomMessage));
 
                 Assert.That(notEmptyOrWhiteSpaceStringA.Equals(notEmptyOrWhiteSpaceStringB), Is.True);
@@ -163,7 +165,8 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings
             [Test]
             public void With_Different_Values_Returns_False()
             {
-                (NonEmptyOrWhiteSpaceString notEmptyOrWhiteSpaceStringA, NonEmptyOrWhiteSpaceString notEmptyOrWhiteSpaceStringB)
+                (NonEmptyOrWhiteSpaceString notEmptyOrWhiteSpaceStringA, 
+                 NonEmptyOrWhiteSpaceString notEmptyOrWhiteSpaceStringB)
                     = (Build(ValidSampleValue, UseCustomMessage), Build(ValidSampleValue + "B", UseCustomMessage));
 
                 Assert.That(notEmptyOrWhiteSpaceStringA.Equals(notEmptyOrWhiteSpaceStringB), Is.False);

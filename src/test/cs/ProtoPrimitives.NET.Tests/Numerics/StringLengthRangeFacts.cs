@@ -1,15 +1,11 @@
 ﻿using NUnit.Framework;
 
-using Triplex.ProtoDomainPrimitives.Exceptions;
 using Triplex.ProtoDomainPrimitives.Numerics;
 
 namespace Triplex.ProtoDomainPrimitives.Tests.Numerics
 {
     internal static class StringLengthRangeFacts
     {
-        private const int DefaultRawValue = 1024;
-        private static  readonly Message CustomErrorMessage = new Message("Some dummy error message.");
-
         [TestFixture]
         internal sealed class ConstructorMessage
         {

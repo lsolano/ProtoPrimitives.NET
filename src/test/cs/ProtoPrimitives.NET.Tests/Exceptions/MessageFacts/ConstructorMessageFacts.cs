@@ -12,7 +12,7 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Exceptions.MessageFacts
     {
         [Test]
         public void With_Null_Throws_Argument_Null_Exception()
-            => Assert.That(() => new Message(null), Throws.ArgumentNullException);
+            => Assert.That(() => new Message(null!), Throws.ArgumentNullException);
 
         [Test]
         public void With_Empty_Throws_ArgumentFormatException()
@@ -31,11 +31,9 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Exceptions.MessageFacts
 
         [Test]
         public void Accepts_Real_Exception_Messages_Concatenated_With_Stack_Traces() {
-            var someBar = new Bar();
-
             try
             {
-                someBar.Compose("Hello", null);
+                Bar.Compose("Hello", null!);
             }
             catch (Exception ex)
             {
@@ -46,11 +44,11 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Exceptions.MessageFacts
             Assert.Fail($"Test design error, an exception was expected as input for {nameof(Message)} constructor.");
         }
 
-        private sealed class Bar
+        private static class Bar
         {
-            internal string Compose(in string baseMessage, in string with) => baseMessage + Transform(with);
-            internal string Transform(in string with) => GetLengthAsTring(with);
-            private string GetLengthAsTring(in string with) => with.Length.ToString();
+            internal static string Compose(string baseMessage, string with) => baseMessage + Transform(with);
+            internal static string Transform(string with) => GetLengthAsTring(with);
+            private static string GetLengthAsTring(string with) => with.Length.ToString();
         }
     }
 }

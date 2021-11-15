@@ -11,9 +11,11 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Bu
 {
     internal sealed class WithRequiresTrimmedMessage : ValidConstructorArgumentsFixture
     {
-        private static readonly Message DefaultInvalidFormatMessage = new Message("Can't have white-spaces leading or trailing.");
+        private static readonly Message DefaultInvalidFormatMessage = 
+            new("Can't have white-spaces leading or trailing.");
 
-        public WithRequiresTrimmedMessage(bool useSingleParamConstructor, bool useSingleMessage) : base(useSingleParamConstructor, useSingleMessage)
+        public WithRequiresTrimmedMessage(bool useSingleParamConstructor, bool useSingleMessage) : 
+            base(useSingleParamConstructor, useSingleMessage)
         {
         }
 
@@ -22,7 +24,7 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Bu
         {
             ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
 
-            Assert.That(() => WithRequiresTrimmed(builder, requiresTrimmed, null, true, parameterless: false),
+            Assert.That(() => WithRequiresTrimmed(builder, requiresTrimmed, null!, true, parameterless: false),
                 Throws.ArgumentNullException
                     .With.Property(nameof(ArgumentNullException.ParamName)).EqualTo("invalidFormatErrorMessage"));
         }
@@ -32,14 +34,15 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Bu
         {
             ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
 
-            Assert.That(() => WithRequiresTrimmed(builder, requiresTrimmed, DefaultInvalidFormatMessage, sendMessage, parameterless: false),
-                Throws.Nothing);
+            Assert.That(() => WithRequiresTrimmed(builder, requiresTrimmed, DefaultInvalidFormatMessage, sendMessage, 
+                parameterless: false), Throws.Nothing);
         }
 
         [Test]
         public void Rejects_Leading_And_Trailing_White_Spaces_When_True(
             [Values(" ", "\t", "\n", "\r", "\t\r\n")] string whiteSpace,
-            [Values(WhiteSpacePosition.Leading, WhiteSpacePosition.Trailing, WhiteSpacePosition.Both)] WhiteSpacePosition position,
+            [Values(WhiteSpacePosition.Leading, WhiteSpacePosition.Trailing, WhiteSpacePosition.Both)] 
+            WhiteSpacePosition position,
             [Values] bool sendMessage,
             [Values] bool parameterless)
         {
@@ -55,7 +58,7 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Bu
         [Test]
         public void Accepts_Leading_And_Trailing_White_Spaces_When_False(
             [Values(" ", "\t", "\n", "\r", "\t\r\n")] string whiteSpace,
-            [Values(WhiteSpacePosition.Leading, WhiteSpacePosition.Trailing, WhiteSpacePosition.Both)] WhiteSpacePosition position,
+            [Values] WhiteSpacePosition position,
             [Values] bool sendMessage)
         {   
             string rawValue = ConcatWhiteSpacesAtPosition(position, whiteSpace);
@@ -88,11 +91,11 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Bu
         }
 
         private static ConfigurableString.Builder WithRequiresTrimmed(
-            in ConfigurableString.Builder builder,
-            in bool requiresTrimmed,
-            in Message invalidFormatMsg,
-            in bool sendMessage,
-            in bool parameterless)  {
+            ConfigurableString.Builder builder,
+            bool requiresTrimmed,
+            Message invalidFormatMsg,
+            bool sendMessage,
+            bool parameterless)  {
                 if (parameterless && requiresTrimmed && !sendMessage) {
                     builder.WithRequiresTrimmed();
                 }
@@ -101,7 +104,7 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Bu
                 : builder.WithRequiresTrimmed(requiresTrimmed);
             }
 
-        private static string ConcatWhiteSpacesAtPosition(in WhiteSpacePosition position, in string whiteSpace)
+        private static string ConcatWhiteSpacesAtPosition(WhiteSpacePosition position, string whiteSpace)
         {
             const string baseValue = "abc";
             return position switch

@@ -11,7 +11,7 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Numerics
     internal static class NegativeIntegerFacts
     {
         private const int DefaultRawValue = -1024;
-        private static  readonly Message CustomErrorMessage = new Message("Some dummy error message.");
+        private static  readonly Message CustomErrorMessage = new("Some dummy error message.");
 
         internal sealed class ConstructorMessage : RawValueAndErrorMessageBaseFixture
         {
@@ -41,7 +41,7 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Numerics
             [Test]
             public void Rejects_Null_Custom_Error_Message()
             {
-                Assert.That(() => new NegativeInteger(DefaultRawValue, null),
+                Assert.That(() => new NegativeInteger(DefaultRawValue, null!),
                     Throws.ArgumentNullException
                         .With.Property(nameof(ArgumentNullException.ParamName)).EqualTo("errorMessage"));
             }
@@ -94,65 +94,70 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Numerics
 
         [TestFixture(false)]
         [TestFixture(true)]
-        internal sealed class EqualsMessage : IEquatableEqualsFacts<NegativeInteger, int>, IOptionalCustomMessageTestFixture
+        internal sealed class EqualsMessage : AbstractEquatableFixture<NegativeInteger, int>, 
+            IOptionalCustomMessageTestFixture
         {
             public bool UseCustomMessage { get; }
 
             protected override Context CreateContext()
             {
-                return new IEquatableEqualsFacts<NegativeInteger, int>.Context(
-                    subject: UseCustomMessage ? new NegativeInteger(DefaultRawValue, CustomErrorMessage) : new NegativeInteger(DefaultRawValue),
-                    subjectValueCopy: UseCustomMessage ? new NegativeInteger(DefaultRawValue, CustomErrorMessage) : new NegativeInteger(DefaultRawValue),
-                    differentSubject: UseCustomMessage ? new NegativeInteger(DefaultRawValue * 2, CustomErrorMessage) : new NegativeInteger(DefaultRawValue * 2) 
+                return new Context(
+                    subject: UseCustomMessage ? 
+                        new NegativeInteger(DefaultRawValue, CustomErrorMessage) : new NegativeInteger(DefaultRawValue),
+                    subjectValueCopy: UseCustomMessage ? 
+                        new NegativeInteger(DefaultRawValue, CustomErrorMessage) : new NegativeInteger(DefaultRawValue),
+                    differentSubject: UseCustomMessage ? 
+                        new NegativeInteger(DefaultRawValue * 2, CustomErrorMessage) : 
+                            new NegativeInteger(DefaultRawValue * 2) 
                 );
             }
             
             public EqualsMessage(bool useCustomMessage) => UseCustomMessage = useCustomMessage;
         }
 
-        internal sealed class CompareToMessage : RawValueAndErrorMessageBaseFixture
-        {
-            public CompareToMessage(bool useCustomMessage) : base(useCustomMessage)
-            {
-            }
-
-            [Test]
-            public void With_Null_Returns_Positive()
-            {
-                NegativeInteger ns = Build(DefaultRawValue, UseCustomMessage);
-
-                Assert.That(ns.CompareTo(null), Is.GreaterThan(0));
-            }
-
-            [Test]
-            public void With_Self_Returns_Zero()
-            {
-                NegativeInteger ns = Build(DefaultRawValue, UseCustomMessage);
-
-                Assert.That(ns.CompareTo(ns), Is.Zero);
-            }
-
-            [Test]
-            public void Same_As_Raw_Value([Values(-1, -2)] in int rawValueA, [Values(-1, -2)] in int rawValueB)
-            {
-                (NegativeInteger positiveIntA, NegativeInteger positiveIntB)
-                    = (Build(rawValueA, UseCustomMessage), Build(rawValueB, UseCustomMessage));
-
-                Assert.That(positiveIntA.CompareTo(positiveIntB), Is.EqualTo(rawValueA.CompareTo(rawValueB)));
-            }
-        }
-
-        internal sealed class RelationalOperatorsFacts : IComparableCompareToAndRelationalOperatorsFacts<NegativeInteger, int>
+        internal sealed class RelationalOperatorsFacts : 
+            AbstractComparaToAndRelationalOperatorsFixture<NegativeInteger, int>
         {
             protected override Context CreateContext()
             {
                 var subject = new NegativeInteger(-10);
-                return new IComparableCompareToAndRelationalOperatorsFacts<NegativeInteger, int>.Context(
+                return new Context(
                     lessThanSubject: new NegativeInteger(subject.Value - 1),
                     subject: subject,
                     copyOfSubject: new NegativeInteger(subject.Value),
                     greaterThanSubject: new NegativeInteger(subject.Value + 1)
                 );
+            }
+
+            protected override int ExecuteCompareTo(NegativeInteger self, NegativeInteger? other)
+                => self.CompareTo(other);
+
+            protected override bool ExecuteEqualsOperator(NegativeInteger? left, NegativeInteger? right)
+                => left! == right!;
+
+            protected override bool ExecuteGreaterThanOperator(NegativeInteger? left, NegativeInteger? right)
+            {
+                throw new NotImplementedException();
+            }
+
+            protected override bool ExecuteGreaterThanOrEqualsToOperator(NegativeInteger? left, NegativeInteger? right)
+            {
+                throw new NotImplementedException();
+            }
+
+            protected override bool ExecuteLessThanOperator(NegativeInteger? left, NegativeInteger? right)
+            {
+                throw new NotImplementedException();
+            }
+
+            protected override bool ExecuteLessThanOrEqualsToOperator(NegativeInteger? left, NegativeInteger? right)
+            {
+                throw new NotImplementedException();
+            }
+
+            protected override bool ExecuteNotEqualsOperator(NegativeInteger? left, NegativeInteger? right)
+            {
+                throw new NotImplementedException();
             }
         }
 
