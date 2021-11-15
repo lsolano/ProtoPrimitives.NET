@@ -53,7 +53,7 @@ public sealed class PositiveInteger : AbstractDomainPrimitive<int>, IEquatable<P
     public int CompareTo(PositiveInteger? other) => base.CompareTo(other);
 
     /// <inheritdoc cref="AbstractDomainPrimitive{TRawType}.Equals(object?)" />
-    public override bool Equals(object? obj) => Equals(obj as PositiveInteger);
+    public override bool Equals(object? obj) => base.Equals(obj as PositiveInteger);
 
     /// <inheritdoc cref="AbstractDomainPrimitive{TRawType}.Equals(AbstractDomainPrimitive{TRawType}?)" />
     public bool Equals(PositiveInteger? other) => base.Equals(other);

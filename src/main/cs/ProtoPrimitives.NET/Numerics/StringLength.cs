@@ -48,7 +48,7 @@ public sealed class StringLength : AbstractDomainPrimitive<int>, IEquatable<Stri
     public int CompareTo(StringLength? other) => base.CompareTo(other);
 
     /// <inheritdoc cref="AbstractDomainPrimitive{TRawType}.Equals(object?)" />
-    public override bool Equals(object? obj) => Equals(obj as StringLength);
+    public override bool Equals(object? obj) => base.Equals(obj as StringLength);
 
     /// <inheritdoc cref="AbstractDomainPrimitive{TRawType}.Equals(AbstractDomainPrimitive{TRawType}?)" />
     public bool Equals(StringLength? other) => base.Equals(other);

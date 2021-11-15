@@ -16,7 +16,7 @@ public sealed class Message : IDomainPrimitive<string>, IComparable<Message>, IE
     /// <exception cref="ArgumentFormatException">
     /// When <paramref name="rawValue"/> is empty or contains only white-spaces.
     /// </exception>
-    public Message(in string rawValue)
+    public Message(string rawValue)
         => Value = Arguments.NotEmptyOrWhiteSpaceOnly(rawValue, nameof(rawValue));
 
     /// <summary>

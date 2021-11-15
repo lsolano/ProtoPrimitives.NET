@@ -1,6 +1,4 @@
-﻿using Triplex.Validations;
-
-namespace Triplex.ProtoDomainPrimitives.Numerics;
+﻿namespace Triplex.ProtoDomainPrimitives.Numerics;
 
 /// <summary>
 /// Defines a length's range for strings.
@@ -12,7 +10,7 @@ public sealed class StringLengthRange
     /// </summary>
     /// <param name="min">Can be equals to <paramref name="max"/> but not <see langword="null"/></param>
     /// <param name="max">Can be equals to <paramref name="min"/> but not <see langword="null"/></param>
-    public StringLengthRange(in StringLength min, in StringLength max)
+    public StringLengthRange(StringLength min, StringLength max)
     {
         Validate(min, max);
 
@@ -29,7 +27,7 @@ public sealed class StringLengthRange
     /// </summary>
     public StringLength Max { get; }
 
-    internal static void Validate(in StringLength min, in StringLength max)
+    internal static void Validate(StringLength min, StringLength max)
     {
         Arguments.NotNull(min, nameof(min));
         Arguments.NotNull(max, nameof(max));

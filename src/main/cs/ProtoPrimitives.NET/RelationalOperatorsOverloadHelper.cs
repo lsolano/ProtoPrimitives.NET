@@ -72,8 +72,10 @@ public static class RelationalOperatorsOverloadHelper
         {
             return 1;
         }
-
-        return object.ReferenceEquals(self, other) ? 0 : valueComparator(other);
+        else
+        {
+            return ReferenceEquals(self, other) ? 0 : valueComparator(other);
+        }
     }
 
     /// <summary>
@@ -104,8 +106,10 @@ public static class RelationalOperatorsOverloadHelper
         {
             return false;
         }
-
-        return object.ReferenceEquals(self, other) || valueComparator(other);
+        else
+        {
+            return ReferenceEquals(self, other) || valueComparator(other);
+        }
     }
 
     /// <summary>
@@ -140,8 +144,10 @@ public static class RelationalOperatorsOverloadHelper
         {
             return right is null;
         }
-
-        return left.Equals(right);
+        else
+        {
+            return left.Equals(right);
+        }
     }
 
     /// <summary>
@@ -163,8 +169,10 @@ public static class RelationalOperatorsOverloadHelper
         {
             return right is not null;
         }
-
-        return left.CompareTo(right) < 0;
+        else
+        {
+            return left.CompareTo(right) < 0;
+        }
     }
 
     /// <summary>
@@ -186,8 +194,10 @@ public static class RelationalOperatorsOverloadHelper
         {
             return true;
         }
-
-        return left.CompareTo(right) <= 0;
+        else
+        {
+            return left.CompareTo(right) <= 0;
+        }
     }
 
     /// <summary>
@@ -210,14 +220,15 @@ public static class RelationalOperatorsOverloadHelper
         if (left is null)
         {
             return false;
-
         }
         else if (right is null)
         {
             return true;
         }
-
-        return left.CompareTo(right) > 0;
+        else
+        {
+            return left.CompareTo(right) > 0;
+        }
     }
 
     /// <summary>
@@ -246,7 +257,9 @@ public static class RelationalOperatorsOverloadHelper
         {
             return false;
         }
-
-        return left.CompareTo(right) >= 0;
+        else
+        {
+            return left.CompareTo(right) >= 0;
+        }
     }
 }

@@ -26,7 +26,7 @@ public sealed class NegativeInteger : AbstractDomainPrimitive<int>, IEquatable<N
     /// <exception cref="ArgumentOutOfRangeException">
     /// If <paramref name="rawValue"/> is zero or positive.
     /// </exception>
-    public NegativeInteger(in int rawValue) : this(rawValue, DefaultErrorMessage)
+    public NegativeInteger(int rawValue) : this(rawValue, DefaultErrorMessage)
     {
     }
 
@@ -41,7 +41,7 @@ public sealed class NegativeInteger : AbstractDomainPrimitive<int>, IEquatable<N
     /// <exception cref="ArgumentNullException">
     /// When <paramref name="errorMessage"/> is <see langword="null"/>.
     /// </exception>
-    public NegativeInteger(in int rawValue, in Message errorMessage) :
+    public NegativeInteger(int rawValue, Message errorMessage) :
         base(rawValue, errorMessage, (val, msg) => Validate(val, msg))
     {
     }
@@ -53,7 +53,7 @@ public sealed class NegativeInteger : AbstractDomainPrimitive<int>, IEquatable<N
     public int CompareTo(NegativeInteger? other) => base.CompareTo(other);
 
     /// <inheritdoc cref="AbstractDomainPrimitive{TRawType}.Equals(object?)" />
-    public override bool Equals(object? obj) => Equals(obj as NegativeInteger);
+    public override bool Equals(object? obj) => base.Equals(obj as NegativeInteger);
 
     /// <inheritdoc cref="AbstractDomainPrimitive{TRawType}.Equals(AbstractDomainPrimitive{TRawType}?)" />
     public bool Equals(NegativeInteger? other) => base.Equals(other);

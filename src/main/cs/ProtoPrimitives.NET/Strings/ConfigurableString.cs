@@ -6,26 +6,26 @@ namespace Triplex.ProtoDomainPrimitives.Strings;
 /// <summary>
 /// <para>
 /// String wrapper with several format and structural validations upon construction.
-/// Use <see cref="ConfigurableString.Builder"/> to create instances of this class.
+/// Use <see cref="Builder"/> to create instances of this class.
 /// </para>
 /// <para>
 /// Be aware that wrapped value van not be <see langword="null"/> above all other validations.
 /// </para>
 /// </summary>
-public sealed class ConfigurableString : IDomainPrimitive<string>, IComparable<ConfigurableString>, IEquatable<ConfigurableString>
+public sealed class ConfigurableString : AbstractDomainPrimitive<string>, IDomainPrimitive<string>,
+    IComparable<ConfigurableString>, IEquatable<ConfigurableString>
 {
+    private static readonly Message FallbackMessage = new("Invalid input.");
+
     private readonly StringComparison _comparisonStrategy;
 
-    private ConfigurableString(string rawValue, StringComparison comparisonStrategy)
-    {
-        Value = rawValue;
-        _comparisonStrategy = comparisonStrategy;
-    }
+    private ConfigurableString(string rawValue, StringComparison comparisonStrategy) :
+        base(rawValue, FallbackMessage, (val, msg) => val!) => _comparisonStrategy = comparisonStrategy;
 
-    /// <summary>
-    /// Actual value.
-    /// </summary>
-    public string Value { get; }
+    // /// <summary>
+    // /// Actual value.
+    // /// </summary>
+    // public string Value { get; }
 
     /// <summary>
     /// Checks for equality using the strategy specified by builder <see cref="Builder.WithComparisonStrategy"/>.
@@ -33,15 +33,6 @@ public sealed class ConfigurableString : IDomainPrimitive<string>, IComparable<C
     /// <param name="obj"></param>
     /// <returns></returns>
     public override bool Equals(object? obj) => Equals(obj as ConfigurableString);
-
-    /// <summary>
-    /// Checks for equality using the strategy specified by builder <see cref="Builder.WithComparisonStrategy"/>.
-    /// </summary>
-    /// <param name="other"></param>
-    /// <returns></returns>
-    public bool Equals(IDomainPrimitive<string>? other)
-        => RelationalOperatorsOverloadHelper.SelfIsEqualsTo(this, other,
-            o => Value.Equals(o.Value, _comparisonStrategy));
 
     /// <summary>
     /// Categorize based on values and provided comparison strategy.
@@ -78,7 +69,7 @@ public sealed class ConfigurableString : IDomainPrimitive<string>, IComparable<C
     /// <param name="right"></param>
     /// <returns></returns>
     public static bool operator !=(ConfigurableString left, ConfigurableString right)
-        => RelationalOperatorsOverloadHelper.NotEquals<ConfigurableString>(left, right);
+        => RelationalOperatorsOverloadHelper.NotEquals(left, right);
 
     /// <summary>
     /// Indicates if two instances are equals.
@@ -87,7 +78,7 @@ public sealed class ConfigurableString : IDomainPrimitive<string>, IComparable<C
     /// <param name="right"></param>
     /// <returns></returns>
     public static bool operator ==(ConfigurableString left, ConfigurableString right)
-        => RelationalOperatorsOverloadHelper.Equals<ConfigurableString>(left, right);
+        => RelationalOperatorsOverloadHelper.Equals(left, right);
 
     /// <summary>
     /// Indicates if <paramref name="left"/> is less than <paramref name="right"/>.
@@ -96,7 +87,7 @@ public sealed class ConfigurableString : IDomainPrimitive<string>, IComparable<C
     /// <param name="right"></param>
     /// <returns></returns>
     public static bool operator <(ConfigurableString left, ConfigurableString right)
-        => RelationalOperatorsOverloadHelper.LessThan<ConfigurableString>(left, right);
+        => RelationalOperatorsOverloadHelper.LessThan(left, right);
 
     /// <summary>
     /// Indicates if <paramref name="left"/> is less than or equals to <paramref name="right"/>.
@@ -105,7 +96,7 @@ public sealed class ConfigurableString : IDomainPrimitive<string>, IComparable<C
     /// <param name="right"></param>
     /// <returns></returns>
     public static bool operator <=(ConfigurableString left, ConfigurableString right)
-        => RelationalOperatorsOverloadHelper.LessThanOrEqualsTo<ConfigurableString>(left, right);
+        => RelationalOperatorsOverloadHelper.LessThanOrEqualsTo(left, right);
 
     /// <summary>
     /// Indicates if <paramref name="left"/> is greater than <paramref name="right"/>.
@@ -114,7 +105,7 @@ public sealed class ConfigurableString : IDomainPrimitive<string>, IComparable<C
     /// <param name="right"></param>
     /// <returns></returns>
     public static bool operator >(ConfigurableString left, ConfigurableString right)
-        => RelationalOperatorsOverloadHelper.GreaterThan<ConfigurableString>(left, right);
+        => RelationalOperatorsOverloadHelper.GreaterThan(left, right);
 
     /// <summary>
     /// Indicates if <paramref name="left"/> is greater than or equals to <paramref name="right"/>.
@@ -123,7 +114,7 @@ public sealed class ConfigurableString : IDomainPrimitive<string>, IComparable<C
     /// <param name="right"></param>
     /// <returns></returns>
     public static bool operator >=(ConfigurableString left, ConfigurableString right)
-        => RelationalOperatorsOverloadHelper.GreaterThanOrEqualsTo<ConfigurableString>(left, right);
+        => RelationalOperatorsOverloadHelper.GreaterThanOrEqualsTo(left, right);
 
     /// <summary>
     /// Fluent builder for <see cref="ConfigurableString"/>s.
