@@ -11,7 +11,7 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Numerics
     internal static class NegativeIntegerFacts
     {
         private const int DefaultRawValue = -1024;
-        private static  readonly Message CustomErrorMessage = new("Some dummy error message.");
+        private static readonly Message CustomErrorMessage = new("Some dummy error message.");
 
         internal sealed class ConstructorMessage : RawValueAndErrorMessageBaseFixture
         {
@@ -92,30 +92,20 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Numerics
             }
         }
 
-        [TestFixture(false)]
-        [TestFixture(true)]
-        internal sealed class EqualsMessage : AbstractEquatableFixture<NegativeInteger, int>, 
-            IOptionalCustomMessageTestFixture
+        [TestFixture]
+        internal sealed class EqualsMessage : AbstractEquatableFixture<NegativeInteger, int>
         {
-            public bool UseCustomMessage { get; }
-
             protected override Context CreateContext()
             {
                 return new Context(
-                    subject: UseCustomMessage ? 
-                        new NegativeInteger(DefaultRawValue, CustomErrorMessage) : new NegativeInteger(DefaultRawValue),
-                    subjectValueCopy: UseCustomMessage ? 
-                        new NegativeInteger(DefaultRawValue, CustomErrorMessage) : new NegativeInteger(DefaultRawValue),
-                    differentSubject: UseCustomMessage ? 
-                        new NegativeInteger(DefaultRawValue * 2, CustomErrorMessage) : 
-                            new NegativeInteger(DefaultRawValue * 2) 
+                    subject: new NegativeInteger(DefaultRawValue, CustomErrorMessage),
+                    subjectValueCopy: new NegativeInteger(DefaultRawValue, CustomErrorMessage),
+                    differentSubject: new NegativeInteger(DefaultRawValue * 2, CustomErrorMessage)
                 );
             }
-            
-            public EqualsMessage(bool useCustomMessage) => UseCustomMessage = useCustomMessage;
         }
 
-        internal sealed class RelationalOperatorsFacts : 
+        internal sealed class RelationalOperatorsFacts :
             AbstractComparaToAndRelationalOperatorsFixture<NegativeInteger, int>
         {
             protected override Context CreateContext()
@@ -135,30 +125,20 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Numerics
             protected override bool ExecuteEqualsOperator(NegativeInteger? left, NegativeInteger? right)
                 => left! == right!;
 
+            protected override bool ExecuteNotEqualsOperator(NegativeInteger? left, NegativeInteger? right)
+                => left! != right!;
+
             protected override bool ExecuteGreaterThanOperator(NegativeInteger? left, NegativeInteger? right)
-            {
-                throw new NotImplementedException();
-            }
+                => left! > right!;
 
             protected override bool ExecuteGreaterThanOrEqualsToOperator(NegativeInteger? left, NegativeInteger? right)
-            {
-                throw new NotImplementedException();
-            }
+                => left! >= right!;
 
             protected override bool ExecuteLessThanOperator(NegativeInteger? left, NegativeInteger? right)
-            {
-                throw new NotImplementedException();
-            }
+                => left! < right!;
 
             protected override bool ExecuteLessThanOrEqualsToOperator(NegativeInteger? left, NegativeInteger? right)
-            {
-                throw new NotImplementedException();
-            }
-
-            protected override bool ExecuteNotEqualsOperator(NegativeInteger? left, NegativeInteger? right)
-            {
-                throw new NotImplementedException();
-            }
+                => left! <= right!;
         }
 
         private static NegativeInteger Build(in int rawValue, in bool useCustomMessage)

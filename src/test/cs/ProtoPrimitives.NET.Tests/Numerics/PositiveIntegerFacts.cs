@@ -11,7 +11,7 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Numerics
     internal static class PositiveIntegerFacts
     {
         private const int DefaultRawValue = 1024;
-        private static  readonly Message CustomErrorMessage = new("Some dummy error message.");
+        private static readonly Message CustomErrorMessage = new("Some dummy error message.");
 
         internal sealed class ConstructorMessage : RawValueAndErrorMessageBaseFixture
         {
@@ -103,7 +103,7 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Numerics
                 return new AbstractEquatableFixture<PositiveInteger, int>.Context(
                     subject: UseCustomMessage ? new PositiveInteger(DefaultRawValue, CustomErrorMessage) : new PositiveInteger(DefaultRawValue),
                     subjectValueCopy: UseCustomMessage ? new PositiveInteger(DefaultRawValue, CustomErrorMessage) : new PositiveInteger(DefaultRawValue),
-                    differentSubject: UseCustomMessage ? new PositiveInteger(DefaultRawValue * 2, CustomErrorMessage) : new PositiveInteger(DefaultRawValue * 2) 
+                    differentSubject: UseCustomMessage ? new PositiveInteger(DefaultRawValue * 2, CustomErrorMessage) : new PositiveInteger(DefaultRawValue * 2)
                 );
             }
 
@@ -130,30 +130,20 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Numerics
             protected override bool ExecuteEqualsOperator(PositiveInteger? left, PositiveInteger? right)
                 => left! == right!;
 
+            protected override bool ExecuteNotEqualsOperator(PositiveInteger? left, PositiveInteger? right)
+                => left! != right!;
+
             protected override bool ExecuteGreaterThanOperator(PositiveInteger? left, PositiveInteger? right)
-            {
-                throw new NotImplementedException();
-            }
+                => left! > right!;
 
             protected override bool ExecuteGreaterThanOrEqualsToOperator(PositiveInteger? left, PositiveInteger? right)
-            {
-                throw new NotImplementedException();
-            }
+                => left! >= right!;
 
             protected override bool ExecuteLessThanOperator(PositiveInteger? left, PositiveInteger? right)
-            {
-                throw new NotImplementedException();
-            }
+                => left! < right!;
 
             protected override bool ExecuteLessThanOrEqualsToOperator(PositiveInteger? left, PositiveInteger? right)
-            {
-                throw new NotImplementedException();
-            }
-
-            protected override bool ExecuteNotEqualsOperator(PositiveInteger? left, PositiveInteger? right)
-            {
-                throw new NotImplementedException();
-            }
+                => left! <= right!;
         }
 
         private static PositiveInteger Build(in int rawValue, in bool useCustomMessage)

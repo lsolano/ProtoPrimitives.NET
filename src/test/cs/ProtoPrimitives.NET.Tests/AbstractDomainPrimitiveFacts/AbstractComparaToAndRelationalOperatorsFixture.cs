@@ -8,7 +8,7 @@ namespace Triplex.ProtoDomainPrimitives.Tests.AbstractDomainPrimitiveFacts
 {
     [TestFixture]
     internal abstract class AbstractComparaToAndRelationalOperatorsFixture<TDomainPrimitive, TRawType>
-        where TDomainPrimitive : AbstractDomainPrimitive<TRawType>
+        where TDomainPrimitive : IComparable<TDomainPrimitive>, IEquatable<TDomainPrimitive>
         where TRawType : IComparable<TRawType>, IEquatable<TRawType>
     {
         protected class Context
@@ -19,10 +19,10 @@ namespace Triplex.ProtoDomainPrimitives.Tests.AbstractDomainPrimitiveFacts
                 TDomainPrimitive copyOfSubject,
                 TDomainPrimitive greaterThanSubject)
             {
-                LessThanSubject = Arguments.NotNull(lessThanSubject, nameof(lessThanSubject));
-                Subject = Arguments.NotNull(subject, nameof(subject));
-                CopyOfSubject = Arguments.NotNull(copyOfSubject, nameof(copyOfSubject));
-                GreaterThanSubject = Arguments.NotNull(greaterThanSubject, nameof(greaterThanSubject));
+                LessThanSubject = lessThanSubject; //Arguments.IsNotDefault(lessThanSubject, nameof(subject));
+                Subject = subject; //Arguments.IsNotDefault(subject, nameof(subject));
+                CopyOfSubject = copyOfSubject; //Arguments.IsNotDefault(copyOfSubject, nameof(copyOfSubject));
+                GreaterThanSubject = greaterThanSubject; //Arguments.IsNotDefault(greaterThanSubject, nameof(greaterThanSubject));
             }
 
             protected internal TDomainPrimitive LessThanSubject { get; }
@@ -49,7 +49,7 @@ namespace Triplex.ProtoDomainPrimitives.Tests.AbstractDomainPrimitiveFacts
 
         [Test]
         public void With_Null_Returns_Positive()
-            => Assert.That(ExecuteCompareTo(_context.Subject, null), Is.GreaterThan(0));
+            => Assert.That(ExecuteCompareTo(_context.Subject, default), Is.GreaterThan(0));
 
         [Test]
         public void With_Self_Returns_Zero()
@@ -71,14 +71,14 @@ namespace Triplex.ProtoDomainPrimitives.Tests.AbstractDomainPrimitiveFacts
 
         #region Equals
         [Test]
-        public void Equals_Returns_True_When_Both_Are_Null()
-            => Assert.That(ExecuteEqualsOperator(null, null), Is.True);
+        public void Equals_Returns_True_When_Both_Are_Default()
+            => Assert.That(ExecuteEqualsOperator(default, default), Is.True);
 
         [Test]
-        public void Equals_Returns_False_When_Some_Is_Null([Values] bool leftIsNull)
+        public void Equals_Returns_False_When_Some_Is_Default([Values] bool leftIsDefault)
         {
-            TDomainPrimitive? left = leftIsNull ? null : _context.Subject;
-            TDomainPrimitive? right = leftIsNull ? _context.Subject : null;
+            TDomainPrimitive? left = leftIsDefault ? default : _context.Subject;
+            TDomainPrimitive? right = leftIsDefault ? _context.Subject : default;
 
             Assert.That(ExecuteEqualsOperator(left, right), Is.False);
         }
@@ -103,143 +103,142 @@ namespace Triplex.ProtoDomainPrimitives.Tests.AbstractDomainPrimitiveFacts
 
         #region Not-Equals
         [Test]
-        public void NotEquals_Returns_False_When_Both_Are_Null()
-            => Assert.That((TDomainPrimitive)null! != null!, Is.False);
+        public void NotEquals_Returns_False_When_Both_Are_Default()
+            => Assert.That(ExecuteNotEqualsOperator(default, default), Is.False);
 
         [Test]
         public void NotEquals_Returns_True_When_Some_Is_Null([Values] bool leftIsNull)
         {
-            var left = leftIsNull ? null : _context.Subject;
-            var right = leftIsNull ? _context.Subject : null;
+            TDomainPrimitive? left = leftIsNull ? default : _context.Subject;
+            TDomainPrimitive? right = leftIsNull ? _context.Subject : default;
 
-            Assert.That(left! != right!, Is.True);
+            Assert.That(ExecuteNotEqualsOperator(left, right), Is.True);
         }
 
         [Test]
         public void NotEquals_Returns_True_When_Are_Different([Values] bool rightIsLessThanLeft)
         {
-            var right = rightIsLessThanLeft ? _context.LessThanSubject : _context.GreaterThanSubject;
+            TDomainPrimitive? right = rightIsLessThanLeft ? _context.LessThanSubject : _context.GreaterThanSubject;
 
-            Assert.That(_context.Subject != right, Is.True);
+            Assert.That(ExecuteNotEqualsOperator(_context.Subject, right), Is.True);
         }
 
         [Test]
         public void NotEquals_Returns_False_When_Both_Have_Same_Value()
-            => Assert.That(_context.Subject != _context.CopyOfSubject, Is.False);
+            => Assert.That(ExecuteNotEqualsOperator(_context.Subject, _context.CopyOfSubject), Is.False);
 
         [Test]
         public void NotEquals_Returns_False_When_Same_Instance()
-#pragma warning disable CS1718 // Comparing same variable
-            => Assert.That(_context.Subject != _context.Subject, Is.False);
-#pragma warning restore CS1718 // Comparing same variable
+            => Assert.That(ExecuteNotEqualsOperator(_context.Subject, _context.Subject), Is.False);
 
         #endregion //Not-Equals
 
         #region LessThan
         [Test]
         public void LessThan_Returns_False_For_Lesser_Than_Subject()
-            => Assert.That(_context.Subject < _context.LessThanSubject, Is.False);
+            => Assert.That(ExecuteLessThanOperator(_context.Subject, _context.LessThanSubject), Is.False);
 
         [Test]
         public void LessThan_Returns_False_For_Subject_Copy()
-            => Assert.That(_context.Subject < _context.CopyOfSubject, Is.False);
+            => Assert.That(ExecuteLessThanOperator(_context.Subject, _context.CopyOfSubject), Is.False);
 
         [Test]
         public void LessThan_Returns_False_For_Same_As_Subject()
-            => Assert.That(_context.Subject < _context.Subject, Is.False);
+            => Assert.That(ExecuteLessThanOperator(_context.Subject, _context.Subject), Is.False);
 
         [Test]
         public void LessThan_Returns_True_For_Greater_Than_As_Subject()
-            => Assert.That(_context.Subject < _context.GreaterThanSubject, Is.True);
+            => Assert.That(ExecuteLessThanOperator(_context.Subject, _context.GreaterThanSubject), Is.True);
 
         [Test]
         public void LessThan_Returns_False_For_Null_Right()
-            => Assert.That(_context.Subject < null!, Is.False);
+            => Assert.That(ExecuteLessThanOperator(_context.Subject, default), Is.False);
 
         [Test]
         public void LessThan_Returns_True_For_Null_Left()
-            => Assert.That(null! < _context.Subject, Is.True);
+            => Assert.That(ExecuteLessThanOperator(default, _context.Subject), Is.True);
 
         #endregion //LessThan
 
         #region LessThanOrEqualsTo
         [Test]
         public void LessThanOrEqualsTo_Returns_False_For_Lesser_Than_Subject()
-            => Assert.That(_context.Subject <= _context.LessThanSubject, Is.False);
+            => Assert.That(ExecuteLessThanOrEqualsToOperator(_context.Subject, _context.LessThanSubject), Is.False);
 
         [Test]
         public void LessThanOrEqualsTo_Returns_True_For_Subject_Copy()
-            => Assert.That(_context.Subject <= _context.CopyOfSubject, Is.True);
+            => Assert.That(ExecuteLessThanOrEqualsToOperator(_context.Subject, _context.CopyOfSubject), Is.True);
 
         [Test]
         public void LessThanOrEqualsTo_Returns_True_For_Same_As_Subject()
-            => Assert.That(_context.Subject <= _context.Subject, Is.True);
+            => Assert.That(ExecuteLessThanOrEqualsToOperator(_context.Subject, _context.Subject), Is.True);
 
         [Test]
         public void LessThanOrEqualsTo_Returns_True_For_Greater_Than_As_Subject()
-            => Assert.That(_context.Subject <= _context.GreaterThanSubject, Is.True);
+            => Assert.That(ExecuteLessThanOrEqualsToOperator(_context.Subject, _context.GreaterThanSubject), Is.True);
 
         [Test]
         public void LessThanOrEqualsTo_Returns_False_For_Null_Right()
-            => Assert.That(_context.Subject <= null!, Is.False);
+            => Assert.That(ExecuteLessThanOrEqualsToOperator(_context.Subject, default), Is.False);
 
         [Test]
         public void LessThanOrEqualsTo_Returns_True_For_Null_Left()
-            => Assert.That(null! <= _context.Subject, Is.True);
+            => Assert.That(ExecuteLessThanOrEqualsToOperator(default, _context.Subject), Is.True);
 
         #endregion //LessThanOrEqualsTo
 
         #region GreaterThan
         [Test]
         public void GreaterThan_Returns_True_For_Lesser_Than_Subject()
-            => Assert.That(_context.Subject > _context.LessThanSubject, Is.True);
+            => Assert.That(ExecuteGreaterThanOperator(_context.Subject, _context.LessThanSubject), Is.True);
 
         [Test]
         public void GreaterThan_Returns_False_For_Subject_Copy()
-            => Assert.That(_context.Subject > _context.CopyOfSubject, Is.False);
+            => Assert.That(ExecuteGreaterThanOperator(_context.Subject, _context.CopyOfSubject), Is.False);
 
         [Test]
         public void GreaterThan_Returns_False_For_Same_As_Subject()
-            => Assert.That(_context.Subject > _context.Subject, Is.False);
+            => Assert.That(ExecuteGreaterThanOperator(_context.Subject, _context.Subject), Is.False);
 
         [Test]
         public void GreaterThan_Returns_False_For_Greater_Than_As_Subject()
-            => Assert.That(_context.Subject > _context.GreaterThanSubject, Is.False);
+            => Assert.That(ExecuteGreaterThanOperator(_context.Subject, _context.GreaterThanSubject), Is.False);
 
         [Test]
         public void GreaterThan_Returns_True_For_Null_Right()
-            => Assert.That(_context.Subject > null!, Is.True);
+            => Assert.That(ExecuteGreaterThanOperator(_context.Subject, default), Is.True);
 
         [Test]
         public void GreaterThan_Returns_False_For_Null_Left()
-            => Assert.That(null! > _context.Subject, Is.False);
+            => Assert.That(ExecuteGreaterThanOperator(default, _context.Subject), Is.False);
 
         #endregion //GreaterThan
 
         #region GreaterThanOrEqualsTo
         [Test]
         public void GreaterThanOrEqualsTo_Returns_True_For_Lesser_Than_Subject()
-            => Assert.That(_context.Subject >= _context.LessThanSubject, Is.True);
+            => Assert.That(ExecuteGreaterThanOrEqualsToOperator(_context.Subject, _context.LessThanSubject), Is.True);
 
         [Test]
         public void GreaterThanOrEqualsTo_Returns_True_For_Subject_Copy()
-            => Assert.That(_context.Subject >= _context.CopyOfSubject, Is.True);
+            => Assert.That(ExecuteGreaterThanOrEqualsToOperator(_context.Subject, _context.CopyOfSubject), Is.True);
 
         [Test]
         public void GreaterThanOrEqualsTo_Returns_True_For_Same_As_Subject()
-            => Assert.That(_context.Subject >= _context.Subject, Is.True);
+            => Assert.That(ExecuteGreaterThanOrEqualsToOperator(_context.Subject, _context.Subject), Is.True);
 
         [Test]
         public void GreaterThanOrEqualsTo_Returns_False_For_Greater_Than_As_Subject()
-            => Assert.That(_context.Subject >= _context.GreaterThanSubject, Is.False);
+            => Assert.That(ExecuteGreaterThanOrEqualsToOperator(_context.Subject, _context.GreaterThanSubject),
+                Is.False);
 
         [Test]
         public void GreaterThanOrEqualsTo_Returns_True_For_Null_Right()
-            => Assert.That(_context.Subject >= null!, Is.True);
+            => Assert.That(ExecuteGreaterThanOrEqualsToOperator(_context.Subject, default), Is.True);
 
         [Test]
         public void GreaterThanOrEqualsTo_Returns_False_For_Null_Left()
-            => Assert.That(null! >= _context.Subject, Is.False);
+            => Assert.That(ExecuteGreaterThanOrEqualsToOperator(default, _context.Subject), Is.False);
 
         #endregion //GreaterThanOrEqualsTo
     }

@@ -2,24 +2,20 @@ using System;
 
 using NUnit.Framework;
 
-using Triplex.Validations;
-
 namespace Triplex.ProtoDomainPrimitives.Tests.AbstractDomainPrimitiveFacts
 {
     [TestFixture]
     internal abstract class AbstractEquatableFixture<TDomainPrimitive, TRawType>
-        where TDomainPrimitive : AbstractDomainPrimitive<TRawType>
+        where TDomainPrimitive : IComparable<TDomainPrimitive>, IEquatable<TDomainPrimitive>
         where TRawType : IComparable<TRawType>, IEquatable<TRawType>
     {
         protected class Context {
-            public Context(
-                in TDomainPrimitive subject, 
-                in TDomainPrimitive subjectValueCopy, 
-                in TDomainPrimitive differentSubject)
+            public Context(TDomainPrimitive subject, TDomainPrimitive subjectValueCopy,
+                TDomainPrimitive differentSubject)
             {
-                Subject = Arguments.NotNull(subject, nameof(subject));
-                SubjectValueCopy = Arguments.NotNull(subjectValueCopy, nameof(subjectValueCopy));
-                DifferentSubject = Arguments.NotNull(differentSubject, nameof(differentSubject));
+                Subject = subject;
+                SubjectValueCopy = subjectValueCopy;
+                DifferentSubject = differentSubject;
             }
 
             protected internal TDomainPrimitive Subject { get; }
