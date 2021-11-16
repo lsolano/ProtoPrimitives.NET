@@ -32,10 +32,10 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings
                     useCustomMessage ? CustomErrorMessage : NonEmptyOrWhiteSpaceString.DefaultErrorMessage;
             }
 
+            [Test]
             public void Rejects_Null()
                 => Assert.That(() => Build(null!, UseCustomMessage),
                     Throws.ArgumentNullException
-                        .With.Message.StartWith(_expectedErrorMessage.Value)
                         .And.Message.Contain(ParamName)
                         .And.Property("ParamName").EqualTo(ParamName));
 

@@ -46,7 +46,7 @@ public sealed class NegativeInteger : AbstractDomainPrimitive<int>, IEquatable<N
     {
     }
 
-    private static int Validate(in int rawValue, in Message errorMessage)
+    private static int Validate(int rawValue, Message errorMessage)
         => Arguments.LessThan(rawValue, 0, nameof(rawValue), errorMessage.Value);
 
     /// <inheritdoc cref="AbstractDomainPrimitive{TRawType}.CompareTo(AbstractDomainPrimitive{TRawType}?)" />

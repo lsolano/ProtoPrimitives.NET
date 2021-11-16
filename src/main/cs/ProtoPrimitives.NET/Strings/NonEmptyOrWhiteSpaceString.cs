@@ -35,7 +35,7 @@ public sealed class NonEmptyOrWhiteSpaceString : AbstractDomainPrimitive<string>
     /// When <paramref name="rawValue"/> is empty or contains only white-spaces.
     /// </exception>
     public NonEmptyOrWhiteSpaceString(string? rawValue)
-        : base((string?)rawValue, DefaultErrorMessage, (value, msg) => Validate(value, msg)) { }
+        : base(rawValue, DefaultErrorMessage, (value, msg) => Validate(value, msg)) { }
 
     /// <summary>
     /// Validates input and returns new instance if everything is OK.

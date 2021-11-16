@@ -524,19 +524,28 @@ public sealed class ConfigurableString : AbstractDomainPrimitive<string>, ICompa
 
             if (_requiresTrimmed)
             {
+                ThrowIfNotFullyTrimmed(rawValue);
+            }
+            else
+            {
+                ThrowIfInvalidLeadingOrTrailingWhiteSpacesFound(rawValue);
+            }
+
+            void ThrowIfNotFullyTrimmed(string rawValue)
+            {
                 if (rawValue.IsNotTrimmed())
                 {
                     throw new FormatException(_invalidFormatErrorMessage.Value);
                 }
             }
-            else
-            {
-                if (DoesNotAllowLeadingWhiteSpace && rawValue.HasLeadingWhiteSpace())
-                {
-                    throw new FormatException(_invalidFormatErrorMessage.Value);
-                }
 
-                if (DoesNotAllowTrailingWhiteSpace && rawValue.HasTrailingWhiteSpace())
+            void ThrowIfInvalidLeadingOrTrailingWhiteSpacesFound(string rawValue)
+            {
+                bool hasLeadingOrTrailingWhiteSpace =
+                    (DoesNotAllowLeadingWhiteSpace && rawValue.HasLeadingWhiteSpace())
+                    || (DoesNotAllowTrailingWhiteSpace && rawValue.HasTrailingWhiteSpace());
+
+                if (hasLeadingOrTrailingWhiteSpace)
                 {
                     throw new FormatException(_invalidFormatErrorMessage.Value);
                 }

@@ -7,7 +7,7 @@ namespace Triplex.ProtoDomainPrimitives;
 /// All operations, except input validation, are based on the wrapped type.
 /// </summary>
 /// <typeparam name="TRawType">Wrapped type</typeparam>
-public abstract class AbstractDomainPrimitive<TRawType> : IDomainPrimitive<TRawType>,
+public class AbstractDomainPrimitive<TRawType> : IDomainPrimitive<TRawType>,
     IComparable<AbstractDomainPrimitive<TRawType>>, IEquatable<AbstractDomainPrimitive<TRawType>>
     where TRawType : IComparable<TRawType>, IEquatable<TRawType>
 {
@@ -24,7 +24,7 @@ public abstract class AbstractDomainPrimitive<TRawType> : IDomainPrimitive<TRawT
     /// </exception>
 #pragma warning disable CS8618 // Non-null property must have a value (Value)
     protected AbstractDomainPrimitive(TRawType? rawValue, Message errorMessage,
-        Func<TRawType?, Message, TRawType> validator)
+        Func<TRawType, Message, TRawType> validator)
     {
         if (rawValue is null)
         {
@@ -52,6 +52,14 @@ public abstract class AbstractDomainPrimitive<TRawType> : IDomainPrimitive<TRawT
     public override bool Equals(object? obj) => Equals(obj as AbstractDomainPrimitive<TRawType>);
 
     /// <summary>
+    /// Same as wrapped instances <see cref="IEquatable{T}.Equals"/>>.
+    /// </summary>
+    /// <param name="other"></param>
+    /// <returns></returns>
+    public bool Equals(AbstractDomainPrimitive<TRawType>? other)
+        => RelationalOperatorsOverloadHelper.SelfIsEqualsTo(this, other, o => Value.Equals(o.Value));
+
+    /// <summary>
     /// Same as <see cref="Value"/>'s hash-code.
     /// </summary>
     /// <returns></returns>
@@ -73,16 +81,6 @@ public abstract class AbstractDomainPrimitive<TRawType> : IDomainPrimitive<TRawT
     public int CompareTo(AbstractDomainPrimitive<TRawType>? other)
         => RelationalOperatorsOverloadHelper
             .SelfComparedToOther(this, other, o => Value.CompareTo(o.Value));
-
-    /// <summary>
-    /// Same as wrapped instances <see cref="IEquatable{T}.Equals"/>>.
-    /// </summary>
-    /// <param name="other"></param>
-    /// <returns></returns>
-    public bool Equals(AbstractDomainPrimitive<TRawType>? other)
-        => RelationalOperatorsOverloadHelper
-            .SelfIsEqualsTo(this, other, o => Value.Equals(o.Value));
-
 
     #region Relational Operators
 
