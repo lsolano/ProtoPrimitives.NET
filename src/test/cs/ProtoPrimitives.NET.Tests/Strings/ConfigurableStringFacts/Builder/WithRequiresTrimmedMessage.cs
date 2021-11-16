@@ -26,13 +26,22 @@ internal sealed class WithRequiresTrimmedMessage : ValidConstructorArgumentsFixt
     }
 
     [Test]
-    public void With_Valid_Input_Throws_Nothing([Values] bool requiresTrimmed, [Values] bool sendMessage, 
+    public void With_Valid_Input_Throws_Nothing([Values] bool requiresTrimmed, [Values] bool sendMessage,
         [Values] bool parameterless)
     {
         ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
 
         Assert.That(() => WithRequiresTrimmed(builder, requiresTrimmed, DefaultInvalidFormatMessage, sendMessage,
             parameterless), Throws.Nothing);
+    }
+
+    [Test]
+    public void With_Empty_And_False_Throws_Nothing([Values] bool sendMessage, [Values] bool parameterless)
+    {
+        ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
+        WithRequiresTrimmed(builder, requiresTrimmed: false, DefaultInvalidFormatMessage, sendMessage, parameterless);
+
+        Assert.That(() => builder.Build(string.Empty), Throws.Nothing);
     }
 
     [Test]
@@ -73,9 +82,9 @@ internal sealed class WithRequiresTrimmedMessage : ValidConstructorArgumentsFixt
      */
     [Test]
     public void Overrides_AllowLeadingWhiteSpace_Option_When_True(
-         [Values(" ", "\t", "\n", "\r", "\t\r\n")] string whiteSpace,
-         [Values(WhiteSpacePosition.Leading, WhiteSpacePosition.Both)] WhiteSpacePosition position,
-         [Values] bool sendMessage, [Values] bool parameterless)
+        [Values(" ", "\t", "\n", "\r", "\t\r\n")] string whiteSpace,
+        [Values(WhiteSpacePosition.Leading, WhiteSpacePosition.Both)] WhiteSpacePosition position,
+        [Values] bool sendMessage, [Values] bool parameterless)
     {
         Assume.That(!parameterless || !sendMessage, Is.True);
 
