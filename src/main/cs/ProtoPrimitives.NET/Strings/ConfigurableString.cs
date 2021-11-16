@@ -553,28 +553,22 @@ public sealed class ConfigurableString : AbstractDomainPrimitive<string>, ICompa
 
         private void CheckForInvalidChars(string rawValue)
         {
-            if (_invalidCharsRegex is null)
+            if (_invalidCharsRegex is null || !_invalidCharsRegex.IsMatch(rawValue))
             {
                 return;
             }
 
-            if (_invalidCharsRegex.IsMatch(rawValue))
-            {
-                throw new FormatException(_invalidCharactersErrorMessage.Value);
-            }
+            throw new FormatException(_invalidCharactersErrorMessage.Value);
         }
 
         private void CheckForValidFormat(string rawValue)
         {
-            if (_validFormatRegex == null)
+            if (_validFormatRegex is null || _validFormatRegex.IsMatch(rawValue))
             {
                 return;
             }
 
-            if (!_validFormatRegex.IsMatch(rawValue))
-            {
-                throw new FormatException(_invalidFormatErrorMessage.Value);
-            }
+            throw new FormatException(_invalidFormatErrorMessage.Value);
         }
 
         private void CheckForWhiteSpaces(string rawValue)
