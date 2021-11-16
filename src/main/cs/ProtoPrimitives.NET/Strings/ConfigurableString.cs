@@ -521,8 +521,7 @@ public sealed class ConfigurableString : AbstractDomainPrimitive<string>, ICompa
             {
                 return;
             }
-
-            if (_requiresTrimmed)
+            else if (_requiresTrimmed)
             {
                 ThrowIfNotFullyTrimmed(rawValue);
             }
@@ -530,25 +529,25 @@ public sealed class ConfigurableString : AbstractDomainPrimitive<string>, ICompa
             {
                 ThrowIfInvalidLeadingOrTrailingWhiteSpacesFound(rawValue);
             }
+        }
 
-            void ThrowIfNotFullyTrimmed(string rawValue)
+        private void ThrowIfNotFullyTrimmed(string rawValue)
+        {
+            if (rawValue.IsNotTrimmed())
             {
-                if (rawValue.IsNotTrimmed())
-                {
-                    throw new FormatException(_invalidFormatErrorMessage.Value);
-                }
+                throw new FormatException(_invalidFormatErrorMessage.Value);
             }
+        }
 
-            void ThrowIfInvalidLeadingOrTrailingWhiteSpacesFound(string rawValue)
+        private void ThrowIfInvalidLeadingOrTrailingWhiteSpacesFound(string rawValue)
+        {
+            bool hasLeadingOrTrailingWhiteSpace =
+                (DoesNotAllowLeadingWhiteSpace && rawValue.HasLeadingWhiteSpace())
+                || (DoesNotAllowTrailingWhiteSpace && rawValue.HasTrailingWhiteSpace());
+
+            if (hasLeadingOrTrailingWhiteSpace)
             {
-                bool hasLeadingOrTrailingWhiteSpace =
-                    (DoesNotAllowLeadingWhiteSpace && rawValue.HasLeadingWhiteSpace())
-                    || (DoesNotAllowTrailingWhiteSpace && rawValue.HasTrailingWhiteSpace());
-
-                if (hasLeadingOrTrailingWhiteSpace)
-                {
-                    throw new FormatException(_invalidFormatErrorMessage.Value);
-                }
+                throw new FormatException(_invalidFormatErrorMessage.Value);
             }
         }
 
