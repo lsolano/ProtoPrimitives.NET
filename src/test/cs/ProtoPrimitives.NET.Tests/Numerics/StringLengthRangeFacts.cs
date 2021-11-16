@@ -1,7 +1,4 @@
-﻿using System;
-using NUnit.Framework;
-
-using Triplex.ProtoDomainPrimitives.Numerics;
+﻿using Triplex.ProtoDomainPrimitives.Numerics;
 
 namespace Triplex.ProtoDomainPrimitives.Tests.Numerics;
 

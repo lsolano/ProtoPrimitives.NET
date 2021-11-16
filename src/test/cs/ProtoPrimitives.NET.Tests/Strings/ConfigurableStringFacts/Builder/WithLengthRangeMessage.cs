@@ -1,15 +1,11 @@
-using System;
-
-using NUnit.Framework;
-
 using Triplex.ProtoDomainPrimitives.Exceptions;
 using Triplex.ProtoDomainPrimitives.Numerics;
 using Triplex.ProtoDomainPrimitives.Strings;
 
 using static Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Builder.ConstructorMessage;
 
-namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Builder
-{
+namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Builder;
+
     internal sealed class WithLengthRangeMessage : ValidConstructorArgumentsFixture
     {
         private static readonly StringLengthRange SomeRange = new(new StringLength(32), new StringLength(64));
@@ -99,4 +95,3 @@ namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Bu
                     .And.Property(nameof(ArgumentOutOfRangeException.ActualValue)).EqualTo(rawValue.Length));
         }
     }
-}

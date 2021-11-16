@@ -1,7 +1,6 @@
-namespace Triplex.ProtoDomainPrimitives.Tests
+namespace Triplex.ProtoDomainPrimitives.Tests;
+
+internal interface IOptionalCustomMessageTestFixture
 {
-    internal interface IOptionalCustomMessageTestFixture
-    {
-        bool UseCustomMessage { get; }
-    }
+    bool UseCustomMessage { get; }
 }
