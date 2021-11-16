@@ -553,7 +553,7 @@ public sealed class ConfigurableString : AbstractDomainPrimitive<string>, ICompa
 
         private void CheckForInvalidChars(string rawValue)
         {
-            if (_invalidCharsRegex == null)
+            if (_invalidCharsRegex is null)
             {
                 return;
             }

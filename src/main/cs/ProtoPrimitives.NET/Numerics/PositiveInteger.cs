@@ -26,7 +26,7 @@ public sealed class PositiveInteger : AbstractDomainPrimitive<int>, IEquatable<P
     /// <exception cref="ArgumentOutOfRangeException">
     /// If <paramref name="rawValue"/> is zero or negative.
     /// </exception>
-    public PositiveInteger(in int rawValue) : this(rawValue, DefaultErrorMessage)
+    public PositiveInteger(int rawValue) : this(rawValue, DefaultErrorMessage)
     {
     }
 
@@ -41,13 +41,13 @@ public sealed class PositiveInteger : AbstractDomainPrimitive<int>, IEquatable<P
     /// <exception cref="ArgumentNullException">
     /// When <paramref name="errorMessage"/> is <see langword="null"/>.
     /// </exception>
-    public PositiveInteger(in int rawValue, in Message errorMessage) :
-        base(rawValue, errorMessage, (val, msg) => Validate(val, msg))
+    public PositiveInteger(int rawValue, Message errorMessage) :
+        base(rawValue, errorMessage, (val, msg) => Validate(val, msg.Value))
     {
     }
 
-    private static int Validate(in int rawValue, in Message errorMessage)
-        => Arguments.GreaterThan(rawValue, 0, nameof(rawValue), errorMessage.Value);
+    private static int Validate(int rawValue, string errorMessage)
+        => Arguments.GreaterThan(rawValue, 0, nameof(rawValue), errorMessage);
 
     /// <inheritdoc cref="AbstractDomainPrimitive{TRawType}.CompareTo(AbstractDomainPrimitive{TRawType}?)" />
     public int CompareTo(PositiveInteger? other) => base.CompareTo(other);

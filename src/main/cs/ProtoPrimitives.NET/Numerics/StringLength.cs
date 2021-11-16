@@ -26,7 +26,7 @@ public sealed class StringLength : AbstractDomainPrimitive<int>, IEquatable<Stri
     /// Initializes an instance after validating provided input.
     /// </summary>
     /// <param name="rawValue"></param>
-    public StringLength(in int rawValue) : this(rawValue, DefaultErrorMessage)
+    public StringLength(int rawValue) : this(rawValue, DefaultErrorMessage)
     {
     }
 
@@ -36,13 +36,12 @@ public sealed class StringLength : AbstractDomainPrimitive<int>, IEquatable<Stri
     /// <param name="rawValue"></param>
     /// <param name="errorMessage">Can not be <see langword="null"/></param>
     public StringLength(int rawValue, Message errorMessage) :
-        base(rawValue, errorMessage, (val, msg) => Validate(val, msg))
+        base(rawValue, errorMessage, (val, msg) => Validate(val, msg.Value))
     {
     }
 
-    private static int Validate(int rawValue, Message errorMessage)
-        => Arguments.GreaterThanOrEqualTo(rawValue, 0, nameof(rawValue),
-            Arguments.NotNull(errorMessage, nameof(errorMessage)).Value);
+    private static int Validate(int rawValue, string errorMessage)
+        => Arguments.GreaterThanOrEqualTo(rawValue, 0, nameof(rawValue), errorMessage);
 
     /// <inheritdoc cref="AbstractDomainPrimitive{TRawType}.CompareTo(AbstractDomainPrimitive{TRawType}?)" />
     public int CompareTo(StringLength? other) => base.CompareTo(other);

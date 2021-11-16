@@ -42,12 +42,12 @@ public sealed class NegativeInteger : AbstractDomainPrimitive<int>, IEquatable<N
     /// When <paramref name="errorMessage"/> is <see langword="null"/>.
     /// </exception>
     public NegativeInteger(int rawValue, Message errorMessage) :
-        base(rawValue, errorMessage, (val, msg) => Validate(val, msg))
+        base(rawValue, errorMessage, (val, msg) => Validate(val, msg.Value))
     {
     }
 
-    private static int Validate(int rawValue, Message errorMessage)
-        => Arguments.LessThan(rawValue, 0, nameof(rawValue), errorMessage.Value);
+    private static int Validate(int rawValue, string errorMessage)
+        => Arguments.LessThan(rawValue, 0, nameof(rawValue), errorMessage);
 
     /// <inheritdoc cref="AbstractDomainPrimitive{TRawType}.CompareTo(AbstractDomainPrimitive{TRawType}?)" />
     public int CompareTo(NegativeInteger? other) => base.CompareTo(other);
