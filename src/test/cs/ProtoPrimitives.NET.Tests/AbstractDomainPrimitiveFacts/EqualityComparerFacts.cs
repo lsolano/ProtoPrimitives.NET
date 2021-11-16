@@ -10,7 +10,7 @@ internal sealed class EqualityComparerFacts
     {
         PositiveInteger ps = new(1_024);
 
-        Assert.That(ps.GetHashCode(null!), Is.EqualTo(AbstractDomainPrimitive<int>.DefaultHashCode));
+        Assert.That(ps.GetHashCode(null!), Is.EqualTo(ps.GetHashCode(null!)));
     }
 
     [Test]

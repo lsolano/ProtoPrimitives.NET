@@ -19,7 +19,7 @@ public class AbstractDomainPrimitive<TRawType> :
     /// <summary>
     /// Hashcode used when instances are null.
     /// </summary>
-    public static readonly int DefaultHashCode = 31;
+    private const int DefaultHashCode = 31;
 
     /// <summary>
     /// Builds a new instance calling <paramref name="validator"/> first.
@@ -66,7 +66,7 @@ public class AbstractDomainPrimitive<TRawType> :
     /// </summary>
     /// <param name="other"></param>
     /// <returns></returns>
-    public bool Equals(AbstractDomainPrimitive<TRawType>? other)
+    public virtual bool Equals(AbstractDomainPrimitive<TRawType>? other)
         => RelationalOperatorsOverloadHelper.SelfIsEqualsTo(this, other, o => Value.Equals(o.Value));
 
     /// <summary>
@@ -109,7 +109,7 @@ public class AbstractDomainPrimitive<TRawType> :
     /// <param name="obj"></param>
     /// <returns></returns>
     public int GetHashCode([DisallowNull] AbstractDomainPrimitive<TRawType> obj)
-        => obj?.GetHashCode() ?? AbstractDomainPrimitive<TRawType>.DefaultHashCode;
+        => obj?.GetHashCode() ?? DefaultHashCode;
 
     #region Relational Operators
 
