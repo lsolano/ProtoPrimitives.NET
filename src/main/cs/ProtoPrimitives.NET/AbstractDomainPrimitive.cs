@@ -1,4 +1,6 @@
-﻿using Triplex.ProtoDomainPrimitives.Exceptions;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using Triplex.ProtoDomainPrimitives.Exceptions;
 
 namespace Triplex.ProtoDomainPrimitives;
 
@@ -7,10 +9,18 @@ namespace Triplex.ProtoDomainPrimitives;
 /// All operations, except input validation, are based on the wrapped type.
 /// </summary>
 /// <typeparam name="TRawType">Wrapped type</typeparam>
-public class AbstractDomainPrimitive<TRawType> : IDomainPrimitive<TRawType>,
-    IComparable<AbstractDomainPrimitive<TRawType>>, IEquatable<AbstractDomainPrimitive<TRawType>>
+public class AbstractDomainPrimitive<TRawType> :
+    IDomainPrimitive<TRawType>,
+    IComparable<AbstractDomainPrimitive<TRawType>>,
+    IEquatable<AbstractDomainPrimitive<TRawType>>,
+    IEqualityComparer<AbstractDomainPrimitive<TRawType>>
     where TRawType : IComparable<TRawType>, IEquatable<TRawType>
 {
+    /// <summary>
+    /// Hashcode used when instances are null.
+    /// </summary>
+    public static readonly int DefaultHashCode = 31;
+
     /// <summary>
     /// Builds a new instance calling <paramref name="validator"/> first.
     /// </summary>
@@ -81,6 +91,25 @@ public class AbstractDomainPrimitive<TRawType> : IDomainPrimitive<TRawType>,
     public int CompareTo(AbstractDomainPrimitive<TRawType>? other)
         => RelationalOperatorsOverloadHelper
             .SelfComparedToOther(this, other, o => Value.CompareTo(o.Value));
+
+    /// <summary>
+    /// Compares two domain primitives.
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <returns></returns>
+    public bool Equals(AbstractDomainPrimitive<TRawType>? x, AbstractDomainPrimitive<TRawType>? y)
+        => x is not null ?
+            RelationalOperatorsOverloadHelper.SelfIsEqualsTo(x, y, notNullY => x.Equals(y)) :
+            y is null;
+
+    /// <summary>
+    /// Categorization function.
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <returns></returns>
+    public int GetHashCode([DisallowNull] AbstractDomainPrimitive<TRawType> obj)
+        => obj?.GetHashCode() ?? AbstractDomainPrimitive<TRawType>.DefaultHashCode;
 
     #region Relational Operators
 

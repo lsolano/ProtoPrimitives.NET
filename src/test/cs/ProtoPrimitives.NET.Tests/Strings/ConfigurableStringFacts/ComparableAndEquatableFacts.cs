@@ -23,7 +23,7 @@ internal sealed class ComparableAndEquatableFacts
         );
     }
 
-    private static ConfigurableString Build(string rawValue)
+    internal static ConfigurableString Build(string rawValue)
     {
         ConfigurableString configurableString = new ConfigurableString.Builder(DummyError, useSingleMessage: true)
             .WithComparisonStrategy(StringComparison.Ordinal)
