@@ -26,12 +26,13 @@ internal sealed class WithRequiresTrimmedMessage : ValidConstructorArgumentsFixt
     }
 
     [Test]
-    public void With_Valid_Input_Throws_Nothing([Values] bool requiresTrimmed, [Values] bool sendMessage)
+    public void With_Valid_Input_Throws_Nothing([Values] bool requiresTrimmed, [Values] bool sendMessage, 
+        [Values] bool parameterless)
     {
         ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
 
         Assert.That(() => WithRequiresTrimmed(builder, requiresTrimmed, DefaultInvalidFormatMessage, sendMessage,
-            parameterless: false), Throws.Nothing);
+            parameterless), Throws.Nothing);
     }
 
     [Test]

@@ -229,7 +229,7 @@ public sealed class ConfigurableString : AbstractDomainPrimitive<string>, ICompa
         /// <returns>Self</returns>
         /// <exception cref="InvalidOperationException">If already built.</exception>
         public Builder WithRequiresTrimmed()
-            => WithRequiresTrimmed(true, _invalidFormatErrorMessage ?? DefaultInvalidFormatErrorMessage);
+            => WithRequiresTrimmed(true, _invalidFormatErrorMessage);
 
         /// <summary>
         /// Indicates if the given input must be trimmed (can not have white space characters at the biginning 
@@ -239,7 +239,7 @@ public sealed class ConfigurableString : AbstractDomainPrimitive<string>, ICompa
         /// <returns>Self</returns>
         /// <exception cref="InvalidOperationException">If already built.</exception>
         public Builder WithRequiresTrimmed(bool requiresTrimmed)
-            => WithRequiresTrimmed(requiresTrimmed, _invalidFormatErrorMessage ?? DefaultInvalidFormatErrorMessage);
+            => WithRequiresTrimmed(requiresTrimmed, _invalidFormatErrorMessage);
 
         /// <summary>
         /// Indicates if the given input must be trimmed (can not have white space characters at the biginning 
@@ -579,9 +579,7 @@ public sealed class ConfigurableString : AbstractDomainPrimitive<string>, ICompa
 
         private void CheckForWhiteSpaces(string rawValue)
         {
-            bool CanNotBeEmpty() => _minLength is not null && _minLength.Value > 0;
-
-            if (DoesNotAllowWhiteSpacesOnly && CanNotBeEmpty() && rawValue.IsWhiteSpaceOnly())
+            if (DoesNotAllowWhiteSpacesOnly && rawValue.IsWhiteSpaceOnly())
             {
                 throw new FormatException(_invalidFormatErrorMessage.Value);
             }
