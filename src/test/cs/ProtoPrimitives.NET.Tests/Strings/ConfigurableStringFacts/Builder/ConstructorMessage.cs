@@ -1,5 +1,6 @@
 ﻿using Triplex.ProtoDomainPrimitives.Exceptions;
-using Triplex.ProtoDomainPrimitives.Strings;
+
+using static Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Builder.BuildMessage;
 
 namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Builder;
 
@@ -25,15 +26,4 @@ internal sealed class ConstructorMessage : ValidConstructorArgumentsFixture
     public void With_Valid_Parameters_Throws_Nothing()
         => Assert.That(() => Create(_useSingleParamConstructor, ArgNullErrorMessage, _useSingleMessage),
                        Throws.Nothing);
-
-    internal static ConfigurableString.Builder Create(bool useSingleParamConstructor, bool useSingleMessage)
-        => useSingleParamConstructor ?
-            new ConfigurableString.Builder(ArgNullErrorMessage) :
-            new ConfigurableString.Builder(ArgNullErrorMessage, useSingleMessage);
-
-    internal static ConfigurableString.Builder Create(bool useSingleParamConstructor, Message theMessage,
-        bool useSingleMessage)
-        => useSingleParamConstructor ?
-            new ConfigurableString.Builder(theMessage) :
-            new ConfigurableString.Builder(theMessage, useSingleMessage);
 }

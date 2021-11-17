@@ -1,7 +1,7 @@
 using Triplex.ProtoDomainPrimitives.Exceptions;
 using Triplex.ProtoDomainPrimitives.Strings;
 
-using static Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Builder.ConstructorMessage;
+using static Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Builder.BuildMessage;
 
 namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Builder;
 
@@ -54,7 +54,7 @@ internal sealed class WithRequiresTrimmedMessage : ValidConstructorArgumentsFixt
     {
         Assume.That(!parameterless || !sendMessage, Is.True);
 
-        string rawValue = ConcatWhiteSpacesAtPosition(position, whiteSpace);
+        string rawValue = ConcatAtPosition(position, whiteSpace);
         ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
         WithRequiresTrimmed(builder, true, DefaultInvalidFormatMessage, sendMessage, parameterless);
 
@@ -67,7 +67,7 @@ internal sealed class WithRequiresTrimmedMessage : ValidConstructorArgumentsFixt
         [Values] WhiteSpacePosition position,
         [Values] bool sendMessage)
     {
-        string rawValue = ConcatWhiteSpacesAtPosition(position, whiteSpace);
+        string rawValue = ConcatAtPosition(position, whiteSpace);
         ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
         WithRequiresTrimmed(builder, false, DefaultInvalidFormatMessage, sendMessage, parameterless: false);
 
@@ -75,7 +75,7 @@ internal sealed class WithRequiresTrimmedMessage : ValidConstructorArgumentsFixt
         Assert.That(str.Value, Is.SameAs(rawValue));
     }
 
-    public enum WhiteSpacePosition { None, Leading, Trailing, Both }
+
 
     /*
      * Overrides: AllowLeadingWhiteSpace, AllowTrailingWhiteSpace, AllowWhiteSpaceOnly (true => false) 
@@ -88,7 +88,7 @@ internal sealed class WithRequiresTrimmedMessage : ValidConstructorArgumentsFixt
     {
         Assume.That(!parameterless || !sendMessage, Is.True);
 
-        string rawValue = ConcatWhiteSpacesAtPosition(position, whiteSpace);
+        string rawValue = ConcatAtPosition(position, whiteSpace);
         ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
         builder.WithAllowLeadingWhiteSpace(true);
         WithRequiresTrimmed(builder, true, DefaultInvalidFormatMessage, sendMessage, parameterless);
@@ -110,18 +110,5 @@ internal sealed class WithRequiresTrimmedMessage : ValidConstructorArgumentsFixt
 
         return sendMessage ? builder.WithRequiresTrimmed(requiresTrimmed, invalidFormatMsg)
         : builder.WithRequiresTrimmed(requiresTrimmed);
-    }
-
-    private static string ConcatWhiteSpacesAtPosition(WhiteSpacePosition position, string whiteSpace)
-    {
-        const string baseValue = "abc";
-        return position switch
-        {
-            WhiteSpacePosition.None => baseValue,
-            WhiteSpacePosition.Leading => $"{whiteSpace}{baseValue}",
-            WhiteSpacePosition.Trailing => $"{baseValue}{whiteSpace}",
-            WhiteSpacePosition.Both => $"{whiteSpace}{baseValue}{whiteSpace}",
-            _ => throw new ArgumentOutOfRangeException(nameof(position), position, "Not handled enumeration value.")
-        };
-    }
+    }   
 }

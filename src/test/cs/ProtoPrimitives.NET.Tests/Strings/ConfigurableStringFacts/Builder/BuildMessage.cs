@@ -1,3 +1,4 @@
+using Triplex.ProtoDomainPrimitives.Exceptions;
 using Triplex.ProtoDomainPrimitives.Strings;
 using static Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Builder.ConstructorMessage;
 
@@ -44,4 +45,32 @@ internal sealed class BuildMessage : ValidConstructorArgumentsFixture
         Assert.That(() => builder.Build("Some other value."),
             Throws.InstanceOf<InvalidOperationException>().With.Message.EqualTo(AlreadyBuiltErrorMessage));
     }
+
+    internal static string ConcatAtPosition(WhiteSpacePosition position, string whiteSpace)
+        => ConcatAtPosition(position, whiteSpace, "abc");
+
+    internal static string ConcatAtPosition(WhiteSpacePosition position, string whiteSpace, string text)
+    {
+        return position switch
+        {
+            WhiteSpacePosition.None => text,
+            WhiteSpacePosition.Leading => $"{whiteSpace}{text}",
+            WhiteSpacePosition.Trailing => $"{text}{whiteSpace}",
+            WhiteSpacePosition.Both => $"{whiteSpace}{text}{whiteSpace}",
+            _ => throw new ArgumentOutOfRangeException(nameof(position), position, "Not handled enumeration value.")
+        };
+    }
+
+    internal static ConfigurableString.Builder Create(bool useSingleParamConstructor, bool useSingleMessage)
+    => useSingleParamConstructor ?
+        new ConfigurableString.Builder(ArgNullErrorMessage) :
+        new ConfigurableString.Builder(ArgNullErrorMessage, useSingleMessage);
+
+    internal static ConfigurableString.Builder Create(bool useSingleParamConstructor, Message theMessage,
+        bool useSingleMessage)
+        => useSingleParamConstructor ?
+            new ConfigurableString.Builder(theMessage) :
+            new ConfigurableString.Builder(theMessage, useSingleMessage);
 }
+
+internal enum WhiteSpacePosition { None, Leading, Trailing, Both }

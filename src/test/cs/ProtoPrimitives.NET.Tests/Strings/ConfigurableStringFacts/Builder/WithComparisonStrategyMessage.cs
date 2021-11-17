@@ -1,18 +1,17 @@
 using Triplex.ProtoDomainPrimitives.Strings;
-using static Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Builder.ConstructorMessage;
+using static Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Builder.BuildMessage;
 
 namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Builder;
 
 internal sealed class WithComparisonStrategyMessage : ValidConstructorArgumentsFixture
 {
-    private static readonly IEnumerable<StringComparison> AllStrategies = Enum.GetValues(typeof(StringComparison)).Cast<StringComparison>().ToList();
-
-    public WithComparisonStrategyMessage(bool useSingleParamConstructor, bool useSingleMessage) : base(useSingleParamConstructor, useSingleMessage)
+    public WithComparisonStrategyMessage(bool useSingleParamConstructor, bool useSingleMessage)
+        : base(useSingleParamConstructor, useSingleMessage)
     {
     }
 
     [Test]
-    public void With_Valid_Values_Throws_Nothing([ValueSource(nameof(AllStrategies))] StringComparison strategy)
+    public void With_Valid_Values_Throws_Nothing([Values] StringComparison strategy)
     {
         ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
 
@@ -95,7 +94,8 @@ internal sealed class WithComparisonStrategyMessage : ValidConstructorArgumentsF
             Throws.InstanceOf<InvalidOperationException>().With.Message.EqualTo(BuildMessage.AlreadyBuiltErrorMessage));
     }
 
-    private static ConfigurableString[] FromRaw(in string[] rawValues, in bool useSingleParamConstructor, in bool useSingleMessage, in StringComparison? strategy)
+    private static ConfigurableString[] FromRaw(string[] rawValues, bool useSingleParamConstructor, 
+        bool useSingleMessage, StringComparison? strategy)
     {
         List<ConfigurableString> result = new();
         foreach (string rawValue in rawValues)
