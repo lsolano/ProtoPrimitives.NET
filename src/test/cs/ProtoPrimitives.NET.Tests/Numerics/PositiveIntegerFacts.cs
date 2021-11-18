@@ -94,7 +94,7 @@ internal static class PositiveIntegerFacts
     }
 
 
-    internal sealed class RelationalOperatorsFacts : AbstractComparaToAndRelationalOperatorsFixture<PositiveInteger, int>
+    internal sealed class RelationalOperatorsFacts : AbstractCompareToAndRelationalOperatorsFixture<PositiveInteger, int>
     {
         protected override Context CreateContext()
         {

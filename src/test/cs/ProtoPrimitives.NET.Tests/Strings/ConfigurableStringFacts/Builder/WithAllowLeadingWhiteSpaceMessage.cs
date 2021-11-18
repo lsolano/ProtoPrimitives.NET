@@ -34,6 +34,30 @@ internal sealed class WithAllowLeadingWhiteSpaceMessage : ValidConstructorArgume
             Throws.Nothing);
     }
 
+    [Test]
+    public void With_True_Accepts_Leading_And_No_White_Spaces_At_Begining(
+        [Values("Hello", " World", "\tif(a == b){}", " Peter ")] string rawValue,
+        [Values] bool sendMessage)
+    {
+        ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage)
+            .WithAllowTrailingWhiteSpace(true);
+        WithAllowLeadingWhiteSpace(builder, true, DefaultInvalidFormatMessage, sendMessage);
+
+        Assert.That(() => builder.Build(rawValue), Throws.Nothing);
+    }
+
+    [Test]
+    public void With_False_Rejects_Leading_White_Spaces_At_Begining(
+        [Values(" Hello", "\n\rWorld", "\tif(a == b){}", "\r\nPeter ")] string rawValue,
+        [Values] bool sendMessage)
+    {
+        ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage)
+            .WithAllowTrailingWhiteSpace(true);
+        WithAllowLeadingWhiteSpace(builder, false, DefaultInvalidFormatMessage, sendMessage);
+
+        Assert.That(() => builder.Build(rawValue), Throws.InstanceOf<FormatException>());
+    }
+
     private static ConfigurableString.Builder WithAllowLeadingWhiteSpace(
         ConfigurableString.Builder builder,
         bool allowLeadingWhiteSpace,

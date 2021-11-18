@@ -75,11 +75,6 @@ internal sealed class WithRequiresTrimmedMessage : ValidConstructorArgumentsFixt
         Assert.That(str.Value, Is.SameAs(rawValue));
     }
 
-
-
-    /*
-     * Overrides: AllowLeadingWhiteSpace, AllowTrailingWhiteSpace, AllowWhiteSpaceOnly (true => false) 
-     */
     [Test]
     public void Overrides_AllowLeadingWhiteSpace_Option_When_True(
         [Values(" ", "\t", "\n", "\r", "\t\r\n")] string whiteSpace,
@@ -96,6 +91,24 @@ internal sealed class WithRequiresTrimmedMessage : ValidConstructorArgumentsFixt
         Assert.That(() => builder.Build(rawValue), Throws.InstanceOf<FormatException>());
     }
 
+    [Test]
+    public void Rejects_Not_Trimmed_When_True()
+    {
+        ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
+        builder.WithRequiresTrimmed();
+
+        Assert.That(() => builder.Build(" Hello World "), Throws.InstanceOf<FormatException>());
+    }
+
+    [Test]
+    public void Accepts_Trimmed_When_True()
+    {
+        ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
+        builder.WithRequiresTrimmed();
+
+        Assert.That(() => builder.Build("Hello World"), Throws.Nothing);
+    }
+
     private static ConfigurableString.Builder WithRequiresTrimmed(
         ConfigurableString.Builder builder,
         bool requiresTrimmed,
@@ -110,5 +123,5 @@ internal sealed class WithRequiresTrimmedMessage : ValidConstructorArgumentsFixt
 
         return sendMessage ? builder.WithRequiresTrimmed(requiresTrimmed, invalidFormatMsg)
         : builder.WithRequiresTrimmed(requiresTrimmed);
-    }   
+    }
 }

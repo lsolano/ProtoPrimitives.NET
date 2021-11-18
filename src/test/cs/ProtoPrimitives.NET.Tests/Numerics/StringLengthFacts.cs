@@ -94,7 +94,7 @@ internal static class StringLengthFacts
     }
 
 
-    internal sealed class RelationalOperatorsFacts : AbstractComparaToAndRelationalOperatorsFixture<StringLength, int>
+    internal sealed class RelationalOperatorsFacts : AbstractCompareToAndRelationalOperatorsFixture<StringLength, int>
     {
         protected override Context CreateContext()
         {

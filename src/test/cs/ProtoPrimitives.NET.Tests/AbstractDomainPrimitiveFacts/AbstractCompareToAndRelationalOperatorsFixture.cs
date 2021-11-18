@@ -1,7 +1,7 @@
 namespace Triplex.ProtoDomainPrimitives.Tests.AbstractDomainPrimitiveFacts;
 
 [TestFixture]
-internal abstract class AbstractComparaToAndRelationalOperatorsFixture<TDomainPrimitive, TRawType>
+internal abstract class AbstractCompareToAndRelationalOperatorsFixture<TDomainPrimitive, TRawType>
     where TDomainPrimitive : IComparable<TDomainPrimitive>, IEquatable<TDomainPrimitive>
     where TRawType : IComparable<TRawType>, IEquatable<TRawType>
 {
@@ -13,10 +13,10 @@ internal abstract class AbstractComparaToAndRelationalOperatorsFixture<TDomainPr
             TDomainPrimitive copyOfSubject,
             TDomainPrimitive greaterThanSubject)
         {
-            LessThanSubject = lessThanSubject; //Arguments.IsNotDefault(lessThanSubject, nameof(subject));
-            Subject = subject; //Arguments.IsNotDefault(subject, nameof(subject));
-            CopyOfSubject = copyOfSubject; //Arguments.IsNotDefault(copyOfSubject, nameof(copyOfSubject));
-            GreaterThanSubject = greaterThanSubject; //Arguments.IsNotDefault(greaterThanSubject, nameof(greaterThanSubject));
+            LessThanSubject = lessThanSubject;
+            Subject = subject;
+            CopyOfSubject = copyOfSubject;
+            GreaterThanSubject = greaterThanSubject;
         }
 
         protected internal TDomainPrimitive LessThanSubject { get; }
@@ -27,7 +27,7 @@ internal abstract class AbstractComparaToAndRelationalOperatorsFixture<TDomainPr
 
     private readonly Context _context;
 
-    protected AbstractComparaToAndRelationalOperatorsFixture() => _context = CreateContext();
+    protected AbstractCompareToAndRelationalOperatorsFixture() => _context = CreateContext();
 
     protected abstract Context CreateContext();
 
@@ -38,63 +38,7 @@ internal abstract class AbstractComparaToAndRelationalOperatorsFixture<TDomainPr
     protected abstract bool ExecuteLessThanOrEqualsToOperator(TDomainPrimitive? left, TDomainPrimitive? right);
     protected abstract bool ExecuteNotEqualsOperator(TDomainPrimitive? left, TDomainPrimitive? right);
     protected abstract int ExecuteCompareTo(TDomainPrimitive self, TDomainPrimitive? other);
-    //protected abstract bool ExecuteEquals(TDomainPrimitive self, object? other);
 
-    #region CompareTo
-
-    [Test]
-    public void With_Null_Returns_Positive()
-        => Assert.That(ExecuteCompareTo(_context.Subject, default), Is.GreaterThan(0));
-
-    [Test]
-    public void With_Self_Returns_Zero()
-        => Assert.That(ExecuteCompareTo(_context.Subject, _context.Subject), Is.Zero);
-
-    [Test]
-    public void With_Subject_Copy_Returns_Zero()
-        => Assert.That(ExecuteCompareTo(_context.Subject, _context.CopyOfSubject), Is.Zero);
-
-    [Test]
-    public void With_Less_Than_Subject_Returns_Positive()
-        => Assert.That(ExecuteCompareTo(_context.Subject, _context.LessThanSubject), Is.Positive);
-
-    [Test]
-    public void With_Greater_Than_Subject_Returns_Negative()
-        => Assert.That(ExecuteCompareTo(_context.Subject, _context.GreaterThanSubject), Is.Negative);
-
-    #endregion //CompareTo
-    
-    // #region Equals
-    // [Test]
-    // public void Equals_Returns_False_Other_Is_Default()
-    //     => Assert.That(ExecuteEquals(_context.Subject, default), Is.True);
-
-    // [Test]
-    // public void Equals_Returns_False_When_Some_Is_Default([Values] bool leftIsDefault)
-    // {
-    //     TDomainPrimitive? left = leftIsDefault ? default : _context.Subject;
-    //     TDomainPrimitive? right = leftIsDefault ? _context.Subject : default;
-
-    //     Assert.That(ExecuteEqualsOperator(left, right), Is.False);
-    // }
-
-    // [Test]
-    // public void EqualsOpt_Returns_False_When_Are_Different([Values] bool rightIsLessThanLeft)
-    // {
-    //     TDomainPrimitive? right = rightIsLessThanLeft ? _context.LessThanSubject : _context.GreaterThanSubject;
-
-    //     Assert.That(ExecuteEqualsOperator(_context.Subject, right), Is.False);
-    // }
-
-    // [Test]
-    // public void EqualsOpt_Returns_True_When_Both_Have_Same_Value()
-    //     => Assert.That(ExecuteEqualsOperator(_context.Subject, _context.CopyOfSubject), Is.True);
-
-    // [Test]
-    // public void EqualsOpt_Returns_True_When_Same_Instance()
-    //     => Assert.That(ExecuteEqualsOperator(_context.Subject, _context.Subject), Is.True);
-
-    // #endregion //Equals
 
     #region Equals Operator
     [Test]
@@ -174,7 +118,7 @@ internal abstract class AbstractComparaToAndRelationalOperatorsFixture<TDomainPr
         => Assert.That(ExecuteLessThanOperator(_context.Subject, _context.Subject), Is.False);
 
     [Test]
-    public void LessThan_Returns_True_For_Greater_Than_As_Subject()
+    public void LessThan_Returns_True_For_Greater_Than_Subject()
         => Assert.That(ExecuteLessThanOperator(_context.Subject, _context.GreaterThanSubject), Is.True);
 
     [Test]
@@ -201,7 +145,7 @@ internal abstract class AbstractComparaToAndRelationalOperatorsFixture<TDomainPr
         => Assert.That(ExecuteLessThanOrEqualsToOperator(_context.Subject, _context.Subject), Is.True);
 
     [Test]
-    public void LessThanOrEqualsTo_Returns_True_For_Greater_Than_As_Subject()
+    public void LessThanOrEqualsTo_Returns_True_For_Greater_Than_Subject()
         => Assert.That(ExecuteLessThanOrEqualsToOperator(_context.Subject, _context.GreaterThanSubject), Is.True);
 
     [Test]
@@ -228,7 +172,7 @@ internal abstract class AbstractComparaToAndRelationalOperatorsFixture<TDomainPr
         => Assert.That(ExecuteGreaterThanOperator(_context.Subject, _context.Subject), Is.False);
 
     [Test]
-    public void GreaterThan_Returns_False_For_Greater_Than_As_Subject()
+    public void GreaterThan_Returns_False_For_Greater_Than_Subject()
         => Assert.That(ExecuteGreaterThanOperator(_context.Subject, _context.GreaterThanSubject), Is.False);
 
     [Test]
@@ -255,7 +199,7 @@ internal abstract class AbstractComparaToAndRelationalOperatorsFixture<TDomainPr
         => Assert.That(ExecuteGreaterThanOrEqualsToOperator(_context.Subject, _context.Subject), Is.True);
 
     [Test]
-    public void GreaterThanOrEqualsTo_Returns_False_For_Greater_Than_As_Subject()
+    public void GreaterThanOrEqualsTo_Returns_False_For_Greater_Than_Subject()
         => Assert.That(ExecuteGreaterThanOrEqualsToOperator(_context.Subject, _context.GreaterThanSubject),
             Is.False);
 
@@ -268,4 +212,27 @@ internal abstract class AbstractComparaToAndRelationalOperatorsFixture<TDomainPr
         => Assert.That(ExecuteGreaterThanOrEqualsToOperator(default, _context.Subject), Is.False);
 
     #endregion //GreaterThanOrEqualsTo
+
+    #region CompareTo Message
+    [Test]
+    public void CompareTo_Returns_Positive_For_Lesser_Than_Subject()
+        => Assert.That(ExecuteCompareTo(_context.Subject, _context.LessThanSubject), Is.Positive);
+
+    [Test]
+    public void CompareTo_Returns_Zero_For_Subject_Copy()
+        => Assert.That(ExecuteCompareTo(_context.Subject, _context.CopyOfSubject), Is.Zero);
+
+    [Test]
+    public void CompareTo_Returns_Zero_For_Same_As_Subject()
+        => Assert.That(ExecuteCompareTo(_context.Subject, _context.Subject), Is.Zero);
+
+    [Test]
+    public void CompareTo_Returns_Negative_For_Greater_Than_Subject()
+        => Assert.That(ExecuteCompareTo(_context.Subject, _context.GreaterThanSubject), Is.Negative);
+
+    [Test]
+    public void CompareTo_Returns_Positive_For_Default()
+        => Assert.That(ExecuteCompareTo(_context.Subject, default), Is.Positive);
+
+    #endregion //CompareTo Message
 }

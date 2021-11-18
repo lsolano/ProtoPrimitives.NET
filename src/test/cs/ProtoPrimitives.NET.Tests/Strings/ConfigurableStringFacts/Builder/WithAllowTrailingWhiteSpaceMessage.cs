@@ -34,6 +34,30 @@ internal sealed class WithAllowTrailingWhiteSpaceMessage : ValidConstructorArgum
             Throws.Nothing);
     }
 
+    [Test]
+    public void With_True_Accepts_Trailing_And_No_White_Spaces_At_End(
+        [Values("Hello", "World ", "if(a == b){}\t", " Peter ")] string rawValue,
+        [Values] bool sendMessage)
+    {
+        ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage)
+            .WithAllowLeadingWhiteSpace(true);
+        WithAllowTrailingWhiteSpace(builder, true, DefaultInvalidFormatMessage, sendMessage);
+
+        Assert.That(() => builder.Build(rawValue), Throws.Nothing);
+    }
+
+    [Test]
+    public void With_False_Rejects_Trailing_White_Spaces_At_End(
+        [Values("Hello ", "World\n\r", "if(a == b){}\t", "Peter\r\n")] string rawValue,
+        [Values] bool sendMessage)
+    {
+        ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage)
+            .WithAllowLeadingWhiteSpace(true);
+        WithAllowTrailingWhiteSpace(builder, false, DefaultInvalidFormatMessage, sendMessage);
+
+        Assert.That(() => builder.Build(rawValue), Throws.InstanceOf<FormatException>());
+    }
+
     private static ConfigurableString.Builder WithAllowTrailingWhiteSpace(
         ConfigurableString.Builder builder,
         bool allowTrailingWhiteSpace,

@@ -5,7 +5,7 @@ using Triplex.ProtoDomainPrimitives.Tests.AbstractDomainPrimitiveFacts;
 namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts;
 
 internal sealed class ComparableAndEquatableFacts
-    : AbstractComparaToAndRelationalOperatorsFixture<ConfigurableString, string>
+    : AbstractCompareToAndRelationalOperatorsFixture<ConfigurableString, string>
 {
     private static readonly Message DummyError = new("Something is not OK");
 

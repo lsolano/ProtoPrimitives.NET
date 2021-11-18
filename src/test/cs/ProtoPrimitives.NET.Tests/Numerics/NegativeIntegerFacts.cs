@@ -14,9 +14,7 @@ internal static class NegativeIntegerFacts
         private readonly Message _expectedErrorMessage;
 
         public ConstructorMessage(bool useCustomMessage) : base(useCustomMessage)
-        {
-            _expectedErrorMessage = useCustomMessage ? CustomErrorMessage : NegativeInteger.DefaultErrorMessage;
-        }
+            => _expectedErrorMessage = useCustomMessage ? CustomErrorMessage : NegativeInteger.DefaultErrorMessage;
 
         [Test]
         public void Rejects_Positives_And_Zero([Values(int.MaxValue, 1, 0)] int rawValue)
@@ -102,7 +100,7 @@ internal static class NegativeIntegerFacts
     }
 
     internal sealed class RelationalOperatorsFacts :
-        AbstractComparaToAndRelationalOperatorsFixture<NegativeInteger, int>
+        AbstractCompareToAndRelationalOperatorsFixture<NegativeInteger, int>
     {
         protected override Context CreateContext()
         {

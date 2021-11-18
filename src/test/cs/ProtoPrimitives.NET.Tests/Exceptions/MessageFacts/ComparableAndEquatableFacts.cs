@@ -3,7 +3,7 @@ using Triplex.ProtoDomainPrimitives.Tests.AbstractDomainPrimitiveFacts;
 
 namespace Triplex.ProtoDomainPrimitives.Tests.Exceptions.MessageFacts;
 
-internal sealed class ComparableAndEquatableFacts : AbstractComparaToAndRelationalOperatorsFixture<Message, string>
+internal sealed class ComparableAndEquatableFacts : AbstractCompareToAndRelationalOperatorsFixture<Message, string>
 {
     protected override Context CreateContext()
     {
