@@ -24,7 +24,7 @@ jobs:
       run: dotnet clean --framework net6.0 --configuration Release
 
     - name: Clean old Packages
-      run: rm --force src/main/cs/ProtoPrimitives.NET/bin/Release/Validations/bin/Release/Triplex.ProtoDomainPrimitives*.nupkg
+      run: rm --force src/main/cs/ProtoPrimitives.NET/bin/Release/Triplex.ProtoDomainPrimitives*.nupkg
 
     - name: Restore dependencies
       run: dotnet restore
