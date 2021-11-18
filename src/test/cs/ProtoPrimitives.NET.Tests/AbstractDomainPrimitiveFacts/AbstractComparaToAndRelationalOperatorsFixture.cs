@@ -38,6 +38,7 @@ internal abstract class AbstractComparaToAndRelationalOperatorsFixture<TDomainPr
     protected abstract bool ExecuteLessThanOrEqualsToOperator(TDomainPrimitive? left, TDomainPrimitive? right);
     protected abstract bool ExecuteNotEqualsOperator(TDomainPrimitive? left, TDomainPrimitive? right);
     protected abstract int ExecuteCompareTo(TDomainPrimitive self, TDomainPrimitive? other);
+    //protected abstract bool ExecuteEquals(TDomainPrimitive self, object? other);
 
     #region CompareTo
 
@@ -62,10 +63,42 @@ internal abstract class AbstractComparaToAndRelationalOperatorsFixture<TDomainPr
         => Assert.That(ExecuteCompareTo(_context.Subject, _context.GreaterThanSubject), Is.Negative);
 
     #endregion //CompareTo
+    
+    // #region Equals
+    // [Test]
+    // public void Equals_Returns_False_Other_Is_Default()
+    //     => Assert.That(ExecuteEquals(_context.Subject, default), Is.True);
 
-    #region Equals
+    // [Test]
+    // public void Equals_Returns_False_When_Some_Is_Default([Values] bool leftIsDefault)
+    // {
+    //     TDomainPrimitive? left = leftIsDefault ? default : _context.Subject;
+    //     TDomainPrimitive? right = leftIsDefault ? _context.Subject : default;
+
+    //     Assert.That(ExecuteEqualsOperator(left, right), Is.False);
+    // }
+
+    // [Test]
+    // public void EqualsOpt_Returns_False_When_Are_Different([Values] bool rightIsLessThanLeft)
+    // {
+    //     TDomainPrimitive? right = rightIsLessThanLeft ? _context.LessThanSubject : _context.GreaterThanSubject;
+
+    //     Assert.That(ExecuteEqualsOperator(_context.Subject, right), Is.False);
+    // }
+
+    // [Test]
+    // public void EqualsOpt_Returns_True_When_Both_Have_Same_Value()
+    //     => Assert.That(ExecuteEqualsOperator(_context.Subject, _context.CopyOfSubject), Is.True);
+
+    // [Test]
+    // public void EqualsOpt_Returns_True_When_Same_Instance()
+    //     => Assert.That(ExecuteEqualsOperator(_context.Subject, _context.Subject), Is.True);
+
+    // #endregion //Equals
+
+    #region Equals Operator
     [Test]
-    public void Equals_Returns_True_When_Both_Are_Default()
+    public void EqualsOpt_Returns_True_When_Both_Are_Default()
         => Assert.That(ExecuteEqualsOperator(default, default), Is.True);
 
     [Test]
@@ -78,22 +111,22 @@ internal abstract class AbstractComparaToAndRelationalOperatorsFixture<TDomainPr
     }
 
     [Test]
-    public void Equals_Returns_False_When_Are_Different([Values] bool rightIsLessThanLeft)
+    public void EqualsOpt_Returns_False_When_Are_Different([Values] bool rightIsLessThanLeft)
     {
-        var right = rightIsLessThanLeft ? _context.LessThanSubject : _context.GreaterThanSubject;
+        TDomainPrimitive? right = rightIsLessThanLeft ? _context.LessThanSubject : _context.GreaterThanSubject;
 
         Assert.That(ExecuteEqualsOperator(_context.Subject, right), Is.False);
     }
 
     [Test]
-    public void Equals_Returns_True_When_Both_Have_Same_Value()
+    public void EqualsOpt_Returns_True_When_Both_Have_Same_Value()
         => Assert.That(ExecuteEqualsOperator(_context.Subject, _context.CopyOfSubject), Is.True);
 
     [Test]
-    public void Equals_Returns_True_When_Same_Instance()
+    public void EqualsOpt_Returns_True_When_Same_Instance()
         => Assert.That(ExecuteEqualsOperator(_context.Subject, _context.Subject), Is.True);
 
-    #endregion //Equals
+    #endregion //Equals Operator
 
     #region Not-Equals
     [Test]
