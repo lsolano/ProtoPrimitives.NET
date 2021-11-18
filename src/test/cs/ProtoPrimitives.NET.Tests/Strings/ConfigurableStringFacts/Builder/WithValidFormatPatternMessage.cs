@@ -1,14 +1,14 @@
-using Triplex.ProtoDomainPrimitives.Exceptions; 
+using Triplex.ProtoDomainPrimitives.Exceptions;
 using Triplex.ProtoDomainPrimitives.Strings;
 using static Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Builder.BuildMessage;
 
 namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Builder;
 
-internal sealed class WithInvalidCharsPatternMessage : ValidConstructorArgumentsFixture
+internal sealed class WithValidFormatPatternMessage : ValidConstructorArgumentsFixture
 {
     private static readonly Message DefaultInvalidPatternMessage = new("Your pattern is buggy :(");
 
-    public WithInvalidCharsPatternMessage(bool useSingleParamConstructor, bool useSingleMessage)
+    public WithValidFormatPatternMessage(bool useSingleParamConstructor, bool useSingleMessage)
             : base(useSingleParamConstructor, useSingleMessage)
     {
     }
@@ -21,7 +21,7 @@ internal sealed class WithInvalidCharsPatternMessage : ValidConstructorArguments
         ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
 
         Assert.That(()
-            => WithInvalidCharsPattern(builder, invalidCharsPattern, DefaultInvalidPatternMessage, sendErrorMessage),
+            => WithValidFormatPattern(builder, invalidCharsPattern, DefaultInvalidPatternMessage, sendErrorMessage),
             Throws.Nothing);
     }
 
@@ -30,42 +30,40 @@ internal sealed class WithInvalidCharsPatternMessage : ValidConstructorArguments
     {
         ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
 
-        Assert.That(() => WithInvalidCharsPattern(builder, null!, DefaultInvalidPatternMessage, sendErrorMessage),
+        Assert.That(() => WithValidFormatPattern(builder, null!, DefaultInvalidPatternMessage, sendErrorMessage),
             Throws.ArgumentNullException.With.Property(nameof(ArgumentNullException.ParamName)).EqualTo("pattern"));
     }
 
     [Test]
-    public void With_All_Digits_Pattern_Rejects_Digits_Throwing_FormatException(
-        [Range(-10, 10)] int digits,
-        [Values("0", "00")] string format,
+    public void With_All_Digits_Pattern_Rejects_Digits_With_Alpha_Throwing_FormatException(
+        [Values("1a", "12U", "00a00")] string rawValue,
         [Values] bool sendErrorMessage)
     {
-        string formattedDigits = digits.ToString(format, CultureInfo.InvariantCulture);
-        string rawValueWithDigits = string.Format("My age is {0}, and yours?", formattedDigits);
-
         ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
-        WithInvalidCharsPattern(builder, "[0-9]", DefaultInvalidPatternMessage, sendErrorMessage);
+        WithValidFormatPattern(builder, "^[0-9]$", DefaultInvalidPatternMessage, sendErrorMessage);
 
-        Assert.That(() => builder.Build(rawValueWithDigits), Throws.InstanceOf<FormatException>());
+        Assert.That(() => builder.Build(rawValue), Throws.InstanceOf<FormatException>());
     }
 
     [Test]
-    public void With_All_Digits_Pattern_Accepts_Input_Without_Digits([Values] bool sendErrorMessage)
+    public void With_All_Digits_Pattern_Accepts_Input_With_Digits_Only(
+        [Values("1", "12", "00100")] string rawValue,
+        [Values] bool sendErrorMessage)
     {
         ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
-        WithInvalidCharsPattern(builder, "[0-9]", DefaultInvalidPatternMessage, sendErrorMessage);
+        WithValidFormatPattern(builder, "[0-9]", DefaultInvalidPatternMessage, sendErrorMessage);
 
-        Assert.That(() => builder.Build("I'm five (V) years old."), Throws.Nothing);
+        Assert.That(() => builder.Build(rawValue), Throws.Nothing);
     }
 
-    private static ConfigurableString.Builder WithInvalidCharsPattern(
+    private static ConfigurableString.Builder WithValidFormatPattern(
         ConfigurableString.Builder builder,
         string pattern,
         Message invalidFormatMsg,
         bool sendMessage)
     {
         return sendMessage ?
-            builder.WithInvalidCharsPattern(pattern, invalidFormatMsg) :
-            builder.WithInvalidCharsPattern(pattern);
+            builder.WithValidFormatPattern(pattern, invalidFormatMsg) :
+            builder.WithValidFormatPattern(pattern);
     }
 }

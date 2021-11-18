@@ -1,14 +1,14 @@
-using Triplex.ProtoDomainPrimitives.Exceptions; 
+using Triplex.ProtoDomainPrimitives.Exceptions;
 using Triplex.ProtoDomainPrimitives.Strings;
 using static Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Builder.BuildMessage;
 
 namespace Triplex.ProtoDomainPrimitives.Tests.Strings.ConfigurableStringFacts.Builder;
 
-internal sealed class WithInvalidCharsPatternMessage : ValidConstructorArgumentsFixture
+internal sealed class WithInvalidCharsRegexMessage : ValidConstructorArgumentsFixture
 {
     private static readonly Message DefaultInvalidPatternMessage = new("Your pattern is buggy :(");
 
-    public WithInvalidCharsPatternMessage(bool useSingleParamConstructor, bool useSingleMessage)
+    public WithInvalidCharsRegexMessage(bool useSingleParamConstructor, bool useSingleMessage)
             : base(useSingleParamConstructor, useSingleMessage)
     {
     }
@@ -21,7 +21,7 @@ internal sealed class WithInvalidCharsPatternMessage : ValidConstructorArguments
         ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
 
         Assert.That(()
-            => WithInvalidCharsPattern(builder, invalidCharsPattern, DefaultInvalidPatternMessage, sendErrorMessage),
+            => WithInvalidCharsRegex(builder, invalidCharsPattern, DefaultInvalidPatternMessage, sendErrorMessage),
             Throws.Nothing);
     }
 
@@ -30,7 +30,7 @@ internal sealed class WithInvalidCharsPatternMessage : ValidConstructorArguments
     {
         ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
 
-        Assert.That(() => WithInvalidCharsPattern(builder, null!, DefaultInvalidPatternMessage, sendErrorMessage),
+        Assert.That(() => WithInvalidCharsRegex(builder, null!, DefaultInvalidPatternMessage, sendErrorMessage),
             Throws.ArgumentNullException.With.Property(nameof(ArgumentNullException.ParamName)).EqualTo("pattern"));
     }
 
@@ -44,7 +44,7 @@ internal sealed class WithInvalidCharsPatternMessage : ValidConstructorArguments
         string rawValueWithDigits = string.Format("My age is {0}, and yours?", formattedDigits);
 
         ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
-        WithInvalidCharsPattern(builder, "[0-9]", DefaultInvalidPatternMessage, sendErrorMessage);
+        WithInvalidCharsRegex(builder, "[0-9]", DefaultInvalidPatternMessage, sendErrorMessage);
 
         Assert.That(() => builder.Build(rawValueWithDigits), Throws.InstanceOf<FormatException>());
     }
@@ -53,19 +53,19 @@ internal sealed class WithInvalidCharsPatternMessage : ValidConstructorArguments
     public void With_All_Digits_Pattern_Accepts_Input_Without_Digits([Values] bool sendErrorMessage)
     {
         ConfigurableString.Builder builder = Create(_useSingleParamConstructor, _useSingleMessage);
-        WithInvalidCharsPattern(builder, "[0-9]", DefaultInvalidPatternMessage, sendErrorMessage);
+        WithInvalidCharsRegex(builder, "[0-9]", DefaultInvalidPatternMessage, sendErrorMessage);
 
         Assert.That(() => builder.Build("I'm five (V) years old."), Throws.Nothing);
     }
 
-    private static ConfigurableString.Builder WithInvalidCharsPattern(
+    private static ConfigurableString.Builder WithInvalidCharsRegex(
         ConfigurableString.Builder builder,
         string pattern,
         Message invalidFormatMsg,
         bool sendMessage)
     {
         return sendMessage ?
-            builder.WithInvalidCharsPattern(pattern, invalidFormatMsg) :
-            builder.WithInvalidCharsPattern(pattern);
+            builder.WithInvalidCharsRegex(new Regex(pattern), invalidFormatMsg) :
+            builder.WithInvalidCharsRegex(new Regex(pattern));
     }
 }
