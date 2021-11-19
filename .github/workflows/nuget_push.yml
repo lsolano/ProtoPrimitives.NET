@@ -1,4 +1,4 @@
-name: Publish in Nuget.org V3 Package Registry
+name: Publish to Nuget.org V3 Package Registry
 
 on:
   workflow_dispatch:
@@ -40,5 +40,5 @@ jobs:
 
     - name: Deploy To Nuget.org
       run: |
-          cd src/Validations/bin/Release
+          cd src/main/cs/ProtoPrimitives.NET/bin/Release
           dotnet nuget push "**/*.nupkg" -k ${{secrets.NUGET_DEPLOYMENT_KEY}} -s https://api.nuget.org/v3/index.json
