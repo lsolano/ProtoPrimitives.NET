@@ -1,11 +1,8 @@
-﻿using NUnit.Framework;
+﻿[assembly: Parallelizable(ParallelScope.All)]
 
-[assembly: Parallelizable(ParallelScope.All)]
+namespace Triplex.ProtoDomainPrimitives.Tests;
 
-namespace Triplex.ProtoDomainPrimitives.Tests
+[SetUpFixture]
+internal sealed class SetUpFixture
 {
-    [SetUpFixture]
-    internal sealed class SetUpFixture
-    {
-    }
 }

@@ -1,0 +1,44 @@
+name: Publish in Nuget.org V3 Package Registry
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - '3.*'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: false
+
+    - name: Clean Last Build
+      run: dotnet clean --framework net6.0 --configuration Release
+
+    - name: Clean old Packages
+      run: rm --force src/main/cs/ProtoPrimitives.NET/bin/Release/Triplex.ProtoDomainPrimitives*.nupkg
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --framework net6.0 --configuration Release
+
+    - name: Test
+      run: dotnet test --no-build --verbosity normal --framework net6.0 --configuration Release
+
+    - name: Package
+      run: dotnet pack --configuration Release
+
+    - name: Deploy To Nuget.org
+      run: |
+          cd src/Validations/bin/Release
+          dotnet nuget push "**/*.nupkg" -k ${{secrets.NUGET_DEPLOYMENT_KEY}} -s https://api.nuget.org/v3/index.json

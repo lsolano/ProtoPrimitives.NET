@@ -1,13 +1,10 @@
-﻿using NUnit.Framework;
+﻿namespace Triplex.ProtoDomainPrimitives.Tests;
 
-namespace Triplex.ProtoDomainPrimitives.Tests
+[TestFixture(false)]
+[TestFixture(true)]
+internal abstract class RawValueAndErrorMessageBaseFixture
 {
-    [TestFixture(false)]
-    [TestFixture(true)]
-    internal abstract class RawValueAndErrorMessageBaseFixture
-    {
-        protected RawValueAndErrorMessageBaseFixture(bool useCustomMessage) => UseCustomMessage = useCustomMessage;
+    protected RawValueAndErrorMessageBaseFixture(bool useCustomMessage) => UseCustomMessage = useCustomMessage;
 
-        protected bool UseCustomMessage { get; }
-    }
+    protected bool UseCustomMessage { get; }
 }

@@ -351,3 +351,7 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 *.orig
+
+#Coverlet test coverage
+test-results/
+coverage.net*.json

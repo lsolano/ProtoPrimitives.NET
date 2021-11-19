@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net5.0</TargetFrameworks>
-    <LangVersion>9.0</LangVersion>
+    <TargetFrameworks>net6.0</TargetFrameworks>
+    <LangVersion>10.0</LangVersion>
     <IsTestProject>false</IsTestProject>
     <RootNamespace>Triplex.ProtoDomainPrimitives</RootNamespace>
     <AssemblyName>Triplex.ProtoDomainPrimitives</AssemblyName>
@@ -22,20 +22,29 @@
     <AnalysisLevel>latest</AnalysisLevel>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Version>2.5.0</Version>
+    <Version>3.0.0-alpha</Version>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageTags>Domain Primitives;Invariants;DDD;Domain Driven Design</PackageTags>
     <PackageIcon>icon.png</PackageIcon>
     <PackageReleaseNotes>
 Improvements:
-  - Adding ToISOString() method for both Triplex.ProtoDomainPrimitives.Temporal.PastOrPresentTimestamp and Triplex.ProtoDomainPrimitives.Temporal.FutureTimestamp.
+  - Migrate to .NET 6 SDK and implement minor syntax improvements.
+  - Increase test coverage to 100%.
+  - Analyse code cuality using SonarCloud.io (see https://sonarcloud.io/project/overview?id=lsolano_ProtoPrimitives.NET).
+  - Eliminate code quality issues.
+
+Breaking changes:
+  - AbstractDomainPrimitive{TRawType} adds three new contracts to its signature:
+    - IComparable{AbstractDomainPrimitive{TRawType}},
+    - IEquatable{AbstractDomainPrimitive{TRawType}},
+    - IEqualityComparer{AbstractDomainPrimitive{TRawType}}
     </PackageReleaseNotes>
 
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Triplex.Validations" Version="1.0.0" />
+    <PackageReference Include="Triplex.Validations" Version="3.0.5-alpha" />
   </ItemGroup>
 
   <ItemGroup>
