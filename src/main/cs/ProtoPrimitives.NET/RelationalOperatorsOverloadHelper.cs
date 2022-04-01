@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Triplex.ProtoDomainPrimitives;
 
 /// <summary>
@@ -62,7 +64,8 @@ public static class RelationalOperatorsOverloadHelper
     /// </param>
     /// <typeparam name="TType"></typeparam>
     /// <returns></returns>
-    public static int SelfComparedToOther<TType>(TType self, TType? other, Func<TType, int> valueComparator)
+    public static int SelfComparedToOther<TType>([NotNull] TType self, TType? other, 
+        [NotNull] Func<TType, int> valueComparator)
         where TType : class
     {
         Arguments.NotNull(self, nameof(self));
@@ -96,7 +99,8 @@ public static class RelationalOperatorsOverloadHelper
     /// </param>
     /// <typeparam name="TType"></typeparam>
     /// <returns></returns>
-    public static bool SelfIsEqualsTo<TType>(TType self, TType? other, Func<TType, bool> valueComparator)
+    public static bool SelfIsEqualsTo<TType>([NotNull] TType self, TType? other, 
+        [NotNull] Func<TType, bool> valueComparator)
         where TType : class
     {
         Arguments.NotNull(self, nameof(self));

@@ -4,15 +4,15 @@ using Triplex.ProtoDomainPrimitives.Exceptions;
 namespace Triplex.ProtoDomainPrimitives.Numerics;
 
 /// <summary>
-/// Valid negative integer, meaning <code>&lt; 0</code> (less than zero).
+/// Valid positive long, meaning <code>&gt;= 1</code> (greater than or equals to one).
 /// </summary>
-public sealed class NegativeInteger : AbstractDomainPrimitive<int>, IEquatable<NegativeInteger>,
-    IComparable<NegativeInteger>
+public sealed class PositiveLong : AbstractDomainPrimitive<long>, IEquatable<PositiveLong>,
+    IComparable<PositiveLong>
 {
     /// <summary>
     /// Error message used when not provided.
     /// </summary>
-    public static readonly Message DefaultErrorMessage = new("'rawValue' must be negative.");
+    public static readonly Message DefaultErrorMessage = new("'rawValue' must be positive.");
 
     /// <summary>
     /// Error message used when <code>errorMessage</code> parameter is invalid.
@@ -23,11 +23,11 @@ public sealed class NegativeInteger : AbstractDomainPrimitive<int>, IEquatable<N
     /// <summary>
     /// Wraps the raw value and returns a new instance.
     /// </summary>
-    /// <param name="rawValue">Must be negative</param>
+    /// <param name="rawValue">Must be positive</param>
     /// <exception cref="ArgumentOutOfRangeException">
-    /// If <paramref name="rawValue"/> is zero or positive.
+    /// If <paramref name="rawValue"/> is zero or negative.
     /// </exception>
-    public NegativeInteger(int rawValue) : this(rawValue, DefaultErrorMessage)
+    public PositiveLong(long rawValue) : this(rawValue, DefaultErrorMessage)
     {
     }
 
@@ -37,27 +37,27 @@ public sealed class NegativeInteger : AbstractDomainPrimitive<int>, IEquatable<N
     /// <param name="rawValue">Must be positive</param>
     /// <param name="errorMessage">Custom error message</param>
     /// <exception cref="ArgumentOutOfRangeException">
-    /// When <paramref name="rawValue"/> is zero or positive.
+    /// When <paramref name="rawValue"/> is zero or negative.
     /// </exception>
     /// <exception cref="ArgumentNullException">
     /// When <paramref name="errorMessage"/> is <see langword="null"/>.
     /// </exception>
-    public NegativeInteger(int rawValue, [NotNull] Message errorMessage) :
+    public PositiveLong(long rawValue, [NotNull] Message errorMessage) :
         base(rawValue, errorMessage, (val, msg) => Validate(val, msg.Value))
     {
     }
 
-    private static int Validate(int rawValue, string errorMessage)
-        => Arguments.LessThan(rawValue, 0, nameof(rawValue), errorMessage);
+    private static long Validate(long rawValue, string errorMessage)
+        => Arguments.GreaterThan(rawValue, 0, nameof(rawValue), errorMessage);
 
     /// <inheritdoc cref="AbstractDomainPrimitive{TRawType}.CompareTo(AbstractDomainPrimitive{TRawType}?)" />
-    public int CompareTo(NegativeInteger? other) => base.CompareTo(other);
+    public int CompareTo(PositiveLong? other) => base.CompareTo(other);
 
     /// <inheritdoc cref="AbstractDomainPrimitive{TRawType}.Equals(object?)" />
-    public override bool Equals(object? obj) => base.Equals(obj as NegativeInteger);
+    public override bool Equals(object? obj) => base.Equals(obj as PositiveLong);
 
     /// <inheritdoc cref="AbstractDomainPrimitive{TRawType}.Equals(AbstractDomainPrimitive{TRawType}?)" />
-    public bool Equals(NegativeInteger? other) => base.Equals(other);
+    public bool Equals(PositiveLong? other) => base.Equals(other);
 
     /// <inheritdoc cref="AbstractDomainPrimitive{TRawType}.GetHashCode()" />
     public override int GetHashCode() => base.GetHashCode();

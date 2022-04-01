@@ -33,8 +33,8 @@ public class AbstractDomainPrimitive<TRawType> :
     /// When <paramref name="validator"/> is <see langword="null"/>.
     /// </exception>
 #pragma warning disable CS8618 // Non-null property must have a value (Value)
-    protected AbstractDomainPrimitive(TRawType? rawValue, Message errorMessage,
-        Func<TRawType, Message, TRawType> validator)
+    protected AbstractDomainPrimitive([NotNull] TRawType? rawValue, [NotNull] Message errorMessage,
+        [NotNull] Func<TRawType, Message, TRawType> validator)
     {
         if (rawValue is null)
         {
@@ -52,6 +52,7 @@ public class AbstractDomainPrimitive<TRawType> :
     /// <summary>
     /// Wrapped value.
     /// </summary>
+    [NotNull]
     public TRawType Value { get; }
 
     /// <summary>

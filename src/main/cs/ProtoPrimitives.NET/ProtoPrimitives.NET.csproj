@@ -1,46 +1,54 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <Version>3.1.0</Version>
+
     <TargetFrameworks>net6.0</TargetFrameworks>
-    <LangVersion>10.0</LangVersion>
-    <IsTestProject>false</IsTestProject>
+    <LangVersion>latest</LangVersion>
+
     <RootNamespace>Triplex.ProtoDomainPrimitives</RootNamespace>
-    <AssemblyName>Triplex.ProtoDomainPrimitives</AssemblyName>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/lsolano/ProtoPrimitives.NET</RepositoryUrl>
-    <Year>$([System.DateTime]::Now.Year.ToString("####"))</Year>
-    <CopyrightStartYear>2019</CopyrightStartYear>
-    <CopyrightEndYear Condition="$(Year) != '$(CopyrightStartYear)'">-$(Year)</CopyrightEndYear>
-    <Copyright>(C) Lorenzo Solano Martinez (https://lorenzosolano.com/) $(CopyrightStartYear)$(CopyrightEndYear). All Rights Reserved.</Copyright>
+    <AssemblyName>$(RootNamespace)</AssemblyName>
+    <IsPackable>true</IsPackable>
+    <IsTestProject>false</IsTestProject>
+    <PackageId>$(RootNamespace)</PackageId>
+
+    <ImplicitUsings>disable</ImplicitUsings>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
-    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
-    <Authors>Lorenzo Solano Martinez</Authors>
-    <Description>Use these Proto-Domain-Primitives as building blocks for your Domain Primitives and Entities (DDD) for your .NET projects.</Description>
+
     <Nullable>enable</Nullable>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisLevel>latest</AnalysisLevel>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/lsolano/ProtoPrimitives.NET</RepositoryUrl>
+
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Version>3.0.1-alpha</Version>
+    <Year>$([System.DateTime]::Now.Year.ToString("####"))</Year>
+    <CopyrightStartYear>2019</CopyrightStartYear>
+    <CopyrightEndYear Condition="$(Year) != '$(CopyrightStartYear)'">-$(Year)</CopyrightEndYear>
+    <Copyright>(C) Lorenzo Solano Martinez (https://lorenzosolano.com/) $(CopyrightStartYear)$(CopyrightEndYear). All Rights Reserved.</Copyright>
+    <Authors>Lorenzo Solano Martinez</Authors>
+    <Description>Use these Proto-Domain-Primitives as building blocks for your Domain Primitives and Entities (DDD) for your .NET projects.</Description>
+    
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageTags>Domain Primitives;Invariants;DDD;Domain Driven Design</PackageTags>
     <PackageIcon>icon.png</PackageIcon>
     <PackageReleaseNotes>
 Improvements:
-  - Migrate to .NET 6 SDK and implement minor syntax improvements.
-  - Increase test coverage to 100%.
-  - Analyse code cuality using SonarCloud.io (see https://sonarcloud.io/project/overview?id=lsolano_ProtoPrimitives.NET).
-  - Eliminate code quality issues.
+  - Adding PositiveLong and NegativeLong types as requested by #6 "Add Another numerics primitive like Long".
+  - Change small quality gate badge (from sonarcloud.io) for the big one.
 
 Breaking changes:
-  - AbstractDomainPrimitive{TRawType} adds three new contracts to its signature:
-    - IComparable{AbstractDomainPrimitive{TRawType}},
-    - IEquatable{AbstractDomainPrimitive{TRawType}},
-    - IEqualityComparer{AbstractDomainPrimitive{TRawType}}
+  - NA
     </PackageReleaseNotes>
-
   </PropertyGroup>
 
   <ItemGroup>
@@ -54,4 +62,8 @@ Breaking changes:
     </None>
     <None Include="..\..\..\..\icon.png" Pack="true" PackagePath="/" />
   </ItemGroup>
+
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+  </PropertyGroup>
 </Project>

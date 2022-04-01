@@ -1,4 +1,5 @@
-﻿using Triplex.ProtoDomainPrimitives.Exceptions;
+﻿using System.Diagnostics.CodeAnalysis;
+using Triplex.ProtoDomainPrimitives.Exceptions;
 using Triplex.ProtoDomainPrimitives.Numerics;
 
 namespace Triplex.ProtoDomainPrimitives.Strings;
@@ -19,7 +20,7 @@ public sealed class ConfigurableString : AbstractDomainPrimitive<string>, ICompa
 
     private readonly StringComparison _comparisonStrategy;
 
-    private ConfigurableString(string rawValue, StringComparison comparisonStrategy) :
+    private ConfigurableString([NotNull] string rawValue, [NotNull] StringComparison comparisonStrategy) :
         base(rawValue, FallbackMessage, (val, _) => val!) => _comparisonStrategy = comparisonStrategy;
 
     /// <summary>
@@ -100,8 +101,8 @@ public sealed class ConfigurableString : AbstractDomainPrimitive<string>, ICompa
         /// <param name="argumentNullErrorMessage">Required</param>
         /// <exception cref="ArgumentNullException">
         /// When <paramref name="argumentNullErrorMessage"/> is <see langword="null"/>
-        /// </exception>
-        public Builder(Message argumentNullErrorMessage) : this(argumentNullErrorMessage, false)
+        /// </exception>        
+        public Builder([NotNull] Message argumentNullErrorMessage) : this(argumentNullErrorMessage, false)
         {
         }
 
@@ -116,7 +117,7 @@ public sealed class ConfigurableString : AbstractDomainPrimitive<string>, ICompa
         /// <exception cref="ArgumentNullException">
         /// When <paramref name="argumentNullErrorMessage"/> is <see langword="null"/>
         /// </exception>
-        public Builder(Message argumentNullErrorMessage, bool useSingleMessage)
+        public Builder([NotNull] Message argumentNullErrorMessage, bool useSingleMessage)
         {
             _argumentNullErrorMessage = Arguments.NotNull(argumentNullErrorMessage,
                 nameof(argumentNullErrorMessage));
@@ -141,7 +142,8 @@ public sealed class ConfigurableString : AbstractDomainPrimitive<string>, ICompa
         /// <exception cref="InvalidOperationException">
         /// If already built.
         /// </exception>
-        public Builder WithComparisonStrategy(StringComparison comparisonStrategy)
+        [return: NotNull]
+        public Builder WithComparisonStrategy([NotNull] StringComparison comparisonStrategy)
             => CheckPreconditionsAndExecute(() => _comparisonStrategy =
                 Arguments.ValidEnumerationMember(comparisonStrategy, nameof(comparisonStrategy)));
 
@@ -152,7 +154,8 @@ public sealed class ConfigurableString : AbstractDomainPrimitive<string>, ICompa
         /// <returns>Self</returns>
         /// <exception cref="ArgumentNullException">When any parameter is <see langword="null"/></exception>
         /// <exception cref="InvalidOperationException">If already built.</exception>
-        public Builder WithMinLength(StringLength minLength)
+        [return: NotNull]
+        public Builder WithMinLength([NotNull] StringLength minLength)
             => CheckPreconditionsAndExecute(() => _minLength = Arguments.NotNull(minLength, nameof(minLength)));
 
         /// <summary>
@@ -163,7 +166,8 @@ public sealed class ConfigurableString : AbstractDomainPrimitive<string>, ICompa
         /// <returns>Self</returns>
         /// <exception cref="ArgumentNullException">When any parameter is <see langword="null"/></exception>
         /// <exception cref="InvalidOperationException">If already built.</exception>
-        public Builder WithMinLength(StringLength minLength, Message tooShortErrorMessage)
+        [return: NotNull]
+        public Builder WithMinLength([NotNull] StringLength minLength, [NotNull] Message tooShortErrorMessage)
         {
             return CheckPreconditionsAndExecute(() =>
             {
@@ -179,7 +183,8 @@ public sealed class ConfigurableString : AbstractDomainPrimitive<string>, ICompa
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">When any parameter is <see langword="null"/></exception>
         /// <exception cref="InvalidOperationException">If already built.</exception>
-        public Builder WithMaxLength(StringLength maxLength)
+        [return: NotNull]
+        public Builder WithMaxLength([NotNull] StringLength maxLength)
             => CheckPreconditionsAndExecute(() => _maxLength = Arguments.NotNull(maxLength, nameof(maxLength)));
 
         /// <summary>
@@ -190,7 +195,8 @@ public sealed class ConfigurableString : AbstractDomainPrimitive<string>, ICompa
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">When any parameter is <see langword="null"/></exception>
         /// <exception cref="InvalidOperationException">If already built.</exception>
-        public Builder WithMaxLength(StringLength maxLength, Message tooLongErrorMessage)
+        [return: NotNull]
+        public Builder WithMaxLength([NotNull] StringLength maxLength, [NotNull] Message tooLongErrorMessage)
         {
             return CheckPreconditionsAndExecute(() =>
             {
@@ -208,8 +214,9 @@ public sealed class ConfigurableString : AbstractDomainPrimitive<string>, ICompa
         /// <returns>Self</returns>
         /// <exception cref="ArgumentNullException">When any parameter is <see langword="null"/></exception>
         /// <exception cref="InvalidOperationException">If already built.</exception>
-        public Builder WithLengthRange(StringLengthRange lengthRange, Message tooShortErrorMessage, Message
-            tooLongErrorMessage)
+        [return: NotNull]
+        public Builder WithLengthRange([NotNull] StringLengthRange lengthRange, [NotNull] Message tooShortErrorMessage, 
+            [NotNull] Message tooLongErrorMessage)
         {
             return CheckPreconditionsAndExecute(() =>
             {
@@ -228,6 +235,7 @@ public sealed class ConfigurableString : AbstractDomainPrimitive<string>, ICompa
         /// </summary>
         /// <returns>Self</returns>
         /// <exception cref="InvalidOperationException">If already built.</exception>
+        [return: NotNull]
         public Builder WithRequiresTrimmed()
             => WithRequiresTrimmed(true, _invalidFormatErrorMessage);
 
@@ -238,6 +246,7 @@ public sealed class ConfigurableString : AbstractDomainPrimitive<string>, ICompa
         /// <param name="requiresTrimmed"></param>
         /// <returns>Self</returns>
         /// <exception cref="InvalidOperationException">If already built.</exception>
+        [return: NotNull]
         public Builder WithRequiresTrimmed(bool requiresTrimmed)
             => WithRequiresTrimmed(requiresTrimmed, _invalidFormatErrorMessage);
 
@@ -250,7 +259,8 @@ public sealed class ConfigurableString : AbstractDomainPrimitive<string>, ICompa
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">When any parameter is <see langword="null"/></exception>
         /// <exception cref="InvalidOperationException">If already built.</exception>
-        public Builder WithRequiresTrimmed(bool requiresTrimmed, Message invalidFormatErrorMessage)
+        [return: NotNull]
+        public Builder WithRequiresTrimmed(bool requiresTrimmed, [NotNull] Message invalidFormatErrorMessage)
         {
             return CheckPreconditionsTrySetInvalidFormatErrorMessageAndExecute(invalidFormatErrorMessage, () =>
             {
@@ -268,6 +278,7 @@ public sealed class ConfigurableString : AbstractDomainPrimitive<string>, ICompa
         /// <param name="allowLeadingWhiteSpace"></param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException">If already built.</exception>
+        [return: NotNull]
         public Builder WithAllowLeadingWhiteSpace(bool allowLeadingWhiteSpace)
             => WithAllowLeadingWhiteSpace(allowLeadingWhiteSpace, DefaultInvalidFormatErrorMessage);
 
@@ -278,7 +289,8 @@ public sealed class ConfigurableString : AbstractDomainPrimitive<string>, ICompa
         /// <param name="invalidFormatErrorMessage"></param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException">If already built.</exception>
-        public Builder WithAllowLeadingWhiteSpace(bool allowLeadingWhiteSpace, Message invalidFormatErrorMessage)
+        [return: NotNull]
+        public Builder WithAllowLeadingWhiteSpace(bool allowLeadingWhiteSpace, [NotNull] Message invalidFormatErrorMessage)
             => CheckPreconditionsTrySetInvalidFormatErrorMessageAndExecute(invalidFormatErrorMessage,
                 () => _allowLeadingWhiteSpace = allowLeadingWhiteSpace);
 
@@ -288,6 +300,7 @@ public sealed class ConfigurableString : AbstractDomainPrimitive<string>, ICompa
         /// <param name="allowTrailingWhiteSpace"></param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException">If already built.</exception>
+        [return: NotNull]
         public Builder WithAllowTrailingWhiteSpace(bool allowTrailingWhiteSpace)
             => WithAllowTrailingWhiteSpace(allowTrailingWhiteSpace, DefaultInvalidFormatErrorMessage);
 
@@ -298,7 +311,8 @@ public sealed class ConfigurableString : AbstractDomainPrimitive<string>, ICompa
         /// <param name="invalidFormatErrorMessage"></param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException">If already built.</exception>
-        public Builder WithAllowTrailingWhiteSpace(bool allowTrailingWhiteSpace, Message invalidFormatErrorMessage)
+        [return: NotNull]
+        public Builder WithAllowTrailingWhiteSpace(bool allowTrailingWhiteSpace, [NotNull] Message invalidFormatErrorMessage)
         {
             return CheckPreconditionsTrySetInvalidFormatErrorMessageAndExecute(invalidFormatErrorMessage,
                 () => _allowTrailingWhiteSpace = allowTrailingWhiteSpace);
@@ -310,6 +324,7 @@ public sealed class ConfigurableString : AbstractDomainPrimitive<string>, ICompa
         /// <param name="allowWhiteSpacesOnly"></param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException">If already built.</exception>
+        [return: NotNull]
         public Builder WithAllowWhiteSpacesOnly(bool allowWhiteSpacesOnly)
             => CheckPreconditionsAndExecute(() => SetAllowWhiteSpacesOnly(allowWhiteSpacesOnly));
 
@@ -320,7 +335,8 @@ public sealed class ConfigurableString : AbstractDomainPrimitive<string>, ICompa
         /// <param name="invalidFormatErrorMessage"></param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException">If already built.</exception>
-        public Builder WithAllowWhiteSpacesOnly(bool allowWhiteSpacesOnly, Message invalidFormatErrorMessage)
+        [return: NotNull]
+        public Builder WithAllowWhiteSpacesOnly(bool allowWhiteSpacesOnly, [NotNull] Message invalidFormatErrorMessage)
             => CheckPreconditionsTrySetInvalidFormatErrorMessageAndExecute(invalidFormatErrorMessage,
                 () => SetAllowWhiteSpacesOnly(allowWhiteSpacesOnly));
 
@@ -341,7 +357,8 @@ public sealed class ConfigurableString : AbstractDomainPrimitive<string>, ICompa
         /// <param name="pattern"></param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException">If already built.</exception>
-        public Builder WithInvalidCharsPattern(string pattern)
+        [return: NotNull]
+        public Builder WithInvalidCharsPattern([NotNull] string pattern)
             => WithInvalidCharsPattern(pattern, DefaultInvalidCharactersErrorMessage);
 
         /// <summary>
@@ -351,7 +368,8 @@ public sealed class ConfigurableString : AbstractDomainPrimitive<string>, ICompa
         /// <param name="invalidCharactersErrorMessage"></param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException">If already built.</exception>
-        public Builder WithInvalidCharsPattern(string pattern, Message invalidCharactersErrorMessage)
+        [return: NotNull]
+        public Builder WithInvalidCharsPattern([NotNull] string pattern, [NotNull] Message invalidCharactersErrorMessage)
         {
             return CheckPreconditionsAndExecute(() =>
             {
@@ -369,7 +387,8 @@ public sealed class ConfigurableString : AbstractDomainPrimitive<string>, ICompa
         /// <param name="regex"></param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException">If already built.</exception>
-        public Builder WithInvalidCharsRegex(Regex regex)
+        [return: NotNull]
+        public Builder WithInvalidCharsRegex([NotNull] Regex regex)
             => WithInvalidCharsRegex(regex, DefaultInvalidCharactersErrorMessage);
 
         /// <summary>
@@ -379,7 +398,8 @@ public sealed class ConfigurableString : AbstractDomainPrimitive<string>, ICompa
         /// <param name="invalidCharactersErrorMessage"></param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException">If already built.</exception>
-        public Builder WithInvalidCharsRegex(Regex regex, Message invalidCharactersErrorMessage)
+        [return: NotNull]
+        public Builder WithInvalidCharsRegex([NotNull] Regex regex, [NotNull] Message invalidCharactersErrorMessage)
         {
             return CheckPreconditionsAndExecute(() =>
             {
@@ -395,7 +415,8 @@ public sealed class ConfigurableString : AbstractDomainPrimitive<string>, ICompa
         /// <param name="pattern"></param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException">If already built.</exception>
-        public Builder WithValidFormatPattern(string pattern)
+        [return: NotNull]
+        public Builder WithValidFormatPattern([NotNull] string pattern)
             => WithValidFormatPattern(pattern, DefaultInvalidFormatErrorMessage);
 
         /// <summary>
@@ -405,7 +426,8 @@ public sealed class ConfigurableString : AbstractDomainPrimitive<string>, ICompa
         /// <param name="invalidFormatErrorMessage"></param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException">If already built.</exception>
-        public Builder WithValidFormatPattern(string pattern, Message invalidFormatErrorMessage)
+        [return: NotNull]
+        public Builder WithValidFormatPattern([NotNull] string pattern, [NotNull] Message invalidFormatErrorMessage)
         {
             return CheckPreconditionsTrySetInvalidFormatErrorMessageAndExecute(invalidFormatErrorMessage,
                 () => _validFormatRegex = new Regex(Arguments.NotNull(pattern, nameof(pattern)),
@@ -418,7 +440,8 @@ public sealed class ConfigurableString : AbstractDomainPrimitive<string>, ICompa
         /// <param name="regex"></param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException">If already built.</exception>
-        public Builder WithValidFormatRegex(Regex regex)
+        [return: NotNull]
+        public Builder WithValidFormatRegex([NotNull] Regex regex)
             => WithValidFormatRegex(regex, DefaultInvalidFormatErrorMessage);
 
         /// <summary>
@@ -428,10 +451,12 @@ public sealed class ConfigurableString : AbstractDomainPrimitive<string>, ICompa
         /// <param name="invalidFormatErrorMessage"></param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException">If already built.</exception>
-        public Builder WithValidFormatRegex(Regex regex, Message invalidFormatErrorMessage)
+        [return: NotNull]
+        public Builder WithValidFormatRegex([NotNull] Regex regex, [NotNull] Message invalidFormatErrorMessage)
             => CheckPreconditionsTrySetInvalidFormatErrorMessageAndExecute(invalidFormatErrorMessage,
                 () => _validFormatRegex = Arguments.NotNull(regex, nameof(regex)));
 
+        [return: NotNull]
         private Builder CheckPreconditionsAndExecute(Action checkAndSet)
         {
             EnsureNotBuilt();
@@ -441,8 +466,9 @@ public sealed class ConfigurableString : AbstractDomainPrimitive<string>, ICompa
             return this;
         }
 
+        [return: NotNull]
         private Builder CheckPreconditionsTrySetInvalidFormatErrorMessageAndExecute(
-            Message invalidFormatErrorMessage, Action checkAndSet)
+            [NotNull] Message invalidFormatErrorMessage, Action checkAndSet)
         {
             EnsureNotBuilt();
 
@@ -460,7 +486,8 @@ public sealed class ConfigurableString : AbstractDomainPrimitive<string>, ICompa
         /// </summary>
         /// <param name="rawValue">Can not be <see langowrd="null"/></param>
         /// <returns><see cref="ConfigurableString"/> or throws exception</returns>
-        public ConfigurableString Build(string? rawValue)
+        [return: NotNull]
+        public ConfigurableString Build([NotNull] string? rawValue)
             => Build(rawValue, NoOpCustomParser);
 
         /// <summary>
@@ -471,11 +498,12 @@ public sealed class ConfigurableString : AbstractDomainPrimitive<string>, ICompa
         /// <param name="customParser">Can not be <see langowrd="null"/>. Applied after all options, as a final 
         /// validation.</param>
         /// <returns></returns>
-        public ConfigurableString Build(string? rawValue, Action<string>? customParser)
+        [return: NotNull]
+        public ConfigurableString Build([NotNull] string? rawValue, [NotNull] Action<string>? customParser)
         {
             EnsureNotBuilt();
 
-            (string notNullValue, Action<string>? notNullCustomParser) =
+            (string notNullValue, Action<string> notNullCustomParser) =
                 (Arguments.NotNull(rawValue, nameof(rawValue), _argumentNullErrorMessage.Value),
                 Arguments.NotNull(customParser, nameof(customParser)));
 

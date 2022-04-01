@@ -1,4 +1,6 @@
-﻿namespace Triplex.ProtoDomainPrimitives.Exceptions;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Triplex.ProtoDomainPrimitives.Exceptions;
 
 /// <summary>
 /// Non-empty or null exception message. Comparison other <see cref="string"/>-related operation are done using 
@@ -16,12 +18,13 @@ public sealed class Message : IDomainPrimitive<string>, IComparable<Message>, IE
     /// <exception cref="ArgumentFormatException">
     /// When <paramref name="rawValue"/> is empty or contains only white-spaces.
     /// </exception>
-    public Message(string rawValue)
+    public Message([NotNull] string rawValue)
         => Value = Arguments.NotEmptyOrWhiteSpaceOnly(rawValue, nameof(rawValue));
 
     /// <summary>
     /// Wrapped value.
     /// </summary>
+    [NotNull]
     public string Value { get; }
 
     /// <summary>
@@ -70,7 +73,7 @@ public sealed class Message : IDomainPrimitive<string>, IComparable<Message>, IE
     /// <param name="left"></param>
     /// <param name="right"></param>
     /// <returns></returns>
-    public static bool operator !=(in Message left, in Message right)
+    public static bool operator !=(Message left, Message right)
         => RelationalOperatorsOverloadHelper.NotEquals(left, right);
 
     /// <summary>
@@ -79,7 +82,7 @@ public sealed class Message : IDomainPrimitive<string>, IComparable<Message>, IE
     /// <param name="left"></param>
     /// <param name="right"></param>
     /// <returns></returns>
-    public static bool operator ==(in Message left, in Message right)
+    public static bool operator ==(Message left, Message right)
         => RelationalOperatorsOverloadHelper.Equals(left, right);
 
     /// <summary>
@@ -88,7 +91,7 @@ public sealed class Message : IDomainPrimitive<string>, IComparable<Message>, IE
     /// <param name="left"></param>
     /// <param name="right"></param>
     /// <returns></returns>
-    public static bool operator <(in Message left, in Message right)
+    public static bool operator <(Message left, Message right)
         => RelationalOperatorsOverloadHelper.LessThan(left, right);
 
     /// <summary>
@@ -97,7 +100,7 @@ public sealed class Message : IDomainPrimitive<string>, IComparable<Message>, IE
     /// <param name="left"></param>
     /// <param name="right"></param>
     /// <returns></returns>
-    public static bool operator <=(in Message left, in Message right)
+    public static bool operator <=(Message left, Message right)
         => RelationalOperatorsOverloadHelper.LessThanOrEqualsTo(left, right);
 
     /// <summary>
@@ -106,7 +109,7 @@ public sealed class Message : IDomainPrimitive<string>, IComparable<Message>, IE
     /// <param name="left"></param>
     /// <param name="right"></param>
     /// <returns></returns>
-    public static bool operator >(in Message left, in Message right)
+    public static bool operator >(Message left, Message right)
         => RelationalOperatorsOverloadHelper.GreaterThan(left, right);
 
     /// <summary>
@@ -115,7 +118,7 @@ public sealed class Message : IDomainPrimitive<string>, IComparable<Message>, IE
     /// <param name="left"></param>
     /// <param name="right"></param>
     /// <returns></returns>
-    public static bool operator >=(in Message left, in Message right)
+    public static bool operator >=(Message left, Message right)
         => RelationalOperatorsOverloadHelper.GreaterThanOrEqualsTo(left, right);
 
     #endregion //Relational Operators
