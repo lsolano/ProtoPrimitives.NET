@@ -1,4 +1,6 @@
-﻿namespace Triplex.ProtoDomainPrimitives;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Triplex.ProtoDomainPrimitives;
 
 /// <summary>
 /// Represent a domain primitive wrapping some raw type, 
@@ -9,5 +11,6 @@ public interface IDomainPrimitive<TRawType>
     /// <summary>
     /// Wrapped value.
     /// </summary>
+    [NotNull] 
     TRawType Value { get; }
 }

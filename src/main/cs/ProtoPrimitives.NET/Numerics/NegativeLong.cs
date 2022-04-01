@@ -4,10 +4,10 @@ using Triplex.ProtoDomainPrimitives.Exceptions;
 namespace Triplex.ProtoDomainPrimitives.Numerics;
 
 /// <summary>
-/// Valid negative integer, meaning <code>&lt; 0</code> (less than zero).
+/// Valid negative long, meaning <code>&lt; 0</code> (less than zero).
 /// </summary>
-public sealed class NegativeInteger : AbstractDomainPrimitive<int>, IEquatable<NegativeInteger>,
-    IComparable<NegativeInteger>
+public sealed class NegativeLong : AbstractDomainPrimitive<long>, IEquatable<NegativeLong>,
+    IComparable<NegativeLong>
 {
     /// <summary>
     /// Error message used when not provided.
@@ -27,7 +27,7 @@ public sealed class NegativeInteger : AbstractDomainPrimitive<int>, IEquatable<N
     /// <exception cref="ArgumentOutOfRangeException">
     /// If <paramref name="rawValue"/> is zero or positive.
     /// </exception>
-    public NegativeInteger(int rawValue) : this(rawValue, DefaultErrorMessage)
+    public NegativeLong(long rawValue) : this(rawValue, DefaultErrorMessage)
     {
     }
 
@@ -42,22 +42,22 @@ public sealed class NegativeInteger : AbstractDomainPrimitive<int>, IEquatable<N
     /// <exception cref="ArgumentNullException">
     /// When <paramref name="errorMessage"/> is <see langword="null"/>.
     /// </exception>
-    public NegativeInteger(int rawValue, [NotNull] Message errorMessage) :
+    public NegativeLong(long rawValue, [NotNull] Message errorMessage) :
         base(rawValue, errorMessage, (val, msg) => Validate(val, msg.Value))
     {
     }
 
-    private static int Validate(int rawValue, string errorMessage)
+    private static long Validate(long rawValue, string errorMessage)
         => Arguments.LessThan(rawValue, 0, nameof(rawValue), errorMessage);
 
     /// <inheritdoc cref="AbstractDomainPrimitive{TRawType}.CompareTo(AbstractDomainPrimitive{TRawType}?)" />
-    public int CompareTo(NegativeInteger? other) => base.CompareTo(other);
+    public int CompareTo(NegativeLong? other) => base.CompareTo(other);
 
     /// <inheritdoc cref="AbstractDomainPrimitive{TRawType}.Equals(object?)" />
-    public override bool Equals(object? obj) => base.Equals(obj as NegativeInteger);
+    public override bool Equals(object? obj) => base.Equals(obj as NegativeLong);
 
     /// <inheritdoc cref="AbstractDomainPrimitive{TRawType}.Equals(AbstractDomainPrimitive{TRawType}?)" />
-    public bool Equals(NegativeInteger? other) => base.Equals(other);
+    public bool Equals(NegativeLong? other) => base.Equals(other);
 
     /// <inheritdoc cref="AbstractDomainPrimitive{TRawType}.GetHashCode()" />
     public override int GetHashCode() => base.GetHashCode();
