@@ -1,4 +1,5 @@
-﻿using Triplex.ProtoDomainPrimitives.Exceptions;
+﻿using System.Diagnostics.CodeAnalysis;
+using Triplex.ProtoDomainPrimitives.Exceptions;
 
 namespace Triplex.ProtoDomainPrimitives.Strings;
 
@@ -34,7 +35,7 @@ public sealed class NonEmptyOrWhiteSpaceString : AbstractDomainPrimitive<string>
     /// <exception cref="FormatException">
     /// When <paramref name="rawValue"/> is empty or contains only white-spaces.
     /// </exception>
-    public NonEmptyOrWhiteSpaceString(string? rawValue)
+    public NonEmptyOrWhiteSpaceString([NotNull] string? rawValue)
         : base(rawValue, DefaultErrorMessage, (value, msg) => Validate(value, msg)) { }
 
     /// <summary>
@@ -46,11 +47,12 @@ public sealed class NonEmptyOrWhiteSpaceString : AbstractDomainPrimitive<string>
     /// <exception cref="FormatException">
     /// When <paramref name="rawValue"/> is empty or contains only white-spaces.
     /// </exception>
-    public NonEmptyOrWhiteSpaceString(string? rawValue, Message? errorMessage)
+    public NonEmptyOrWhiteSpaceString([NotNull] string? rawValue, [NotNull] Message? errorMessage)
         : base(rawValue, Arguments.NotNull(errorMessage, nameof(errorMessage), InvalidCustomErrorMessageMessage),
             (v, m) => Validate(v, m))
     { }
 
+    [return: NotNull] 
     private static string Validate(string? rawValue, Message errorMessage)
     {
         ConfigurableString.Builder builder = new ConfigurableString.Builder(errorMessage, useSingleMessage: true)

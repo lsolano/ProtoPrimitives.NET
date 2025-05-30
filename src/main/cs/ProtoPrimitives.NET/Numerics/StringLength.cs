@@ -1,4 +1,5 @@
-﻿using Triplex.ProtoDomainPrimitives.Exceptions;
+﻿using System.Diagnostics.CodeAnalysis;
+using Triplex.ProtoDomainPrimitives.Exceptions;
 
 namespace Triplex.ProtoDomainPrimitives.Numerics;
 
@@ -35,7 +36,7 @@ public sealed class StringLength : AbstractDomainPrimitive<int>, IEquatable<Stri
     /// </summary>
     /// <param name="rawValue"></param>
     /// <param name="errorMessage">Can not be <see langword="null"/></param>
-    public StringLength(int rawValue, Message errorMessage) :
+    public StringLength(int rawValue, [NotNull] Message errorMessage) :
         base(rawValue, errorMessage, (val, msg) => Validate(val, msg.Value))
     {
     }

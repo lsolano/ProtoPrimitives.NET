@@ -1,4 +1,5 @@
-﻿using Triplex.ProtoDomainPrimitives.Exceptions;
+﻿using System.Diagnostics.CodeAnalysis;
+using Triplex.ProtoDomainPrimitives.Exceptions;
 
 namespace Triplex.ProtoDomainPrimitives.Temporal;
 
@@ -38,12 +39,12 @@ public sealed class FutureTimestamp : AbstractDomainPrimitive<DateTimeOffset>, I
     /// <exception cref="ArgumentOutOfRangeException">
     /// When <paramref name="rawValue"/> is not in the future.
     /// </exception>
-    public FutureTimestamp(DateTimeOffset rawValue, Message errorMessage) : base(rawValue, errorMessage, (val, msg)
+    public FutureTimestamp(DateTimeOffset rawValue, [NotNull] Message errorMessage) : base(rawValue, errorMessage, (val, msg)
         => Validate(val, msg))
             => _asISOString = Value.ToUniversalTime().ToString(Constants.ToISOStringFormat,
                 Constants.ToISOStringFormatInfo);
 
-    private static DateTimeOffset Validate(in DateTimeOffset rawValue, in Message errorMessage)
+    private static DateTimeOffset Validate(DateTimeOffset rawValue, Message errorMessage)
         => Arguments.GreaterThan(rawValue, DateTimeOffset.UtcNow, nameof(rawValue), errorMessage.Value);
 
     /// <inheritdoc cref="AbstractDomainPrimitive{TRawType}.CompareTo(AbstractDomainPrimitive{TRawType}?)"/>
@@ -59,5 +60,6 @@ public sealed class FutureTimestamp : AbstractDomainPrimitive<DateTimeOffset>, I
     public override int GetHashCode() => base.GetHashCode();
 
     /// <inheritdoc cref="PastOrPresentTimestamp.ToISOString"/>
+    [return: NotNull]
     public string ToISOString() => _asISOString;
 }

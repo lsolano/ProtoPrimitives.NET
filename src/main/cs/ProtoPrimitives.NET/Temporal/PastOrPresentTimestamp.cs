@@ -1,4 +1,5 @@
-﻿using Triplex.ProtoDomainPrimitives.Exceptions;
+﻿using System.Diagnostics.CodeAnalysis;
+using Triplex.ProtoDomainPrimitives.Exceptions;
 
 namespace Triplex.ProtoDomainPrimitives.Temporal;
 
@@ -33,12 +34,12 @@ public sealed class PastOrPresentTimestamp : AbstractDomainPrimitive<DateTimeOff
     /// <exception cref="ArgumentNullException">When <paramref name="errorMessage"/> is <see langword="null"/>
     /// </exception>
     /// <exception cref="ArgumentOutOfRangeException">When <paramref name="rawValue"/> is in the future.</exception>
-    public PastOrPresentTimestamp(in DateTimeOffset rawValue, in Message errorMessage) :
+    public PastOrPresentTimestamp(DateTimeOffset rawValue, [NotNull] Message errorMessage) :
         base(rawValue, errorMessage, (val, msg) => Validate(val, msg))
         => _asISOString = Value.ToUniversalTime().ToString(Constants.ToISOStringFormat,
             Constants.ToISOStringFormatInfo);
 
-    private static DateTimeOffset Validate(in DateTimeOffset rawValue, in Message errorMessage)
+    private static DateTimeOffset Validate(DateTimeOffset rawValue, Message errorMessage)
         => Arguments.LessThanOrEqualTo(rawValue, DateTimeOffset.UtcNow, nameof(rawValue), errorMessage.Value);
 
     /// <inheritdoc cref="AbstractDomainPrimitive{TRawType}.CompareTo(AbstractDomainPrimitive{TRawType}?)"/>
@@ -73,5 +74,6 @@ public sealed class PastOrPresentTimestamp : AbstractDomainPrimitive<DateTimeOff
     /// 2021-05-21T15:23:53.162Z
     /// </example>
     /// <returns></returns>
+    [return: NotNull] 
     public string ToISOString() => _asISOString;
 }

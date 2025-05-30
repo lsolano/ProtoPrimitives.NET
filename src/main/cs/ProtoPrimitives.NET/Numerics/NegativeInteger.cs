@@ -1,4 +1,5 @@
-﻿using Triplex.ProtoDomainPrimitives.Exceptions;
+﻿using System.Diagnostics.CodeAnalysis;
+using Triplex.ProtoDomainPrimitives.Exceptions;
 
 namespace Triplex.ProtoDomainPrimitives.Numerics;
 
@@ -41,7 +42,7 @@ public sealed class NegativeInteger : AbstractDomainPrimitive<int>, IEquatable<N
     /// <exception cref="ArgumentNullException">
     /// When <paramref name="errorMessage"/> is <see langword="null"/>.
     /// </exception>
-    public NegativeInteger(int rawValue, Message errorMessage) :
+    public NegativeInteger(int rawValue, [NotNull] Message errorMessage) :
         base(rawValue, errorMessage, (val, msg) => Validate(val, msg.Value))
     {
     }
